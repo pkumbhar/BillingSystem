@@ -1,13 +1,18 @@
 package com.billingsystem;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.databaseAdapter.BaseTable;
+import com.databaseAdapter.DBAdapter;
+
 public class BillingMain extends AppCompatActivity {
     private Button btnStartOrder;
+    DBAdapter dbAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +22,11 @@ public class BillingMain extends AppCompatActivity {
         btnStartOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BillingMain.this,LoginAct.class));
+                dbAdapter=new DBAdapter(getApplicationContext());
+                Cursor mCursor=dbAdapter.getTableDetails(BaseTable.TABLELIST.USER_TABLE);
+                if(mCursor!=null){
+                    startActivity(new Intent(BillingMain.this,LoginAct.class));
+                }
             }
         });
     }
