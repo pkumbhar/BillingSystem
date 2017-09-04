@@ -1,10 +1,20 @@
 package com.databaseAdapter;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
+
+import com.entity.Product;
+
+import java.sql.SQLDataException;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Admin on 24-August-24-2017.
@@ -53,6 +63,42 @@ public class DBAdapter {
         if(mCursor!=null){
             mCursor.moveToFirst();
             return mCursor;
+        }
+        return null;
+    }
+    public long insertintoProduct(Product product) throws SQLDataException{
+        db=dbHelper.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+        cv.put("PRODUCT_ID",product.getProductId());
+        cv.put("NAME",product.getName());
+        cv.put("PRICE",product.getPrice());
+        cv.put("UOM_ID",product.getUomId().getUomId());
+        cv.put("PRODUCT_TYPE_ID",product.getProdyctTypeId().getProductTypeId());
+        Long l=db.insert(BaseTable.TABLELIST.PRODUCT,null,cv);
+        if(l>0){
+            Log.i("Ins Product table"," ");
+        }
+        return l;
+    }
+
+    /*
+    List of Items/Products
+     */
+    public List<Product> getProductList() throws SQLException{
+        List<Product> productList=new ArrayList<Product>();
+        db=dbHelper.getWritableDatabase();
+       Cursor mCursor=db.query(BaseTable.TABLELIST.PRODUCT,null,null,null,null,null,null);
+        if(mCursor!=null){
+         mCursor.moveToFirst();
+            while (mCursor.isAfterLast()==false){
+                Product product=new Product();
+                product.setName(BaseTable.PRODUCT.NAME);
+                //product.setProductId(BaseTable.PRODUCT.PRODUCT_ID);
+                product.setPrice(BaseTable.PRODUCT.PRICE);
+                product.setProductId(BaseTable.PRODUCT.PRODUCT_ID);
+                productList.add(product);
+            }
+            return productList;
         }
         return null;
     }

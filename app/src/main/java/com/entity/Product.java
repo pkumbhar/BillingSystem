@@ -12,8 +12,8 @@ public class Product {
     private String price;
     private List<Uom> uomList;
     private List<ProductType> productTypeList;
-    private String UomId;
-    private String prodyctTypeId;
+    private Uom UomId;
+    private ProductType prodyctTypeId;
 
 
     public String getProductId() {
@@ -56,19 +56,19 @@ public class Product {
         this.productTypeList = productTypeList;
     }
 
-    public String getUomId() {
+    public Uom getUomId() {
         return UomId;
     }
 
-    public void setUomId(String uomId) {
+    public void setUomId(Uom uomId) {
         UomId = uomId;
     }
 
-    public String getProdyctTypeId() {
+    public ProductType getProdyctTypeId() {
         return prodyctTypeId;
     }
 
-    public void setProdyctTypeId(String prodyctTypeId) {
+    public void setProdyctTypeId(ProductType prodyctTypeId) {
         this.prodyctTypeId = prodyctTypeId;
     }
 }

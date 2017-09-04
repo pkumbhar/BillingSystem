@@ -15,6 +15,31 @@ public  class BaseTable {
         public static String UOM="UOM";
         public static String USER_TABLE="user_table";
     }
+    public static class PRODUCT{
+        public static String PRODUCT_ID="PRODUCT_ID";
+        public static String NAME="NAME";
+        public static String PRICE="PRICE";
+        public static String UOM_ID="UOM_ID";
+        public static String PRODUCT_TYPE_ID="PRODUCT_TYPE_ID";
+
+    }
+    public static class SALES_BILL_DETAIL{
+
+    }
+    public static class SALESBILL{
+
+    }
+    public static class USER_TABLE{
+
+    }
+    public static class PRODUCT_TYPE{
+
+    }
+    public static class UOM{
+
+    }
+
+
 
     public static class CREATE_TABLE{
         public static String SALES_BILL_DETAIL="CREATE TABLE `sales_bill_detail` (\n" +

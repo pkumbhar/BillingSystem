@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.billingsystem.R;
+import com.custom_dialog.ViewDialog;
 import com.entity.Product;
 import com.entity.ProductType;
 
@@ -58,6 +59,9 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext,"Item Clicked",Toast.LENGTH_SHORT).show();
+                ViewDialog alertDialoge = new ViewDialog();
+                alertDialoge.showDialog(mActivity, "PUT DIALOG TITLE");
+
             }
         });
     }
