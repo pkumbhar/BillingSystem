@@ -17,6 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.background.DownloadProduct;
+import com.databaseAdapter.DBAdapter;
+import com.entity.Product;
+
+import java.util.List;
 
 public class ItemSearchAct extends AppCompatActivity {
 
@@ -70,6 +74,16 @@ public class ItemSearchAct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                //. new DownloadProduct(getApplicationContext(),ItemSearchAct.this,mHandler).execute("");
+                DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
+                try{
+                    List<Product> productList=dbAdapter.getProductList();
+
+
+
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
 
             }

@@ -97,6 +97,7 @@ public class DBAdapter {
                 product.setPrice(BaseTable.PRODUCT.PRICE);
                 product.setProductId(BaseTable.PRODUCT.PRODUCT_ID);
                 productList.add(product);
+                mCursor.moveToNext();
             }
             return productList;
         }
