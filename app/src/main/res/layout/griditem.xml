@@ -12,15 +12,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageView"
+            android:visibility="gone"
             android:layout_gravity="center"
             android:src="@drawable/table"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="tableName"
+            android:textSize="22sp"
             android:id="@+id/table_id"
+            android:textColor="#ee000000"
             android:gravity="center"/>
-
     </LinearLayout>
 
 

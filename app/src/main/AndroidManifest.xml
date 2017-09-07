@@ -18,7 +18,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginAct" />
-        <activity android:name=".TableAct" />
+        <activity android:name=".TableAct"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".ItemSearchAct" />
         <activity android:name=".OrderAct" />
         <activity android:name=".MenuListAct" />

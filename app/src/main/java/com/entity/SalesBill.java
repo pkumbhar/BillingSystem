@@ -21,6 +21,25 @@ public class SalesBill {
     private String serviceCharge;
     private String isOpen;
     private String recordTime;
+    private String contact;
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    private List<SalesBillDetail> salesBillDetailList;
+
+    public List<SalesBillDetail> getSalesBillDetailList() {
+        return salesBillDetailList;
+    }
+
+    public void setSalesBillDetailList(List<SalesBillDetail> salesBillDetailList) {
+        this.salesBillDetailList = salesBillDetailList;
+    }
 
     private List<UserTable> userTableList;
 
