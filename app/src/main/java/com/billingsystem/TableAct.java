@@ -12,6 +12,9 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +40,7 @@ import com.entity.SalesBill;
 import com.entity.SalesBillDetail;
 import com.entity.UserTable;
 import com.google.gson.Gson;
+import com.listAdapter.SalesBillAdapter;
 import com.serverUrl.ServerHost;
 
 import org.json.JSONArray;
@@ -52,6 +56,9 @@ public class TableAct extends AppCompatActivity {
     protected GridView mGridView;
     protected TableAdapter mAdapter;
     public static ArrayList<UserTable> userTableList=new ArrayList<>();
+    private TextView tvCustomerName,tvCustomerEmail,tvCustomerContactNumber,tvTotalPrice,tvtotalTax;
+    private RecyclerView recyclerViewBillList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,13 @@ public class TableAct extends AppCompatActivity {
         setContentView(R.layout.activity_table);
         mGridView = (GridView) findViewById(R.id.gridView);
         mGridView = (GridView) findViewById(R.id.gridView);
+        tvCustomerName=(TextView)findViewById(R.id.tv_custNameId);
+        tvCustomerContactNumber=(TextView)findViewById(R.id.tv_cust_mibiId);
+        tvCustomerEmail=(TextView)findViewById(R.id.tv_custemail_id);
+        tvTotalPrice=(TextView)findViewById(R.id.tv_cust_total_price_id);
+        recyclerViewBillList=(RecyclerView)findViewById(R.id.listbillListId);
+        tvtotalTax=(TextView)findViewById(R.id.tv_cust_total_tax_id);
+
         new DownloadUserTable(getApplicationContext(),TableAct.this,mHandler).execute("");
 /*
 {"salesBill":{"employeeName":"Ashish","lastName":"Dham","createdOn":"Thu Sep 07 00:00:00 IST 2017","userId":"USRTBL-2017-55","totalTax":1232.26936282954,"firstName":"Ashish","SalesBillDetail":[{"sales_bill_id":"SBL-2017-345","quantity":1,"productId":"PROD-2017-48","price":70,"sales_bill_detail_id":"SBD-2017-186","productName":"Mix Veg"},{"sales_bill_id":"SBL-2017-345","quantity":2,"productId":"PROD-2017-47","price":300,"sales_bill_detail_id":"SBD-2017-206","productName":"Chicken (Gawran)"},{"sales_bill_id":"SBL-2017-345","quantity":7,"productId":"PROD-2017-50","price":60,"sales_bill_detail_id":"SBD-2017-209","productName":"Dal Tadka"},{"sales_bill_id":"SBL-2017-345","quantity":4,"productId":"PROD-2017-52","price":25,"sales_bill_detail_id":"SBD-2017-210","productName":"Dosa"},{"sales_bill_id":"SBL-2017-345","quantity":1,"productId":"PROD-2017-47","price":300,"sales_bill_detail_id":"SBD-2017-212","productName":"Chicken (Gawran)"}],"totalAmount":2722.26936282954,"isOpen":true,"createdBy":"EMP-2017-1","customerEmail":"dhamankar.ashu100@gmail.com","contactNumber":"471582","SalesBillID":"SBL-2017-345"}}
@@ -140,10 +154,10 @@ public class TableAct extends AppCompatActivity {
 
                 if(table.isActive()){
                   //  imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.table_green));
-                    textView.setTextColor(getColor(R.color.colorAccent));
+                    textView.setTextColor(Color.parseColor("#FF3AD922"));
                 }else {
                    // imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.table_black));
-                    textView.setTextColor(getColor(R.color.colorPrimary));
+                    textView.setTextColor(Color.parseColor("#FFDE0B0B"));
                 }
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -184,7 +198,9 @@ public class TableAct extends AppCompatActivity {
             requestQueue.add(stringRequest);
             requestQueue.start();
         }
+        private SalesBillAdapter salesBillAdapter;
         private void handelData(String response){
+            List<SalesBillDetail> salesBillDetails=new ArrayList<SalesBillDetail>();
             if(response!=null){
                 if(!response.isEmpty()){
                     SalesBill salesBill=new SalesBill();
@@ -209,7 +225,7 @@ public class TableAct extends AppCompatActivity {
                             }if(jsonSalesBill.has("SalesBillDetail")){
                                 //Retrn array
                                 JSONArray jsonSalesBillDetail=jsonSalesBill.getJSONArray("SalesBillDetail");
-                                List<SalesBillDetail> salesBillDetails=new ArrayList<SalesBillDetail>();
+
                                 for(int i=0;i<jsonSalesBillDetail.length();i++){
                                     JSONObject js=jsonSalesBillDetail.getJSONObject(i);
                                     SalesBillDetail detail=new SalesBillDetail();
@@ -248,7 +264,22 @@ public class TableAct extends AppCompatActivity {
                     }catch (Exception e){
                         e.printStackTrace();
                     }
+                    if(salesBill!=null){
+                        tvCustomerName.setText(""+salesBill.getFirstName());
+                        tvCustomerEmail.setText(""+salesBill.getEmail());
+                        tvCustomerContactNumber.setText(""+salesBill.getContact());
+                        tvTotalPrice.setText("Total Bill:-"+salesBill.getTotalAmount());
+                        tvtotalTax.setText("Tax:-"+salesBill.getTotaltax());
+
+                        salesBillAdapter=new SalesBillAdapter(salesBillDetails,TableAct.this,mContext);
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                        recyclerViewBillList.setLayoutManager(mLayoutManager);
+                        recyclerViewBillList.setItemAnimator(new DefaultItemAnimator());
+                        recyclerViewBillList.setAdapter(salesBillAdapter);
+
+                    }
                 }
+
             }
 
 
