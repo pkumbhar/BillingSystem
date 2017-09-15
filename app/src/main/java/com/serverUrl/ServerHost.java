@@ -6,5 +6,5 @@ package com.serverUrl;
 
 public class ServerHost {
     //public static String SERVER_URL="http://localhost:8082/BillingSystem/";
-    public static String SERVER_URL="http://192.168.1.104:8084/BillingSystem".trim();
+    public static String SERVER_URL="http://192.168.0.107:8084/BillingSystem".trim();
 }

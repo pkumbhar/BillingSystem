@@ -17,11 +17,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,6 +60,8 @@ public class TableAct extends AppCompatActivity {
     public static ArrayList<UserTable> userTableList=new ArrayList<>();
     private TextView tvCustomerName,tvCustomerEmail,tvCustomerContactNumber,tvTotalPrice,tvtotalTax;
     private RecyclerView recyclerViewBillList;
+    private Button btnAddOrder;
+
 
 
     @Override
@@ -66,12 +70,8 @@ public class TableAct extends AppCompatActivity {
         setContentView(R.layout.activity_table);
         mGridView = (GridView) findViewById(R.id.gridView);
         mGridView = (GridView) findViewById(R.id.gridView);
-        tvCustomerName=(TextView)findViewById(R.id.tv_custNameId);
-        tvCustomerContactNumber=(TextView)findViewById(R.id.tv_cust_mibiId);
-        tvCustomerEmail=(TextView)findViewById(R.id.tv_custemail_id);
-        tvTotalPrice=(TextView)findViewById(R.id.tv_cust_total_price_id);
-        recyclerViewBillList=(RecyclerView)findViewById(R.id.listbillListId);
-        tvtotalTax=(TextView)findViewById(R.id.tv_cust_total_tax_id);
+
+
 
         new DownloadUserTable(getApplicationContext(),TableAct.this,mHandler).execute("");
 /*
@@ -138,41 +138,35 @@ public class TableAct extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
-            View grid;
-            final UserTable table=list.get(position);
-            Log.i("SI------------>",""+table.getUserTableNumber());
-            LayoutInflater inflater = (LayoutInflater) mContext
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View v;
 
-            if (convertView == null) {
-
-                grid = new View(mContext);
-                grid = inflater.inflate(R.layout.griditem, null);
-               // ImageView imageView = (ImageView) grid.findViewById(R.id.imageView);
-                 TextView textView=(TextView)grid.findViewById(R.id.table_id);
-                textView.setText(table.getUserTableNumber());
-
-                if(table.isActive()){
-                  //  imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.table_green));
-                    textView.setTextColor(Color.parseColor("#FF3AD922"));
-                }else {
-                   // imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.table_black));
-                    textView.setTextColor(Color.parseColor("#FFDE0B0B"));
-                }
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(),"ok",Toast.LENGTH_SHORT).show();
-                        setBillTable(table.getUserTableId());
-
-
-
-                    }
-                });
+            if (convertView == null) {  // if it's not recycled, initialize some attributes
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(     Context.LAYOUT_INFLATER_SERVICE );
+                v = inflater.inflate(R.layout.griditem, parent, false);
             } else {
-                grid = (View) convertView;
+                v = (View) convertView;
             }
-            return grid;
+            TextView textView = (TextView)v.findViewById(R.id.tv_tblNo_id);
+           // textView.setText();
+
+            LinearLayout linearLayou=(LinearLayout)v.findViewById(R.id.lin_grid_id);
+            linearLayou.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplication(),"Lin_clicked",Toast.LENGTH_SHORT).show();
+                }
+            });
+            if(userTableList.get(position).isActive()==true){
+                linearLayou.setBackgroundResource(R.drawable.available);
+                textView.setText(userTableList.get(position).getUserTableNumber());
+                textView.setTextColor(Color.parseColor("#FF000000"));
+
+            }else if(userTableList.get(position).isActive()==false) {
+                linearLayou.setBackgroundResource(R.drawable.free);
+                textView.setText(userTableList.get(position).getUserTableNumber());
+                textView.setTextColor(Color.parseColor("#FF0B2266"));
+            }
+            return v;
         }
         /*
         HANDELING ORDER
@@ -265,11 +259,11 @@ public class TableAct extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     if(salesBill!=null){
-                        tvCustomerName.setText(""+salesBill.getFirstName());
+                       /* tvCustomerName.setText(""+salesBill.getFirstName());
                         tvCustomerEmail.setText(""+salesBill.getEmail());
                         tvCustomerContactNumber.setText(""+salesBill.getContact());
                         tvTotalPrice.setText("Total Bill:-"+salesBill.getTotalAmount());
-                        tvtotalTax.setText("Tax:-"+salesBill.getTotaltax());
+                        tvtotalTax.setText("Tax:-"+salesBill.getTotaltax());*/
 
                         salesBillAdapter=new SalesBillAdapter(salesBillDetails,TableAct.this,mContext);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());

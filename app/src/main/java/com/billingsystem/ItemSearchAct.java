@@ -33,7 +33,7 @@ public class ItemSearchAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_search);
         btnMenuList=(Button)findViewById(R.id.btn_billsys_menuList_id);
-        chIsActive=(CheckBox)findViewById(R.id.isChakedID);
+        //chIsActive=(CheckBox)findViewById(R.id.isChakedID);
         btnFind=(Button)findViewById(R.id.btnfindID);
         btnAddToOrder=(Button)findViewById(R.id.btn_add_item_id);
 
@@ -44,7 +44,7 @@ public class ItemSearchAct extends AppCompatActivity {
             }
         });
 
-        chIsActive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      /*  chIsActive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 String url = "";
@@ -69,11 +69,11 @@ public class ItemSearchAct extends AppCompatActivity {
                             }
                         });
             }
-        });
+        });*/
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               //. new DownloadProduct(getApplicationContext(),ItemSearchAct.this,mHandler).execute("");
+                new DownloadProduct(getApplicationContext(),ItemSearchAct.this,mHandler).execute("");
                 DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
                 try{
                     List<Product> productList=dbAdapter.getProductList();

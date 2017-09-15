@@ -7,5 +7,20 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="btn_login_style">
+        <item name="android:background">@drawable/btn_login_selector</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:layout_marginLeft">30sp</item>
+        <item name="android:layout_marginRight">30sp</item>
+        <item name="android:visibility">gone</item>
+    </style>
+    <style name="tbLnumber_style">
+        <item name="android:background">@drawable/table_label</item>
+        <item name="android:text">1</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
 
 </resources>

@@ -7,22 +7,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:visibility="gone"
-            android:layout_gravity="center"
-            android:src="@drawable/table"/>
-        <TextView
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginLeft="20sp"
+        android:layout_marginRight="20sp"
+        android:layout_marginTop="20sp"
+        android:background="#FFF6F7F7">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="tableName"
-            android:textSize="22sp"
-            android:id="@+id/table_id"
-            android:textColor="#ee000000"
-            android:gravity="center"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/lin_grid_id"
+            android:weightSum="1"
+            android:background="#164220">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:gravity="right"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/tbLnumber_style"
+                    android:layout_marginTop="8sp"
+                    android:layout_marginRight="8sp"
+                    android:id="@+id/tv_tblNo_id"/>
+            </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+
     </LinearLayout>
 
 
