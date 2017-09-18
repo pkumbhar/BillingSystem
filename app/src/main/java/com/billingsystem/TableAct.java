@@ -42,6 +42,7 @@ import com.entity.SalesBill;
 import com.entity.SalesBillDetail;
 import com.entity.UserTable;
 import com.google.gson.Gson;
+import com.listAdapter.MenuItemAdapter;
 import com.listAdapter.SalesBillAdapter;
 import com.serverUrl.ServerHost;
 
@@ -158,7 +159,7 @@ public class TableAct extends AppCompatActivity {
                         //startActivity(new Intent(TableAct.this,ItemSearchAct.class));
 
                     }else if(userTableList.get(position).isActive()==false){
-                        startActivity(new Intent(TableAct.this,ItemSearchAct.class));
+                        startActivity(new Intent(TableAct.this,MenuListAct.class));
                     }
 
                 }

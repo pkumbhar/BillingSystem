@@ -52,7 +52,7 @@ public class MenuListAct extends AppCompatActivity {
     }
  /*
     Category View Set
-     */
+  */
     private void setCategoryView() {
         List<ProductType> productTypeList=new ArrayList<ProductType>();
         DBAdapter dbAdapter = new DBAdapter(getApplicationContext());
