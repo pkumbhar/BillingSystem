@@ -136,12 +136,12 @@ public class TableAct extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
             View v;
 
             if (convertView == null) {  // if it's not recycled, initialize some attributes
-                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(     Context.LAYOUT_INFLATER_SERVICE );
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE );
                 v = inflater.inflate(R.layout.griditem, parent, false);
             } else {
                 v = (View) convertView;
@@ -149,11 +149,18 @@ public class TableAct extends AppCompatActivity {
             TextView textView = (TextView)v.findViewById(R.id.tv_tblNo_id);
            // textView.setText();
 
-            LinearLayout linearLayou=(LinearLayout)v.findViewById(R.id.lin_grid_id);
+            final LinearLayout linearLayou=(LinearLayout)v.findViewById(R.id.lin_grid_id);
             linearLayou.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getApplication(),"Lin_clicked",Toast.LENGTH_SHORT).show();
+                    if(userTableList.get(position).isActive()==true){
+                        //startActivity(new Intent(TableAct.this,ItemSearchAct.class));
+
+                    }else if(userTableList.get(position).isActive()==false){
+                        startActivity(new Intent(TableAct.this,ItemSearchAct.class));
+                    }
+
                 }
             });
             if(userTableList.get(position).isActive()==true){
@@ -166,6 +173,7 @@ public class TableAct extends AppCompatActivity {
                 textView.setText(userTableList.get(position).getUserTableNumber());
                 textView.setTextColor(Color.parseColor("#FF0B2266"));
             }
+
             return v;
         }
         /*

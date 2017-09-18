@@ -22,5 +22,12 @@
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
     </style>
+    <style name="text_roe_title">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/title_row</item>
+
+    </style>
 
 </resources>

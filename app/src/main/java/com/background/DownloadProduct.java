@@ -100,7 +100,8 @@ public class DownloadProduct extends AsyncTask<String,Void,String> {
     }
     private int HandelProductData(String ins){
         try{
-            JSONObject object=new JSONObject(ins);
+
+            JSONObject object=new JSONObject(ins.toString());
             if(object.has("product")){
                 JSONArray jsonArray=object.getJSONArray("product");
                 for(int i=0;i<jsonArray.length();i++){

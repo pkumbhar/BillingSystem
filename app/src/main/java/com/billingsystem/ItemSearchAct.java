@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.background.DownloadProduct;
 import com.databaseAdapter.DBAdapter;
+import com.databaseAdapter.DBBackUpAsyncTask;
 import com.entity.Product;
 
 import java.util.List;
@@ -78,9 +79,6 @@ public class ItemSearchAct extends AppCompatActivity {
                 try{
                     List<Product> productList=dbAdapter.getProductList();
 
-
-
-
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -101,7 +99,9 @@ public class ItemSearchAct extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(msg.what==1){
-                //startActivity(new Intent(ItemSearchAct.this,MenuListAct.class));
+
+                new DBBackUpAsyncTask(getApplicationContext()).execute("");
+                startActivity(new Intent(ItemSearchAct.this,MenuListAct.class));
                 Toast.makeText(getApplication(),"cl",Toast.LENGTH_SHORT).show();
             }
         }

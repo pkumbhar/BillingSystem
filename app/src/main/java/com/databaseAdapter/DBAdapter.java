@@ -43,6 +43,7 @@ public class DBAdapter {
             db.execSQL(BaseTable.CREATE_TABLE.PRODUCT_TYPE);
             db.execSQL(BaseTable.CREATE_TABLE.SALESBILL);
             db.execSQL(BaseTable.CREATE_TABLE.USER_TABLE);
+            db.execSQL(BaseTable.CREATE_TABLE.UOM);
             Log.i("Table Created..!!","--"+db.getPath());
 
         }
@@ -75,8 +76,17 @@ public class DBAdapter {
         cv.put("UOM_ID",product.getUomId().getUomId());
         cv.put("PRODUCT_TYPE_ID",product.getProdyctTypeId().getProductTypeId());
         Long l=db.insert(BaseTable.TABLELIST.PRODUCT,null,cv);
+
         if(l>0){
             Log.i("Ins Product table"," ");
+           ContentValues cv1=new ContentValues();
+            cv1.put(BaseTable.PRODUCT_TYPE.PRODUCT_TYPE_ID,product.getProdyctTypeId().getProductTypeId());
+            cv1.put(BaseTable.PRODUCT_TYPE.PRODUCT_NAME,product.getProdyctTypeId().getProductName());
+            cv1.put(BaseTable.PRODUCT_TYPE.TAX_ID,"XYZ");
+            Long l2=db.insert(BaseTable.TABLELIST.PRODUCT_TYPE,null,cv1);
+            if(l2>0){
+                Log.i("ins in Product_type","");
+            }
         }
         return l;
     }

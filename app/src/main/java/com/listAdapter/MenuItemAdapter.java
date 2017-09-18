@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,10 +39,18 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
     public class MenuItem extends RecyclerView.ViewHolder{
 
         private TextView tvItemName;
+        private TextView tvItemPrice;
+        private TextView tvquantity;
+        private ImageView imgAddSign;
+        private ImageView imgDeletSign;
 
         public MenuItem(View itemView) {
             super(itemView);
             tvItemName=(TextView)itemView.findViewById(R.id.tvItemNameId);
+            tvItemPrice=(TextView)itemView.findViewById(R.id.tv_row_price_id);
+            tvquantity=(TextView)itemView.findViewById(R.id.tv_row_quantiry_id_tx);
+            imgAddSign=(ImageView)itemView.findViewById(R.id.img_row_add_sign_id);
+            imgDeletSign=(ImageView)itemView.findViewById(R.id.img_row_minussign_id);
         }
     }
 
@@ -55,12 +64,28 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
     public void onBindViewHolder(MenuItem holder, int position) {
         Product product=productList.get(position);
         holder.tvItemName.setText(product.getName());
+
+        holder.tvItemPrice.setText(product.getPrice());
+        holder.tvquantity.setText("0");
+
         holder.tvItemName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext,"Item Clicked",Toast.LENGTH_SHORT).show();
                 ViewDialog alertDialoge = new ViewDialog();
                 alertDialoge.showDialog(mActivity, "PUT DIALOG TITLE");
+
+            }
+        });
+        holder.imgDeletSign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        holder.imgDeletSign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });

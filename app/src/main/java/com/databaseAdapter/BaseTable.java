@@ -23,6 +23,7 @@ public  class BaseTable {
         public static String PRODUCT_TYPE_ID="PRODUCT_TYPE_ID";
 
     }
+
     public static class SALES_BILL_DETAIL{
 
     }
@@ -33,10 +34,14 @@ public  class BaseTable {
 
     }
     public static class PRODUCT_TYPE{
+        public static String PRODUCT_TYPE_ID="PRODUCT_TYPE_ID";
+        public static String PRODUCT_NAME="PRODUCT_NAME";
+        public static String TAX_ID="TAX_ID";
 
     }
     public static class UOM{
-
+        public static String UOM_ID="USER_ID";
+        public static String UOM_NAME="USER_ID";
     }
 
 
