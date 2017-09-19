@@ -81,6 +81,7 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
             @Override
             public void onClick(View v) {
 
+
             }
         });
         holder.imgDeletSign.setOnClickListener(new View.OnClickListener() {

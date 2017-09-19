@@ -1,5 +1,7 @@
 package com.billingsystem;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +12,8 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -42,6 +46,7 @@ import com.entity.SalesBill;
 import com.entity.SalesBillDetail;
 import com.entity.UserTable;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.listAdapter.MenuItemAdapter;
 import com.listAdapter.SalesBillAdapter;
 import com.serverUrl.ServerHost;
@@ -54,7 +59,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableAct extends AppCompatActivity {
+public class TableAct extends Fragment {
 
     protected GridView mGridView;
     protected TableAdapter mAdapter;
@@ -63,22 +68,20 @@ public class TableAct extends AppCompatActivity {
     private RecyclerView recyclerViewBillList;
     private Button btnAddOrder;
 
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_table);
-        mGridView = (GridView) findViewById(R.id.gridView);
-        mGridView = (GridView) findViewById(R.id.gridView);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
-
-        new DownloadUserTable(getApplicationContext(),TableAct.this,mHandler).execute("");
-/*
-{"salesBill":{"employeeName":"Ashish","lastName":"Dham","createdOn":"Thu Sep 07 00:00:00 IST 2017","userId":"USRTBL-2017-55","totalTax":1232.26936282954,"firstName":"Ashish","SalesBillDetail":[{"sales_bill_id":"SBL-2017-345","quantity":1,"productId":"PROD-2017-48","price":70,"sales_bill_detail_id":"SBD-2017-186","productName":"Mix Veg"},{"sales_bill_id":"SBL-2017-345","quantity":2,"productId":"PROD-2017-47","price":300,"sales_bill_detail_id":"SBD-2017-206","productName":"Chicken (Gawran)"},{"sales_bill_id":"SBL-2017-345","quantity":7,"productId":"PROD-2017-50","price":60,"sales_bill_detail_id":"SBD-2017-209","productName":"Dal Tadka"},{"sales_bill_id":"SBL-2017-345","quantity":4,"productId":"PROD-2017-52","price":25,"sales_bill_detail_id":"SBD-2017-210","productName":"Dosa"},{"sales_bill_id":"SBL-2017-345","quantity":1,"productId":"PROD-2017-47","price":300,"sales_bill_detail_id":"SBD-2017-212","productName":"Chicken (Gawran)"}],"totalAmount":2722.26936282954,"isOpen":true,"createdBy":"EMP-2017-1","customerEmail":"dhamankar.ashu100@gmail.com","contactNumber":"471582","SalesBillID":"SBL-2017-345"}}
- */
-
+        View view=inflater.inflate(R.layout.activity_table, container, false);
+        mGridView = (GridView) view.findViewById(R.id.gridView);
+        mGridView = (GridView) view.findViewById(R.id.gridView);
+        new DownloadUserTable(getActivity(),getActivity(),mHandler).execute("");
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -86,7 +89,19 @@ public class TableAct extends AppCompatActivity {
             }
         });
 
+        return view;
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
 
     private Handler mHandler= new Handler(){
         @Override
@@ -101,7 +116,7 @@ public class TableAct extends AppCompatActivity {
         }
     };
     private void setListView(){
-        mAdapter = new TableAdapter(this,userTableList);
+        mAdapter = new TableAdapter(getActivity(),userTableList);
         mGridView.setAdapter(mAdapter);
     }
 
@@ -154,12 +169,45 @@ public class TableAct extends AppCompatActivity {
             linearLayou.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getApplication(),"Lin_clicked",Toast.LENGTH_SHORT).show();
+
                     if(userTableList.get(position).isActive()==true){
                         //startActivity(new Intent(TableAct.this,ItemSearchAct.class));
 
                     }else if(userTableList.get(position).isActive()==false){
-                        startActivity(new Intent(TableAct.this,MenuListAct.class));
+                        UserTable userTable=userTableList.get(position);
+
+                        String usertableid=userTable.getUserTableId();
+                        String userTableNumber=userTable.getUserTableNumber();
+                        String employeeId="EMP-2017-1";
+
+                        SalesBill salesBill=new SalesBill();
+                        salesBill.setUserId(usertableid);
+                        salesBill.setCreatedBy(employeeId);
+                        salesBill.setFirstName("");
+                        salesBill.setEmail("");
+                        salesBill.setIsOpen("1");
+                        salesBill.setMiddleName("");
+                        salesBill.setServiceCharge("");
+                        salesBill.setRecordTime("");
+                        Gson gson=new Gson();
+                        String salsebill=gson.toJson(salesBill);
+                        Log.i("","salsebill");
+
+                        //{"MiddleName":"","createdBy":"EMP-2017-1","email":"","firstName":"","isOpen":"1","recordTime":"","serviceCharge":"","userId":"USRTBL-2017-58"}
+
+
+
+
+
+
+
+
+                        Toast.makeText(getActivity(),"T:ID="+usertableid+" T:no="+userTableNumber,Toast.LENGTH_SHORT).show();
+
+
+                       /* MenuListFragment menuListFragment=new MenuListFragment();
+                        FragmentManager fragmentManager=getFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();*/
                     }
 
                 }
@@ -182,7 +230,7 @@ public class TableAct extends AppCompatActivity {
          */
 
         private void setBillTable(String userTableId){
-            RequestQueue requestQueue=Volley.newRequestQueue(getApplicationContext());
+            RequestQueue requestQueue=Volley.newRequestQueue(getActivity());
             String url=ServerHost.SERVER_URL.concat("/rest/BillServices/salesBill?userTable="+userTableId);
             StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                 @Override
@@ -268,14 +316,8 @@ public class TableAct extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     if(salesBill!=null){
-                       /* tvCustomerName.setText(""+salesBill.getFirstName());
-                        tvCustomerEmail.setText(""+salesBill.getEmail());
-                        tvCustomerContactNumber.setText(""+salesBill.getContact());
-                        tvTotalPrice.setText("Total Bill:-"+salesBill.getTotalAmount());
-                        tvtotalTax.setText("Tax:-"+salesBill.getTotaltax());*/
-
-                        salesBillAdapter=new SalesBillAdapter(salesBillDetails,TableAct.this,mContext);
-                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                        salesBillAdapter=new SalesBillAdapter(salesBillDetails,getActivity(),getContext());
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                         recyclerViewBillList.setLayoutManager(mLayoutManager);
                         recyclerViewBillList.setItemAnimator(new DefaultItemAnimator());
                         recyclerViewBillList.setAdapter(salesBillAdapter);
@@ -287,15 +329,7 @@ public class TableAct extends AppCompatActivity {
 
 
         }
-        public Handler mHandler=new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if(msg.what==1){
-                    startActivity(new Intent(TableAct.this,MenuListAct.class));
-                }
-            }
-        };
+
 
     }
 

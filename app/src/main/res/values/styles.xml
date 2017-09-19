@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="btn_login_style">
         <item name="android:background">@drawable/btn_login_selector</item>
         <item name="android:gravity">center</item>
@@ -15,6 +16,7 @@
         <item name="android:layout_marginRight">30sp</item>
         <item name="android:visibility">gone</item>
     </style>
+
     <style name="tbLnumber_style">
         <item name="android:background">@drawable/table_label</item>
         <item name="android:text">1</item>
@@ -22,6 +24,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="text_roe_title">
         <item name="android:textSize">22sp</item>
         <item name="android:textStyle">bold</item>
@@ -29,5 +32,14 @@
         <item name="android:textColor">@color/title_row</item>
 
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

@@ -25,9 +25,36 @@ public  class BaseTable {
     }
 
     public static class SALES_BILL_DETAIL{
+        public static String SALES_BILL_DETAIL="SALES_BILL_DETAIL";
+        public static String SALES_BILL_DETAIL_ID="SALES_BILL_DETAIL_ID";
+        public static String PRODUCT_ID="PRODUCT_ID";
+        public static String QUANTITY="QUANTITY";
+        public static String PRICE="PRICE";
+        public static String TOTAL_PRICE="TOTAL_PRICE";
+        public static String SALES_BILL_ID="SALES_BILL_ID";
+        public static String GST="GST";
+        public static String IS_ORDER_READY="IS_ORDER_READY";
+
 
     }
-    public static class SALESBILL{
+    public static class SALES_BILL{
+        public static String SALES_BILL="SALES_BILL";
+        public static String FIRST_NAME="SALES_BILL_ID";
+        public static String LAST_NAME="LAST_NAME";
+        public static String CUSTOMER_EMAIL="CUSTOMER_EMAIL";
+        public static String CONTACT_NO="CONTACT_NO";
+        public static String TOTAL_PRICE="TOTAL_PRICE";
+        public static String TOTAL_TAX="TOTAL_TAX";
+        public static String TOTAL_AMOUNT="TOTAL_AMOUNT";
+        public static String CREATED_BY="CREATED_BY";
+        public static String CREATED_ON="CREATED_ON";
+        public static String USER_ID="USER_ID";
+        public static String SERVICE_CHAGRE="SERVICE_CHAGRE";
+        public static String IS_OPEN="IS_OPEN";
+        public static String RECORD_TIME="RECORD_TIME";
+        public static String IS_UPDATE="IS_UPDATE";
+        public static String PAYMENT_MODE="PAYMENT_MODE";
+
 
     }
     public static class USER_TABLE{

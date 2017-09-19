@@ -1,6 +1,7 @@
 package com.billingsystem;
 
 import android.animation.ValueAnimator;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -48,8 +49,8 @@ public class BillingMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (btnStartOrder.getText().toString().equals("Login")) {
-                    startActivity(new Intent(BillingMain.this,TableAct.class));
-                    finish();
+
+                    startActivity(new Intent(BillingMain.this,FragmentMainActivity.class));
 
                 } else {
                     dbAdapter = new DBAdapter(getApplicationContext());

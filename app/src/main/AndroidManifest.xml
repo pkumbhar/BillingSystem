@@ -22,16 +22,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginAct" />
-        <activity
-            android:name=".TableAct"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
         <activity android:name=".ItemSearchAct" />
         <activity android:name=".OrderAct" />
         <activity android:name=".MenuListAct" />
         <activity android:name=".ReleseTable" />
         <activity android:name=".CaptionSlider" />
-        <activity android:name=".ForgetPassword"></activity>
+        <activity android:name=".ForgetPassword" />
+        <activity android:name=".FragmentMainActivity"
+            android:label="@string/title_activity_fragment_main"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>
