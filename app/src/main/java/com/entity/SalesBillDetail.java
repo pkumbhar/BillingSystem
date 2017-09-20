@@ -15,6 +15,15 @@ public class SalesBillDetail {
     private String totalPrice;
     private String salesBillId;
     private String gst;
+    private SalesBillDetail salesBillDetail;
+
+    public SalesBillDetail getSalesBillDetail() {
+        return salesBillDetail;
+    }
+
+    public void setSalesBillDetail(SalesBillDetail salesBillDetail) {
+        this.salesBillDetail = salesBillDetail;
+    }
 
     public String getSalesBilldetailId() {
         return salesBilldetailId;

@@ -2,6 +2,8 @@ package com.billingsystem;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -13,15 +15,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.background.DownloadProduct;
 
 public class FragmentMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public static TextView tvCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar_acc);
+        tvCart=(TextView)findViewById(R.id.tv_cart_accessories_id);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
 
@@ -35,6 +43,16 @@ public class FragmentMainActivity extends AppCompatActivity
             }
         });
 
+        tvCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"OH",Toast.LENGTH_SHORT).show();
+                FinalOrderFragment finalOrderFragment=new FinalOrderFragment();
+                FragmentManager fragmentManager=getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.content_fragment_main,finalOrderFragment).commit();
+
+            }
+        });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -95,6 +113,7 @@ public class FragmentMainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();
            // setTitle(title);
         } else if (id == R.id.nav_gallery) {
+            new DownloadProduct(getApplicationContext(),FragmentMainActivity.this,mHandler).execute("");
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -110,4 +129,16 @@ public class FragmentMainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    Handler mHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what==1){
+
+                MenuListFragment menuListFragment=new MenuListFragment();
+                FragmentManager fragmentManager=getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();
+            }
+        }
+    };
 }

@@ -40,6 +40,10 @@ public class MenuListAct extends AppCompatActivity {
                 Product product=new Product();
                 product.setName(mCursor.getString(mCursor.getColumnIndex("NAME")));
                 product.setPrice(mCursor.getString(mCursor.getColumnIndex("PRICE")));
+                product.setProductId(mCursor.getString(mCursor.getColumnIndex(BaseTable.PRODUCT.PRODUCT_ID)));
+                ProductType productType=new ProductType();
+                productType.setProductTypeId(mCursor.getString(mCursor.getColumnIndex(BaseTable.PRODUCT.PRODUCT_TYPE_ID)));
+                product.setProdyctTypeId(productType);
                 list.add(product);
                 mCursor.moveToNext();
             }

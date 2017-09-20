@@ -39,7 +39,8 @@ public  class BaseTable {
     }
     public static class SALES_BILL{
         public static String SALES_BILL="SALES_BILL";
-        public static String FIRST_NAME="SALES_BILL_ID";
+        public static String SALES_BILL_ID="SALES_BILL_ID";
+        public static String FIRST_NAME="FIRST_NAME";
         public static String LAST_NAME="LAST_NAME";
         public static String CUSTOMER_EMAIL="CUSTOMER_EMAIL";
         public static String CONTACT_NO="CONTACT_NO";
@@ -81,8 +82,7 @@ public  class BaseTable {
                 "\t`PRICE`\tTEXT,\n" +
                 "\t`TOTAL_PRICE`\tTEXT,\n" +
                 "\t`SALES_BILL_ID`\tTEXT,\n" +
-                "\t`GST`\tTEXT,\n" +
-                "\tPRIMARY KEY(SALES_BILL_DETAIL_ID)\n" +
+                "\t`GST`\tTEXT\n" +
                 ");";
 
 
@@ -100,8 +100,7 @@ public  class BaseTable {
                 "\t`USER_ID`\tTEXT,\n" +
                 "\t`SERVICE_CHAGRE`\tTEXT,\n" +
                 "\t`IS_OPEN`\tTEXT,\n" +
-                "\t`RECORD_TIME`\tTEXT,\n" +
-                "\tPRIMARY KEY(SALES_BILL_ID)\n" +
+                "\t`RECORD_TIME`\tTEXT\n" +
                 ");";
 
         public static String PRODUCT="CREATE TABLE `product` (\n" +

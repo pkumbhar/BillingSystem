@@ -48,7 +48,7 @@
                             android:id="@+id/tv_cart_accessories_id"
                             android:layout_marginRight="2sp"
                             android:layout_marginLeft="8sp"
-                            android:textColor="#d26464"
+                            android:textColor="#ffffff"
                             android:layout_gravity="center|right"/>
                         <ImageView
                             android:layout_width="wrap_content"

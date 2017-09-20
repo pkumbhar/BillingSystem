@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.billingsystem.FinalOrderFragment">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:orientation="vertical">
+
+    <view
+        android:id="@+id/recycler_final_order_id"
+        class="android.support.v7.widget.RecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:layout_weight="0.9"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_centerInParent="true"
+        android:background="#f7f7f7"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SAVE ORDER"
+        android:id="@+id/btn_final_order_id"/>
+</LinearLayout>
+
+
+</LinearLayout>

@@ -4,7 +4,6 @@ package com.listAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,9 +19,8 @@ import com.custom_dialog.ViewDialog;
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
 import com.entity.Product;
-import com.entity.ProductType;
-
-import org.w3c.dom.Text;
+import com.entity.SalesBill;
+import com.entity.SalesBillDetail;
 
 import java.util.List;
 
@@ -30,14 +28,14 @@ import java.util.List;
  * Created by Admin on 24-August-24-2017.
  */
 
-public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuItem>{
+public class FinalOrderAdapter extends RecyclerView.Adapter<FinalOrderAdapter.MenuItem>{
 
-    private List<Product> productList;
+    private List<SalesBillDetail> salesBillDetailList;
     private Context mContext;
     private Activity mActivity;
 
-    public MenuItemAdapter(List<Product> productList, Context mContext, Activity mActivity) {
-        this.productList = productList;
+    public FinalOrderAdapter(List<SalesBillDetail> salesBillDetailList, Context mContext, Activity mActivity) {
+        this.salesBillDetailList = salesBillDetailList;
         this.mContext = mContext;
         this.mActivity = mActivity;
     }
@@ -68,11 +66,11 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
 
     @Override
     public void onBindViewHolder(final MenuItem holder, final int position) {
-        final Product product=productList.get(position);
-        holder.tvItemName.setText(product.getName());
+        final SalesBillDetail salesBillDetail=salesBillDetailList.get(position);
+        holder.tvItemName.setText(salesBillDetail.getProductId());
 
-        holder.tvItemPrice.setText(product.getPrice());
-        holder.tvquantity.setText("0");
+        holder.tvItemPrice.setText(salesBillDetail.getPrice());
+        holder.tvquantity.setText(salesBillDetail.getQuantity());
 
         holder.tvItemName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +93,7 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
             @Override
             public void onClick(View v) {
                 String salesBillId="";
-               String price= product.getPrice();
+               String price= salesBillDetail.getPrice();
                String tempStr=holder.tvquantity.getText().toString();
                 int temp=Integer.valueOf(tempStr);
                 int quantaty=temp+1;
@@ -104,8 +102,8 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
                 Log.i("TOT-"," "+totalprce);
                 String t1=String.valueOf(quantaty);
                 holder.tvquantity.setText(t1);
-                String productName=product.getName();
-                String productId=product.getProductId();
+                String productName=salesBillDetail.getProductId();
+                String productId=salesBillDetail.getProductId();
                 DBAdapter dbAdapter=new DBAdapter(mContext);
                 Cursor mCursor=dbAdapter.getTableDetails(BaseTable.TABLELIST.SALESBILL);
                 if(mCursor!=null){
@@ -113,7 +111,6 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
                     salesBillId=mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL.SALES_BILL_ID));
                     Log.i("DBSL *",salesBillId);
                 }
-
                 int c=dbAdapter.saveOrder(productId,salesBillId,String.valueOf(quantaty),String.valueOf(price),String.valueOf(totalprce));
                 Toast.makeText(mContext,""+c,Toast.LENGTH_SHORT).show();
                 FragmentMainActivity.tvCart.setText(""+c);
@@ -125,6 +122,6 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
 
     @Override
     public int getItemCount() {
-        return productList.size();
+        return salesBillDetailList.size();
     }
 }

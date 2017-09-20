@@ -17,7 +17,7 @@ public class SalesBill {
     private String totalAmount;
     private String createdBy;
     private String createdOn;
-    private String userId;
+    private UserTable userId;
     private String serviceCharge;
     private String isOpen;
     private String recordTime;
@@ -124,11 +124,11 @@ public class SalesBill {
         this.createdOn = createdOn;
     }
 
-    public String getUserId() {
+    public UserTable getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(UserTable userId) {
         this.userId = userId;
     }
 

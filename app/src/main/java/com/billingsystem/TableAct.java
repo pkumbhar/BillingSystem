@@ -40,8 +40,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.background.BookTableService;
 import com.background.DownloadProduct;
 import com.background.DownloadUserTable;
+import com.databaseAdapter.DBBackUpAsyncTask;
 import com.entity.SalesBill;
 import com.entity.SalesBillDetail;
 import com.entity.UserTable;
@@ -67,6 +69,8 @@ public class TableAct extends Fragment {
     private TextView tvCustomerName,tvCustomerEmail,tvCustomerContactNumber,tvTotalPrice,tvtotalTax;
     private RecyclerView recyclerViewBillList;
     private Button btnAddOrder;
+    public static int TABLE_BOOKED=1;
+    public static int TABLE_NOT_BOOKED=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -172,16 +176,16 @@ public class TableAct extends Fragment {
 
                     if(userTableList.get(position).isActive()==true){
                         //startActivity(new Intent(TableAct.this,ItemSearchAct.class));
-
-                    }else if(userTableList.get(position).isActive()==false){
                         UserTable userTable=userTableList.get(position);
 
                         String usertableid=userTable.getUserTableId();
                         String userTableNumber=userTable.getUserTableNumber();
                         String employeeId="EMP-2017-1";
-
+                        UserTable table=new UserTable();
+                        table.setUserTableId(usertableid);
+                        table.setUserTableNumber(userTableNumber);
                         SalesBill salesBill=new SalesBill();
-                        salesBill.setUserId(usertableid);
+                        salesBill.setUserId(table);
                         salesBill.setCreatedBy(employeeId);
                         salesBill.setFirstName("");
                         salesBill.setEmail("");
@@ -192,23 +196,36 @@ public class TableAct extends Fragment {
                         Gson gson=new Gson();
                         String salsebill=gson.toJson(salesBill);
                         Log.i("","salsebill");
-
-                        //{"MiddleName":"","createdBy":"EMP-2017-1","email":"","firstName":"","isOpen":"1","recordTime":"","serviceCharge":"","userId":"USRTBL-2017-58"}
-
-
-
-
-
-
-
-
+                        new BookTableService(getActivity(),salsebill,getActivity(),linearLayou,mHandler).execute("");
                         Toast.makeText(getActivity(),"T:ID="+usertableid+" T:no="+userTableNumber,Toast.LENGTH_SHORT).show();
 
 
-                       /* MenuListFragment menuListFragment=new MenuListFragment();
-                        FragmentManager fragmentManager=getFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();*/
+                    }else if(userTableList.get(position).isActive()==false){
+                        UserTable userTable=userTableList.get(position);
+
+                        String usertableid=userTable.getUserTableId();
+                        String userTableNumber=userTable.getUserTableNumber();
+                        String employeeId="EMP-2017-1";
+                        UserTable table=new UserTable();
+                        table.setUserTableId(usertableid);
+                        table.setUserTableNumber(userTableNumber);
+                        SalesBill salesBill=new SalesBill();
+                        salesBill.setUserId(table);
+                        salesBill.setCreatedBy(employeeId);
+                        salesBill.setFirstName("");
+                        salesBill.setEmail("");
+                        salesBill.setIsOpen("1");
+                        salesBill.setMiddleName("");
+                        salesBill.setServiceCharge("");
+                        salesBill.setRecordTime("");
+                        Gson gson=new Gson();
+                        String salsebill=gson.toJson(salesBill);
+                        Log.i("","salsebill");
+                        new BookTableService(getActivity(),salsebill,getActivity(),linearLayou,mHandler).execute("");
+                        Toast.makeText(getActivity(),"T:ID="+usertableid+" T:no="+userTableNumber,Toast.LENGTH_SHORT).show();
+
                     }
+                    new DBBackUpAsyncTask(mContext).execute("");
 
                 }
             });
@@ -229,6 +246,22 @@ public class TableAct extends Fragment {
         HANDELING ORDER
          */
 
+        public Handler mHandler=new Handler(){
+
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if(msg.what==TABLE_BOOKED){
+                    MenuListFragment menuListFragment=new MenuListFragment();
+                    FragmentManager fragmentManager=getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();
+                }else if(msg.what==TABLE_NOT_BOOKED){
+                    Toast.makeText(getActivity(),"ERROR",Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        };
         private void setBillTable(String userTableId){
             RequestQueue requestQueue=Volley.newRequestQueue(getActivity());
             String url=ServerHost.SERVER_URL.concat("/rest/BillServices/salesBill?userTable="+userTableId);
@@ -267,7 +300,8 @@ public class TableAct extends Fragment {
                             }if(jsonSalesBill.has("createdOn")){
                                 salesBill.setCreatedOn(jsonSalesBill.getString("createdOn"));
                             }if(jsonSalesBill.has("userId")){
-                                salesBill.setUserId(jsonSalesBill.getString("userId"));
+                                //salesBill.setUserId(jsonSalesBill.getString("userId"));
+
                             }if(jsonSalesBill.has("totalTax")){
                                 salesBill.setTotaltax(jsonSalesBill.getString("totalTax"));
                             }if(jsonSalesBill.has("firstName")){

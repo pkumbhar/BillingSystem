@@ -67,6 +67,53 @@ public class DBAdapter {
         }
         return null;
     }
+
+    /*
+    sameProduct
+     */
+    public int saveOrder(String productId,String salesBillID,String quantity,String price,String totalPrice){
+
+        Cursor mCursor=null;
+        db=dbHelper.getWritableDatabase();
+        int order=0;
+        String q="SELECT * FROM sales_bill_detail WHERE sales_bill_detail.PRODUCT_ID='"+productId+"' AND sales_bill_detail.SALES_BILL_ID='"+salesBillID+"'"+";";
+        mCursor=db.rawQuery(q,null);
+        if(mCursor!=null){
+            mCursor.moveToFirst();
+             int c=mCursor.getCount();
+            if(c==1){
+                String[] s={productId,salesBillID};
+                ContentValues cv=new ContentValues();
+                cv.put(BaseTable.SALES_BILL_DETAIL.QUANTITY,quantity);
+                cv.put(BaseTable.SALES_BILL_DETAIL.TOTAL_PRICE,totalPrice);
+                int i=db.update(BaseTable.TABLELIST.SALES_BILL_DETAIL,cv,BaseTable.SALES_BILL_DETAIL.PRODUCT_ID+"=? AND "+BaseTable.SALES_BILL_DETAIL.SALES_BILL_ID+"=?",s);
+                if(i>0){
+                    Log.i("UPDATED SBL","#");
+                }
+
+                //Cursor mCursor=db.u//
+            }else {
+                ContentValues cv=new ContentValues();
+                cv.put(BaseTable.SALES_BILL_DETAIL.PRODUCT_ID,productId);
+                cv.put(BaseTable.SALES_BILL_DETAIL.QUANTITY,quantity);
+                cv.put(BaseTable.SALES_BILL_DETAIL.PRICE,price);
+                cv.put(BaseTable.SALES_BILL_DETAIL.TOTAL_PRICE,totalPrice);
+                cv.put(BaseTable.SALES_BILL_DETAIL.SALES_BILL_ID,salesBillID);
+                long l=db.insert(BaseTable.TABLELIST.SALES_BILL_DETAIL,null,cv);
+                if(l>0){
+                    Log.i("INSERT IN SBL","");
+
+                }
+
+            }
+        }
+        Cursor cursor=getTableDetails(BaseTable.TABLELIST.SALES_BILL_DETAIL);
+        if(mCursor!=null){
+            return cursor.getCount();
+        }
+
+        return order;
+    }
     public long insertintoProduct(Product product) throws SQLDataException{
         db=dbHelper.getWritableDatabase();
         ContentValues cv=new ContentValues();
@@ -90,6 +137,21 @@ public class DBAdapter {
         }
         return l;
     }
+    /*
+    Insert into SalseBill
+     */
+    public long insertIntoSalseBill(String salseId){
+        db=dbHelper.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+        cv.put(BaseTable.SALES_BILL.SALES_BILL_ID,salseId);
+        Long l=db.insert(BaseTable.TABLELIST.SALESBILL,null,cv);
+        if(l>0){
+            Log.i("SALSE BILL INSERT","#");
+            return l;
+        }
+        return 0;
+    }
+
 
     /*
     List of Items/Products
