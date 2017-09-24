@@ -14,6 +14,7 @@ public  class BaseTable {
         public static String PRODUCT_TYPE="product_type";
         public static String UOM="UOM";
         public static String USER_TABLE="user_table";
+        public static String EMPLOYEE="employee";
     }
     public static class PRODUCT{
         public static String PRODUCT_ID="PRODUCT_ID";
@@ -71,6 +72,22 @@ public  class BaseTable {
         public static String UOM_ID="USER_ID";
         public static String UOM_NAME="USER_ID";
     }
+    public static class AREA{
+        public static String AREA_ID="AREA_ID";
+        public static String AREA="area";
+        public static String AREA_NAME="AREA_NAME";
+    }
+    public static class EMPLOYEE{
+
+        public static String EMPLOYEE="employee";
+        public static String EMP_ID="EMP_ID";
+        public static String EMP_NAME="EMP_NAME";
+        public static String EMP_MOBILE="EMP_MOBILE";
+        public static String USER_NAME="USER_NAME";
+        public static String PASWORD="PASWORD";
+        public static String APPLICATION_ROLE_ID="APPLICATION_ROLE_ID";
+        public static String BRANCH_ID="BRANCH_ID";
+    }
 
 
 
@@ -126,7 +143,24 @@ public  class BaseTable {
                 "\t`USER_ID`\tTEXT,\n" +
                 "\t`USER_TABLE`\tTEXT,\n" +
                 "\t`IS_ACTIVE`\tTEXT,\n" +
+                "\t`IS_AC`\tTEXT,\n" +
+                "\t`IS_NONAC`\tTEXT,\n" +
+                "\t`IS_GARDEN`\tTEXT,\n" +
                 "\tPRIMARY KEY(USER_ID)\n" +
+                ");";
+
+        public static String EMPLOYEE="CREATE TABLE `employee` (\n" +
+                "\t`EMP_ID`\tTEXT,\n" +
+                "\t`EMP_NAME`\tTEXT,\n" +
+                "\t`EMP_MOBILE`\tTEXT,\n" +
+                "\t`USER_NAME`\tTEXT,\n" +
+                "\t`PASWORD`\tTEXT,\n" +
+                "\t`APPLICATION_ROLE_ID`\tTEXT,\n" +
+                "\t`BRANCH_ID`\tTEXT\n" +
+                ");";
+        public static String AREA="CREATE TABLE `area` (\n" +
+                "\t`AREA_ID`\tTEXT,\n" +
+                "\t`AREA_NAME`\tTEXT\n" +
                 ");";
     }
     }

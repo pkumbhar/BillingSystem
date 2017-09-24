@@ -20,11 +20,29 @@
         android:layout_marginRight="8dp"
         android:layout_centerInParent="true"
         android:background="#f7f7f7"/>
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SAVE ORDER"
-        android:id="@+id/btn_final_order_id"/>
+        android:orientation="horizontal"
+        android:layout_marginRight="8sp"
+        android:layout_marginLeft="8sp"
+        android:weightSum="1">
+
+        <Button
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:text="BACK TO MENU"
+            android:id="@+id/btn_back_to_menu"
+            android:layout_weight="0.5"/>
+        <Button
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:text="SEND TO KITCHEN"
+            android:id="@+id/btn_final_order_id"
+            android:layout_weight="0.5"/>
+
+    </LinearLayout>
+
 </LinearLayout>
 
 

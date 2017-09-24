@@ -2,6 +2,8 @@ package com.billingsystem;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
@@ -83,7 +86,6 @@ public class MenuListFragment extends android.app.Fragment {
                 productType.setProductTypeId(mCursor.getString(mCursor.getColumnIndex(BaseTable.PRODUCT.PRODUCT_TYPE_ID)));
                 product.setProdyctTypeId(productType);
                 list.add(product);
-                list.add(product);
                 mCursor.moveToNext();
             }
             menuItemAdapter = new MenuItemAdapter(list,getActivity(), getActivity());
@@ -97,8 +99,8 @@ public class MenuListFragment extends android.app.Fragment {
     }
 
     private void setCategoryView() {
-        List<ProductType> productTypeList=new ArrayList<ProductType>();
-        DBAdapter dbAdapter = new DBAdapter(getActivity());
+       final  List<ProductType> productTypeList=new ArrayList<ProductType>();
+        final DBAdapter dbAdapter = new DBAdapter(getActivity());
         Cursor mCursor = dbAdapter.getTableDetails(BaseTable.TABLELIST.PRODUCT_TYPE);
         if (mCursor != null) {
             mCursor.moveToFirst();
@@ -111,9 +113,34 @@ public class MenuListFragment extends android.app.Fragment {
             }
             for(int a=0;a<productTypeList.size();a++){
                 ProductType type=productTypeList.get(a);
-                Button button=new Button(getActivity());
+                final Button button=new Button(getActivity());
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(80,40);
+                params.setMargins(10,8,10,8);
+                button.setLayoutParams(params);
+                button.setTextColor(Color.parseColor("#FFFFFFFF"));
+                button.setBackgroundResource(R.drawable.btn_category_selector);
                 button.setId(a);
+                button.setTag(type);
                 button.setText(type.getProductName());
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       // button.setBackgroundResource(R.drawable.btn_category_selector_yellow);
+                        Toast.makeText(getActivity(),button.getText().toString(),Toast.LENGTH_SHORT).show();
+                        list.clear();
+                        ProductType productType=(ProductType) button.getTag();
+                        try{
+                            list=dbAdapter.getListByProductTypeId(productType.getProductTypeId());
+                            menuItemAdapter = new MenuItemAdapter(list,getActivity(), getActivity());
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                            recyclerView.setLayoutManager(mLayoutManager);
+                            recyclerView.setItemAnimator(new DefaultItemAnimator());
+                            recyclerView.setAdapter(menuItemAdapter);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 linearMenuItem.addView(button);
             }
 

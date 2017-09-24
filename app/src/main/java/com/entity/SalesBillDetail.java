@@ -34,6 +34,7 @@ public class SalesBillDetail {
     }
 
     public String getProductId() {
+
         return productId;
     }
 

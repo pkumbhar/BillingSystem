@@ -104,6 +104,7 @@ public class DownloadUserTable extends AsyncTask<String,Void,String> {
     }
     private int HandelProductData(String ins){
         try{
+            //[{"is_active":false,"table_number":"1","id":"USRTBL-2017-86"}]
             TableAct.userTableList.clear();
             JSONArray jsonArray=new JSONArray(ins);
             for(int i=0;i<jsonArray.length();i++){
@@ -118,6 +119,10 @@ public class DownloadUserTable extends AsyncTask<String,Void,String> {
                 }
                 table.setUserTableNumber(jsonObject.getString("table_number"));
                 TableAct.userTableList.add(table);
+
+
+
+
 
             }
             progressDialog.dismiss();

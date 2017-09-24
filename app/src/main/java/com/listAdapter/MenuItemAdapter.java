@@ -86,6 +86,32 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
         holder.imgDeletSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String salesBillId="";
+                String price= product.getPrice();
+                String tempStr=holder.tvquantity.getText().toString();
+                int temp=Integer.valueOf(tempStr);
+                if(temp>0){
+                    int quantaty=temp-1;
+                    float totalPriceFloat=Float.parseFloat(price);
+                    float totalprce=totalPriceFloat*quantaty;
+                    Log.i("TOT-"," "+totalprce);
+                    String t1=String.valueOf(quantaty);
+                    holder.tvquantity.setText(t1);
+                    String productName=product.getName();
+                    String productId=product.getProductId();
+                    DBAdapter dbAdapter=new DBAdapter(mContext);
+                    Cursor mCursor=dbAdapter.getTableDetails(BaseTable.TABLELIST.SALESBILL);
+                    if(mCursor!=null){
+                        mCursor.moveToFirst();
+                        salesBillId=mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL.SALES_BILL_ID));
+                        Log.i("DBSL *",salesBillId);
+                    }
+                    int c=dbAdapter.saveOrder(productId,salesBillId,String.valueOf(quantaty),String.valueOf(price),String.valueOf(totalprce));
+                    Toast.makeText(mContext,""+c,Toast.LENGTH_SHORT).show();
+                    FragmentMainActivity.tvCart.setText(""+c);
+                }else{
+                    Toast.makeText(mContext,"Quantity must be more then 0",Toast.LENGTH_SHORT).show();
+                }
 
 
 
@@ -127,4 +153,6 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
     public int getItemCount() {
         return productList.size();
     }
+
+
 }

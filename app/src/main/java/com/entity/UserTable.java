@@ -8,6 +8,42 @@ public class UserTable {
     private String userTableId;
     private String userTableNumber;
     private boolean isActive;
+    private boolean isAc;
+    private boolean isNonAc;
+    private boolean isGarden;
+    private String area;
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public boolean isAc() {
+        return isAc;
+    }
+
+    public void setAc(boolean ac) {
+        isAc = ac;
+    }
+
+    public boolean isNonAc() {
+        return isNonAc;
+    }
+
+    public void setNonAc(boolean nonAc) {
+        isNonAc = nonAc;
+    }
+
+    public boolean isGarden() {
+        return isGarden;
+    }
+
+    public void setGarden(boolean garden) {
+        isGarden = garden;
+    }
 
     public String getUserTableId() {
         return userTableId;

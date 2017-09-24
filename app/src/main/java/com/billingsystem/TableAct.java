@@ -43,7 +43,10 @@ import com.android.volley.toolbox.Volley;
 import com.background.BookTableService;
 import com.background.DownloadProduct;
 import com.background.DownloadUserTable;
+import com.databaseAdapter.BaseTable;
+import com.databaseAdapter.DBAdapter;
 import com.databaseAdapter.DBBackUpAsyncTask;
+import com.entity.Employee;
 import com.entity.SalesBill;
 import com.entity.SalesBillDetail;
 import com.entity.UserTable;
@@ -71,10 +74,17 @@ public class TableAct extends Fragment {
     private Button btnAddOrder;
     public static int TABLE_BOOKED=1;
     public static int TABLE_NOT_BOOKED=0;
+    private DBAdapter dbAdapter;
+    private LinearLayout  linearArea;
+    private int NEW_ORDER=1;
+    private int UPDATE_ORDER=2;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+      //  setAreaButtons();
     }
 
     @Nullable
@@ -83,9 +93,14 @@ public class TableAct extends Fragment {
 
 
         View view=inflater.inflate(R.layout.activity_table, container, false);
+        linearArea=(LinearLayout)view.findViewById(R.id.lin_area_id);
         mGridView = (GridView) view.findViewById(R.id.gridView);
         mGridView = (GridView) view.findViewById(R.id.gridView);
-        new DownloadUserTable(getActivity(),getActivity(),mHandler).execute("");
+
+        dbAdapter=new DBAdapter(getActivity());
+       // new DownloadUserTable(getActivity(),getActivity(),mHandler).execute("");
+        setAreaButtons();
+
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -93,9 +108,36 @@ public class TableAct extends Fragment {
             }
         });
 
+
         return view;
     }
+    private void setAreaButtons(){
+        DBAdapter dbAdapter=new DBAdapter(getActivity());
+        Cursor mCursor=dbAdapter.getTableDetails(BaseTable.AREA.AREA);
+        if(mCursor!=null){
+            mCursor.moveToFirst();
+            while (mCursor.isAfterLast()==false){
+                Button button=new Button(getActivity());
+                button.setTag(mCursor.getString(mCursor.getColumnIndex(BaseTable.AREA.AREA_ID)));
+                button.setText(mCursor.getString(mCursor.getColumnIndex(BaseTable.AREA.AREA_NAME)));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(80,40);
+                params.setMargins(10,8,10,8);
+                button.setLayoutParams(params);
+                button.setTextColor(Color.parseColor("#FFFFFFFF"));
+                button.setBackgroundResource(R.drawable.btn_category_selector);
 
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new DownloadUserTable(getActivity(),getActivity(),mHandler).execute("");
+                    }
+                });
+                linearArea.addView(button);
+                mCursor.moveToNext();
+            }
+        }
+
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -167,6 +209,7 @@ public class TableAct extends Fragment {
                 v = (View) convertView;
             }
             TextView textView = (TextView)v.findViewById(R.id.tv_tblNo_id);
+            final TextView tvAc=(TextView)v.findViewById(R.id.tv_ac_id);
            // textView.setText();
 
             final LinearLayout linearLayou=(LinearLayout)v.findViewById(R.id.lin_grid_id);
@@ -175,43 +218,41 @@ public class TableAct extends Fragment {
                 public void onClick(View v) {
 
                     if(userTableList.get(position).isActive()==true){
-                        //startActivity(new Intent(TableAct.this,ItemSearchAct.class));
-                        UserTable userTable=userTableList.get(position);
-
-                        String usertableid=userTable.getUserTableId();
-                        String userTableNumber=userTable.getUserTableNumber();
-                        String employeeId="EMP-2017-1";
-                        UserTable table=new UserTable();
-                        table.setUserTableId(usertableid);
-                        table.setUserTableNumber(userTableNumber);
-                        SalesBill salesBill=new SalesBill();
-                        salesBill.setUserId(table);
-                        salesBill.setCreatedBy(employeeId);
-                        salesBill.setFirstName("");
-                        salesBill.setEmail("");
-                        salesBill.setIsOpen("1");
-                        salesBill.setMiddleName("");
-                        salesBill.setServiceCharge("");
-                        salesBill.setRecordTime("");
-                        Gson gson=new Gson();
-                        String salsebill=gson.toJson(salesBill);
-                        Log.i("","salsebill");
-                        new BookTableService(getActivity(),salsebill,getActivity(),linearLayou,mHandler).execute("");
-                        Toast.makeText(getActivity(),"T:ID="+usertableid+" T:no="+userTableNumber,Toast.LENGTH_SHORT).show();
-
+                        dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
+                        dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
+                        Toast.makeText(getActivity(),"Active Table",Toast.LENGTH_SHORT).show();
+                        setBillTable(userTableList.get(position).getUserTableId(),UPDATE_ORDER);
 
                     }else if(userTableList.get(position).isActive()==false){
+                        dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
+                        dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
                         UserTable userTable=userTableList.get(position);
-
                         String usertableid=userTable.getUserTableId();
                         String userTableNumber=userTable.getUserTableNumber();
-                        String employeeId="EMP-2017-1";
+
                         UserTable table=new UserTable();
+                        String area=tvAc.getText().toString();
+                        table.setArea(area);
+                        table.setAc(Boolean.FALSE);
+                        table.setNonAc(Boolean.FALSE);
+                        table.setGarden(Boolean.FALSE);
+
+                        if(area.equals("AC")){
+                            table.setAc(Boolean.TRUE);
+
+                        }else if(area.equals("NONAC")){
+                            table.setNonAc(Boolean.TRUE);
+
+                        }else if(area.equals("GARDEN")){
+                            table.setGarden(Boolean.TRUE);
+                        }
                         table.setUserTableId(usertableid);
                         table.setUserTableNumber(userTableNumber);
                         SalesBill salesBill=new SalesBill();
                         salesBill.setUserId(table);
-                        salesBill.setCreatedBy(employeeId);
+                        DBAdapter dbAdapter=new DBAdapter(mContext);
+                        Employee employee = dbAdapter.getEmployee();
+                        salesBill.setCreatedBy(employee.getEmployeeId());
                         salesBill.setFirstName("");
                         salesBill.setEmail("");
                         salesBill.setIsOpen("1");
@@ -221,6 +262,7 @@ public class TableAct extends Fragment {
                         Gson gson=new Gson();
                         String salsebill=gson.toJson(salesBill);
                         Log.i("","salsebill");
+
                         new BookTableService(getActivity(),salsebill,getActivity(),linearLayou,mHandler).execute("");
                         Toast.makeText(getActivity(),"T:ID="+usertableid+" T:no="+userTableNumber,Toast.LENGTH_SHORT).show();
 
@@ -229,6 +271,15 @@ public class TableAct extends Fragment {
 
                 }
             });
+            if(userTableList.get(position).isAc()){
+                tvAc.setText("AC");
+            }
+            if(userTableList.get(position).isNonAc()){
+                tvAc.setText("NONAC");
+
+            }if(userTableList.get(position).isGarden()){
+                tvAc.setText("GARDEN");
+            }
             if(userTableList.get(position).isActive()==true){
                 linearLayou.setBackgroundResource(R.drawable.available);
                 textView.setText(userTableList.get(position).getUserTableNumber());
@@ -242,6 +293,8 @@ public class TableAct extends Fragment {
 
             return v;
         }
+
+
         /*
         HANDELING ORDER
          */
@@ -262,16 +315,19 @@ public class TableAct extends Fragment {
 
             }
         };
-        private void setBillTable(String userTableId){
+
+        /*
+        SalesBillm Detail
+         */
+
+        private void setBillTable(String userTableId,final int request){
             RequestQueue requestQueue=Volley.newRequestQueue(getActivity());
             String url=ServerHost.SERVER_URL.concat("/rest/BillServices/salesBill?userTable="+userTableId);
             StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     Log.i("Usertable-->",""+response );
-                    handelData(response);
-
-
+                    handelData(response,request);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -283,12 +339,11 @@ public class TableAct extends Fragment {
             requestQueue.start();
         }
         private SalesBillAdapter salesBillAdapter;
-        private void handelData(String response){
+        private void handelData(String response,int request){
             List<SalesBillDetail> salesBillDetails=new ArrayList<SalesBillDetail>();
             if(response!=null){
                 if(!response.isEmpty()){
                     SalesBill salesBill=new SalesBill();
-
                     try{
                         JSONObject jsonObject=new JSONObject(response);
                         if(jsonObject.has("salesBill")){
@@ -309,6 +364,7 @@ public class TableAct extends Fragment {
 
                             }if(jsonSalesBill.has("SalesBillDetail")){
                                 //Retrn array
+                                FinalOrderFragment.list.clear();
                                 JSONArray jsonSalesBillDetail=jsonSalesBill.getJSONArray("SalesBillDetail");
 
                                 for(int i=0;i<jsonSalesBillDetail.length();i++){
@@ -325,13 +381,19 @@ public class TableAct extends Fragment {
                                         detail.setPrice(js.getString("price"));
                                     }if(js.has("sales_bill_detail_id")){
                                         detail.setSalesBilldetailId(js.getString("sales_bill_detail_id"));
-                                    }/*if(js.has("productName")){
-                                        detail.setProductId(js.getString("productId"));
+                                    }if(js.has("total_price")){
+                                        detail.setTotalPrice(js.getString("total_price"));
 
-                                    }*/
-                                    salesBillDetails.add(detail);
+                                    }
+                                    //salesBillDetails.add(detail);
+                                    FinalOrderFragment.list.add(detail);
                                 }
-                                salesBill.setSalesBillDetailList(salesBillDetails);
+                                if(FinalOrderFragment.list.size()>0){
+                                    DBAdapter dbAdapter=new DBAdapter(mContext);
+                                    dbAdapter.insertIntoSalseBill(FinalOrderFragment.list.get(0).getSalesBillId());
+                                    dbAdapter.insertIntoSalesBillDetails(FinalOrderFragment.list);
+                                    salesBill.setSalesBillDetailList(salesBillDetails);
+                                }
                             }if(jsonSalesBill.has("totalAmount")){
                                 salesBill.setTotalAmount(jsonSalesBill.getString("totalAmount"));
                             }if(jsonSalesBill.has("isOpen")){
@@ -350,12 +412,12 @@ public class TableAct extends Fragment {
                         e.printStackTrace();
                     }
                     if(salesBill!=null){
-                        salesBillAdapter=new SalesBillAdapter(salesBillDetails,getActivity(),getContext());
-                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-                        recyclerViewBillList.setLayoutManager(mLayoutManager);
-                        recyclerViewBillList.setItemAnimator(new DefaultItemAnimator());
-                        recyclerViewBillList.setAdapter(salesBillAdapter);
-
+                        FinalOrderFragment finalOrderFragment=new FinalOrderFragment();
+                        FragmentManager fragmentManager=getFragmentManager();
+                        Bundle args=new Bundle();
+                        args.putInt("request",request);
+                        finalOrderFragment.setArguments(args);
+                        fragmentManager.beginTransaction().replace(R.id.content_fragment_main,finalOrderFragment).commit();
                     }
                 }
 

@@ -70,13 +70,16 @@ public class DownloadProduct extends AsyncTask<String,Void,String> {
             }
             int rs=HandelProductData(buffer.toString());
             if(rs==1){
+                progressDialog.dismiss();
                 return "1";
             }
 
         }catch (Exception e){
             e.printStackTrace();
+            progressDialog.dismiss();
         }
 
+        progressDialog.dismiss();
         return "0";
     }
 
@@ -85,8 +88,10 @@ public class DownloadProduct extends AsyncTask<String,Void,String> {
         super.onPostExecute(s);
         if(s.equals("1")){
             mHandler.obtainMessage(1).sendToTarget();
+            progressDialog.dismiss();
         }else {
             mHandler.obtainMessage(0).sendToTarget();
+            progressDialog.dismiss();
         }
     }
 

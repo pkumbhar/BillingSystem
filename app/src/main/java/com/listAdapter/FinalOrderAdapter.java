@@ -33,11 +33,18 @@ public class FinalOrderAdapter extends RecyclerView.Adapter<FinalOrderAdapter.Me
     private List<SalesBillDetail> salesBillDetailList;
     private Context mContext;
     private Activity mActivity;
+    private DBAdapter dbAdapter;
+    private static int REQUEST_CODE=0;
+    private int UPDATE_ORDER_=1;
+    private int NEW_ORDER=2;
 
-    public FinalOrderAdapter(List<SalesBillDetail> salesBillDetailList, Context mContext, Activity mActivity) {
+    public FinalOrderAdapter(List<SalesBillDetail> salesBillDetailList, Context mContext, Activity mActivity,DBAdapter dbAdapter,int REQUEST_CODE) {
         this.salesBillDetailList = salesBillDetailList;
         this.mContext = mContext;
         this.mActivity = mActivity;
+        this.dbAdapter=dbAdapter;
+        this.REQUEST_CODE=REQUEST_CODE;
+
     }
 
     public class MenuItem extends RecyclerView.ViewHolder{
@@ -67,7 +74,14 @@ public class FinalOrderAdapter extends RecyclerView.Adapter<FinalOrderAdapter.Me
     @Override
     public void onBindViewHolder(final MenuItem holder, final int position) {
         final SalesBillDetail salesBillDetail=salesBillDetailList.get(position);
-        holder.tvItemName.setText(salesBillDetail.getProductId());
+
+        try{
+            String name=dbAdapter.getProductById(salesBillDetail.getProductId());
+            holder.tvItemName.setText(name);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         holder.tvItemPrice.setText(salesBillDetail.getPrice());
         holder.tvquantity.setText(salesBillDetail.getQuantity());
@@ -84,6 +98,32 @@ public class FinalOrderAdapter extends RecyclerView.Adapter<FinalOrderAdapter.Me
         holder.imgDeletSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String salesBillId="";
+                String price= salesBillDetail.getPrice();
+                String tempStr=holder.tvquantity.getText().toString();
+                int temp=Integer.valueOf(tempStr);
+                if(temp>0){
+                    int quantaty=temp-1;
+                    float totalPriceFloat=Float.parseFloat(price);
+                    float totalprce=totalPriceFloat*quantaty;
+                    Log.i("TOT-"," "+totalprce);
+                    String t1=String.valueOf(quantaty);
+                    holder.tvquantity.setText(t1);
+                    String productName=salesBillDetail.getProductId();
+                    String productId=salesBillDetail.getProductId();
+                    DBAdapter dbAdapter=new DBAdapter(mContext);
+                    Cursor mCursor=dbAdapter.getTableDetails(BaseTable.TABLELIST.SALESBILL);
+                    if(mCursor!=null){
+                        mCursor.moveToFirst();
+                        salesBillId=mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL.SALES_BILL_ID));
+                        Log.i("DBSL *",salesBillId);
+                    }
+                    int c=dbAdapter.saveOrder(productId,salesBillId,String.valueOf(quantaty),String.valueOf(price),String.valueOf(totalprce));
+                    Toast.makeText(mContext,""+c,Toast.LENGTH_SHORT).show();
+                    FragmentMainActivity.tvCart.setText(""+c);
+                }else{
+                    Toast.makeText(mContext,"Quantity must be more then 0",Toast.LENGTH_SHORT).show();
+                }
 
 
 
@@ -92,30 +132,31 @@ public class FinalOrderAdapter extends RecyclerView.Adapter<FinalOrderAdapter.Me
         holder.imgAddSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String salesBillId="";
-               String price= salesBillDetail.getPrice();
-               String tempStr=holder.tvquantity.getText().toString();
-                int temp=Integer.valueOf(tempStr);
-                int quantaty=temp+1;
-                float totalPriceFloat=Float.parseFloat(price);
-                float totalprce=totalPriceFloat*quantaty;
-                Log.i("TOT-"," "+totalprce);
-                String t1=String.valueOf(quantaty);
-                holder.tvquantity.setText(t1);
-                String productName=salesBillDetail.getProductId();
-                String productId=salesBillDetail.getProductId();
-                DBAdapter dbAdapter=new DBAdapter(mContext);
-                Cursor mCursor=dbAdapter.getTableDetails(BaseTable.TABLELIST.SALESBILL);
-                if(mCursor!=null){
-                    mCursor.moveToFirst();
-                    salesBillId=mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL.SALES_BILL_ID));
-                    Log.i("DBSL *",salesBillId);
-                }
-                int c=dbAdapter.saveOrder(productId,salesBillId,String.valueOf(quantaty),String.valueOf(price),String.valueOf(totalprce));
-                Toast.makeText(mContext,""+c,Toast.LENGTH_SHORT).show();
-                FragmentMainActivity.tvCart.setText(""+c);
 
-
+                    /*ORDER UPDATE REQUEST*/
+                    String salesBillId="";
+                    String price= salesBillDetail.getPrice();
+                    String tempStr=holder.tvquantity.getText().toString();
+                    int temp=Integer.valueOf(tempStr);
+                    int quantaty=temp+1;
+                    float totalPriceFloat=Float.parseFloat(price);
+                    float totalprce=totalPriceFloat*quantaty;
+                    Log.i("TOT-"," "+totalprce);
+                    String t1=String.valueOf(quantaty);
+                    holder.tvquantity.setText(t1);
+                    String productName=salesBillDetail.getProductId();
+                    String productId=salesBillDetail.getProductId();
+                    DBAdapter dbAdapter=new DBAdapter(mContext);
+                    Cursor mCursor=dbAdapter.getTableDetails(BaseTable.TABLELIST.SALESBILL);
+                    if(mCursor!=null){
+                        mCursor.moveToFirst();
+                        salesBillId=mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL.SALES_BILL_ID));
+                        Log.i("DBSL *",salesBillId);
+                        mCursor.moveToNext();
+                    }
+                    int c=dbAdapter.saveOrder(productId,salesBillId,String.valueOf(quantaty),String.valueOf(price),String.valueOf(totalprce));
+                    Toast.makeText(mContext,""+c,Toast.LENGTH_SHORT).show();
+                    FragmentMainActivity.tvCart.setText(""+mCursor.getCount());
             }
         });
     }

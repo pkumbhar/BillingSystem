@@ -1,19 +1,25 @@
 package com.billingsystem;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.background.SendTableOrder;
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
 import com.entity.Product;
@@ -22,6 +28,7 @@ import com.entity.SalesBillDetail;
 import com.listAdapter.FinalOrderAdapter;
 import com.listAdapter.MenuItemAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -32,9 +39,12 @@ public class FinalOrderFragment extends android.app.Fragment {
 
     private RecyclerView recyclerView;
     private FinalOrderAdapter finalOrderAdapter;
-    private List<SalesBillDetail> list=new ArrayList<SalesBillDetail>();
+    public static  List<SalesBillDetail> list=new ArrayList<SalesBillDetail>();
     private LinearLayout linearMenuItem;
-    private Button btnSendOrder;
+    private Button btnSendOrder,btnBackToMenu;
+    private int REQUEST=0;
+    private int NEW_ORDER=1;
+    private int UPDATE_ORDER=2;
 
 
 
@@ -43,8 +53,6 @@ public class FinalOrderFragment extends android.app.Fragment {
     public FinalOrderFragment() {
         // Required empty public constructor
     }
-
-
 
 
     @Override
@@ -59,51 +67,68 @@ public class FinalOrderFragment extends android.app.Fragment {
         View view=inflater.inflate(R.layout.fragment_final_order, container, false);
         recyclerView=(RecyclerView)view.findViewById(R.id.recycler_final_order_id);
         btnSendOrder=(Button)view.findViewById(R.id.btn_final_order_id);
+        btnBackToMenu=(Button)view.findViewById(R.id.btn_back_to_menu);
+        REQUEST=getArguments().getInt("request");
+        Log.i("RECV-->",""+REQUEST);
 
         final DBAdapter dbAdapter=new DBAdapter(getActivity());
-        Cursor mCursor=dbAdapter.getTableDetails(BaseTable.TABLELIST.SALES_BILL_DETAIL);
-        if(mCursor!=null){
-            mCursor.moveToFirst();
-            while (mCursor.isAfterLast()==false){
-                SalesBillDetail sbd=new SalesBillDetail();
-                sbd.setProductId(mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL_DETAIL.PRODUCT_ID)));
-                sbd.setPrice(mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL_DETAIL.PRICE)));
-                sbd.setQuantity(mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL_DETAIL.QUANTITY)));
-                list.add(sbd);
-                mCursor.moveToNext();
-            }
-            finalOrderAdapter = new FinalOrderAdapter(list,getActivity(), getActivity());
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-            recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(finalOrderAdapter);
-        }
+        list=dbAdapter.getSalesBillDetailList();
+        finalOrderAdapter = new FinalOrderAdapter(list,getActivity(), getActivity(),dbAdapter,REQUEST);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(finalOrderAdapter);
         btnSendOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject jsonObject=new JSONObject();
-                for(SalesBillDetail detail:list){
-                    try{
-                        JSONObject object=new JSONObject();
-                        object.put("product_id",detail.getProductId());
-                        object.put("quantity",detail.getQuantity());
-                        object.put("price",detail.getPrice());
-                        object.put("total_price",detail.getTotalPrice());
-                        object.put("sales_bill_id",detail.getSalesBillId());
-                        jsonObject.put("sales_bill_detail",object);
 
-                    }catch (Exception e){
-                        e.printStackTrace();
+                    JSONArray jsonArray=new JSONArray();
+                    for(SalesBillDetail detail:dbAdapter.getSalesBillDetailList()){
+                        try{
+                            JSONObject object=new JSONObject();
+                            object.put("product_id",detail.getProductId());
+                            object.put("quantity",detail.getQuantity());
+                            object.put("price",detail.getPrice());
+                            object.put("total_price",detail.getTotalPrice());
+                            object.put("sales_bill_id",detail.getSalesBillId());
+                            jsonArray.put(object);
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
-                }
-
-
+                    new SendTableOrder(getActivity(),mHandler,jsonArray.toString(),getActivity()).execute("");
 
             }
         });
+        btnBackToMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MenuListFragment menuListFragment=new MenuListFragment();
+                FragmentManager fragmentManager=getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();
+            }
+        });
+
 
         return view;
     }
+    public Handler mHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what==1){
+                //DBAdapter dbAdapter=new DBAdapter()
+                Toast.makeText(getActivity(),"Order Placed",Toast.LENGTH_SHORT).show();
+                TableAct tableFragment=new TableAct();
+                FragmentManager fragmentManager=getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.content_fragment_main,tableFragment).commit();
+
+            }else if(msg.what==0){
+                Toast.makeText(getActivity(),"Oops",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

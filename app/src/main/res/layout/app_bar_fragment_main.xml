@@ -25,9 +25,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="YARA DI HAWELI"
+                    android:text="Yaara Di Haveli"
                     android:textSize="18dp"
                     android:id="@+id/tv_actitle_id"
+                    android:fontFamily="sans-serif-condensed"
                     android:textColor="#ffdd00"
                     android:textStyle="bold|italic"/>
                 <LinearLayout
@@ -37,25 +38,25 @@
                     android:gravity="center|right">
                     <LinearLayout
                         android:layout_width="55sp"
-                        android:layout_height="35sp"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal"
                         android:layout_marginRight="8sp"
+                        android:layout_marginTop="8sp"
+                        android:layout_marginBottom="8sp"
+                        android:background="@drawable/cart_"
                         android:id="@+id/lin_linCartId">
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:text="0"
+                            android:gravity="center"
+                            android:textStyle="bold|italic"
                             android:id="@+id/tv_cart_accessories_id"
                             android:layout_marginRight="2sp"
                             android:layout_marginLeft="8sp"
                             android:textColor="#ffffff"
                             android:layout_gravity="center|right"/>
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="25sp"
-                            android:adjustViewBounds="true"
-                            android:src="@drawable/cart_"
-                            android:layout_gravity="center"/>
+
 
                     </LinearLayout>
 

@@ -85,6 +85,7 @@
                     android:layout_height="wrap_content"
                     android:hint="password"
                     app:hintEnabled="true"
+                    android:maxLines="1"
                     android:drawablePadding="10sp"
                     android:drawableLeft="@drawable/password_hover"
                     android:inputType="textPassword"
@@ -100,6 +101,7 @@
                 android:layout_marginTop="8sp"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:maxLines="1"
                 android:id="@+id/tv_reset_password_id"
                 android:textColor="#FFA61F24"
                 android:gravity="right"/>
