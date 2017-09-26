@@ -74,7 +74,7 @@ public class ItemSearchAct extends AppCompatActivity {
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DownloadProduct(getApplicationContext(),ItemSearchAct.this,mHandler).execute("");
+               // new DownloadProduct(getApplicationContext(),ItemSearchAct.this,mHandler).execute("");
                 DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
                 try{
                     List<Product> productList=dbAdapter.getProductList();
@@ -86,25 +86,9 @@ public class ItemSearchAct extends AppCompatActivity {
 
             }
         });
-        btnMenuList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ItemSearchAct.this,MenuListAct.class));
-            }
-        });
+
 
     }
-    public Handler mHandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if(msg.what==1){
 
-                new DBBackUpAsyncTask(getApplicationContext()).execute("");
-                startActivity(new Intent(ItemSearchAct.this,MenuListAct.class));
-                Toast.makeText(getApplication(),"cl",Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
 
 }

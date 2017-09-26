@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_feed_back"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#8798f4"
+    android:orientation="vertical"
+    tools:context="com.billingsystem.FeedBackAct">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginRight="12sp"
+        android:layout_marginLeft="10sp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FeedBack"
+            android:gravity="center"
+            android:textColor="#a41f23"
+            android:textSize="50sp"
+            android:layout_marginBottom="40sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your rating help us to improve quality of service \n please rate the Following stars"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:textSize="22sp"
+            android:layout_marginBottom="40sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your rating"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textSize="35sp"
+            android:layout_marginBottom="40sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="12sp"
+                android:layout_marginRight="12sp"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Rate Ambience"
+                    android:textColor="#ffffff"
+                    android:layout_weight="0.5"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="0"
+                    android:textColor="#ffffff"
+                    android:id="@+id/tv_rate_ambiance_id"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_gravity="center"
+                android:id="@+id/rating_ambiance_id"/>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="12sp"
+                android:layout_marginRight="12sp"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Rate Food"
+                    android:layout_weight="0.5"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="0"
+                    android:textColor="#ffffff"
+                    android:id="@+id/tv_rating_food_id"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:layout_gravity="center"
+                android:id="@+id/rating_food_id"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="12sp"
+                android:layout_marginRight="12sp"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Rate Caption"
+                    android:textColor="#ffffff"
+                    android:layout_weight="0.5"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="0"
+                    android:textColor="#ffffff"
+                    android:id="@+id/tv_rating_caption_id"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:layout_gravity="center"
+                android:id="@+id/rating_caption_id"/>
+        </LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SUBMIT"
+            android:layout_marginLeft="60sp"
+            android:layout_marginTop="60sp"
+            android:layout_marginRight="50sp"
+            android:background="@drawable/btn_category_selector"
+            android:textColor="#eeffffff"
+            android:id="@+id/btn_send_feedback_id"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -163,55 +163,18 @@ public class FragmentMainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_area_id) {
+        if(id==R.id.nav_table_id){
+
             TableAct tableFragment=new TableAct();
             FragmentManager fragmentManager=getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_fragment_main,tableFragment).commit();
 
-           // setTitle(title);
-        } else if (id == R.id.nav_area_id) {
-           // new DownloadProduct(getApplicationContext(),FragmentMainActivity.this,mHandler).execute("");
-
-            RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
-            String url= ServerHost.SERVER_URL.concat("/rest/BillServices/getArea");
-            StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.i("Usertable-->",""+response );
-
-                    try{
-                        JSONObject jsonObject=new JSONObject(response);
-                        if(jsonObject.has("status")){
-                            if(jsonObject.getString("status").equals("200")){
-                                JSONArray jsonArray=jsonObject.getJSONArray("area");
-                                DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
-                                dbAdapter.deletTable(BaseTable.AREA.AREA);
-                                for(int i=0;i<jsonArray.length();i++){
-                                    JSONObject object=jsonArray.getJSONObject(i);
-                                    Area area=new Area();
-                                    area.setAreaid(object.getString("area_id"));
-                                    area.setAreaName(object.getString("area_name"));
-                                    dbAdapter.insertIntoArea(area);
-                                }
-                            }else if(jsonObject.getString("status").equals("500")){
-                                Toast.makeText(getApplicationContext(),"Table Not Found",Toast.LENGTH_SHORT).show();
-
-                            }
-                        }
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+        }else if (id == R.id.nav_area_id) {
+            syncArea();
+        } else if (id == R.id.nav_product_id) {
+            new DownloadProduct(getApplicationContext(),FragmentMainActivity.this,mHandler).execute("");
 
 
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                }
-            });
-            requestQueue.add(stringRequest);
-            requestQueue.start();
 
 
         } /*else if (id == R.id.nav_slideshow) {
@@ -222,14 +185,56 @@ public class FragmentMainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
-        }*/ else if (id == R.id.nav_send) {
-            new DownloadProduct(getApplicationContext(),FragmentMainActivity.this,mHandler).execute("");
-
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private void syncArea(){
+        RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
+        String url= ServerHost.SERVER_URL.concat("/rest/BillServices/getArea");
+        StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("Usertable-->",""+response );
+
+                try{
+                    JSONObject jsonObject=new JSONObject(response);
+                    if(jsonObject.has("status")){
+                        if(jsonObject.getString("status").equals("200")){
+                            JSONArray jsonArray=jsonObject.getJSONArray("area");
+                            DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
+                            dbAdapter.deletTable(BaseTable.AREA.AREA);
+                            for(int i=0;i<jsonArray.length();i++){
+                                JSONObject object=jsonArray.getJSONObject(i);
+                                Area area=new Area();
+                                area.setAreaid(object.getString("area_id"));
+                                area.setAreaName(object.getString("area_name"));
+                                dbAdapter.insertIntoArea(area);
+                            }
+                            /***********************Calling TABLE*******************/
+                            TableAct tableFragment=new TableAct();
+                            FragmentManager fragmentManager=getFragmentManager();
+                            fragmentManager.beginTransaction().replace(R.id.content_fragment_main,tableFragment).commit();
+                            /***********************END CALL TABLE*******************/
+
+                        }else if(jsonObject.getString("status").equals("500")){
+                            Toast.makeText(getApplicationContext(),"Table Not Found",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
+        requestQueue.start();
     }
     Handler mHandler=new Handler(){
         @Override
@@ -238,6 +243,9 @@ public class FragmentMainActivity extends AppCompatActivity
             if(msg.what==1){
                 MenuListFragment menuListFragment=new MenuListFragment();
                 FragmentManager fragmentManager=getFragmentManager();
+                Bundle bundle=new Bundle();
+                bundle.putInt("request",1);
+                menuListFragment.setArguments(bundle);
                 fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();
             }
         }

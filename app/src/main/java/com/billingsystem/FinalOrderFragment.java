@@ -2,6 +2,7 @@ package com.billingsystem;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,7 +42,7 @@ public class FinalOrderFragment extends android.app.Fragment {
     private FinalOrderAdapter finalOrderAdapter;
     public static  List<SalesBillDetail> list=new ArrayList<SalesBillDetail>();
     private LinearLayout linearMenuItem;
-    private Button btnSendOrder,btnBackToMenu;
+    private Button btnSendOrder,btnBackToMenu,btnfeedBack;
     private int REQUEST=0;
     private int NEW_ORDER=1;
     private int UPDATE_ORDER=2;
@@ -68,6 +69,7 @@ public class FinalOrderFragment extends android.app.Fragment {
         recyclerView=(RecyclerView)view.findViewById(R.id.recycler_final_order_id);
         btnSendOrder=(Button)view.findViewById(R.id.btn_final_order_id);
         btnBackToMenu=(Button)view.findViewById(R.id.btn_back_to_menu);
+        btnfeedBack=(Button)view.findViewById(R.id.btn_feed_back_id);
         REQUEST=getArguments().getInt("request");
         Log.i("RECV-->",""+REQUEST);
 
@@ -78,6 +80,12 @@ public class FinalOrderFragment extends android.app.Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(finalOrderAdapter);
+        btnfeedBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),FeedBackAct.class));
+            }
+        });
         btnSendOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +114,9 @@ public class FinalOrderFragment extends android.app.Fragment {
             public void onClick(View v) {
                 MenuListFragment menuListFragment=new MenuListFragment();
                 FragmentManager fragmentManager=getFragmentManager();
+                Bundle bundle=new Bundle();
+                bundle.putInt("request",2);
+                menuListFragment.getArguments();
                 fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();
             }
         });

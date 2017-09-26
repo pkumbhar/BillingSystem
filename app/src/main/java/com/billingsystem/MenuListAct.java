@@ -47,11 +47,11 @@ public class MenuListAct extends AppCompatActivity {
                 list.add(product);
                 mCursor.moveToNext();
             }
-            menuItemAdapter = new MenuItemAdapter(list,getApplicationContext(), MenuListAct.this);
+         /*   menuItemAdapter = new MenuItemAdapter(list,getApplicationContext(), MenuListAct.this);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(menuItemAdapter);
+            recyclerView.setAdapter(menuItemAdapter);*/
         }
     }
  /*

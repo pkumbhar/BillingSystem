@@ -31,11 +31,13 @@ public class DownloadUserTable extends AsyncTask<String,Void,String> {
     private Activity mActivity;
     private ProgressDialog progressDialog;
     private Handler mHandler;
+    private String areaid;
 
-    public DownloadUserTable(Context mContext, Activity mActivity,Handler mHandler) {
+    public DownloadUserTable(Context mContext, Activity mActivity,Handler mHandler,String areaid) {
         this.mContext = mContext;
         this.mActivity = mActivity;
         this.mHandler=mHandler;
+        this.areaid=areaid;
     }
 
 
@@ -45,7 +47,7 @@ public class DownloadUserTable extends AsyncTask<String,Void,String> {
         String RETURN = null;
         BufferedReader reader = null;
         try{//http://192.168.0.110:8082/BillingSystem/rest/BillServices/table
-            String query= ServerHost.SERVER_URL+"/rest/BillServices/table";
+            String query= ServerHost.SERVER_URL+"/rest/BillServices/table?areaId="+areaid;
             URL url=new URL(query);
             HttpURLConnection urlConnection=(HttpURLConnection)url.openConnection();
             urlConnection.setRequestMethod("GET");

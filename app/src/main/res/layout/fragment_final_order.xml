@@ -32,14 +32,41 @@
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:text="BACK TO MENU"
+            android:textColor="#eeffffff"
+            android:layout_marginRight="12sp"
+            android:layout_marginLeft="12sp"
+            android:background="@drawable/btn_category_selector"
             android:id="@+id/btn_back_to_menu"
             android:layout_weight="0.5"/>
         <Button
             android:layout_width="0sp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="12sp"
+            android:textColor="#eeffffff"
+            android:layout_marginLeft="12sp"
+            android:background="@drawable/btn_category_selector"
             android:text="SEND TO KITCHEN"
+
             android:id="@+id/btn_final_order_id"
             android:layout_weight="0.5"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:orientation="vertical">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SEND FEEDBACK"
+            android:textColor="#eeffffff"
+            android:layout_marginRight="40sp"
+            android:layout_marginLeft="40sp"
+            android:background="@drawable/btn_category_selector"
+            android:id="@+id/btn_feed_back_id"
+            />
+
 
     </LinearLayout>
 

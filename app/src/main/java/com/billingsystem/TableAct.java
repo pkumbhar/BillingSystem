@@ -46,6 +46,7 @@ import com.background.DownloadUserTable;
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
 import com.databaseAdapter.DBBackUpAsyncTask;
+import com.entity.Area;
 import com.entity.Employee;
 import com.entity.SalesBill;
 import com.entity.SalesBillDetail;
@@ -117,7 +118,7 @@ public class TableAct extends Fragment {
         if(mCursor!=null){
             mCursor.moveToFirst();
             while (mCursor.isAfterLast()==false){
-                Button button=new Button(getActivity());
+                final Button button=new Button(getActivity());
                 button.setTag(mCursor.getString(mCursor.getColumnIndex(BaseTable.AREA.AREA_ID)));
                 button.setText(mCursor.getString(mCursor.getColumnIndex(BaseTable.AREA.AREA_NAME)));
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(80,40);
@@ -129,7 +130,10 @@ public class TableAct extends Fragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new DownloadUserTable(getActivity(),getActivity(),mHandler).execute("");
+                        String id=(String)button.getTag();
+
+                       // Toast.makeText(getActivity(),""+id,Toast.LENGTH_SHORT).show();
+                        new DownloadUserTable(getActivity(),getActivity(),mHandler,id).execute("");
                     }
                 });
                 linearArea.addView(button);
@@ -209,7 +213,7 @@ public class TableAct extends Fragment {
                 v = (View) convertView;
             }
             TextView textView = (TextView)v.findViewById(R.id.tv_tblNo_id);
-            final TextView tvAc=(TextView)v.findViewById(R.id.tv_ac_id);
+
            // textView.setText();
 
             final LinearLayout linearLayou=(LinearLayout)v.findViewById(R.id.lin_grid_id);
@@ -229,23 +233,16 @@ public class TableAct extends Fragment {
                         UserTable userTable=userTableList.get(position);
                         String usertableid=userTable.getUserTableId();
                         String userTableNumber=userTable.getUserTableNumber();
+                        String areaId=userTable.getArea();
 
                         UserTable table=new UserTable();
-                        String area=tvAc.getText().toString();
-                        table.setArea(area);
+
+                        //table.setArea(area);
                         table.setAc(Boolean.FALSE);
                         table.setNonAc(Boolean.FALSE);
                         table.setGarden(Boolean.FALSE);
 
-                        if(area.equals("AC")){
-                            table.setAc(Boolean.TRUE);
 
-                        }else if(area.equals("NONAC")){
-                            table.setNonAc(Boolean.TRUE);
-
-                        }else if(area.equals("GARDEN")){
-                            table.setGarden(Boolean.TRUE);
-                        }
                         table.setUserTableId(usertableid);
                         table.setUserTableNumber(userTableNumber);
                         SalesBill salesBill=new SalesBill();
@@ -259,11 +256,12 @@ public class TableAct extends Fragment {
                         salesBill.setMiddleName("");
                         salesBill.setServiceCharge("");
                         salesBill.setRecordTime("");
+
                         Gson gson=new Gson();
                         String salsebill=gson.toJson(salesBill);
                         Log.i("","salsebill");
 
-                        new BookTableService(getActivity(),salsebill,getActivity(),linearLayou,mHandler).execute("");
+                       new BookTableService(getActivity(),salsebill,getActivity(),linearLayou,mHandler).execute("");
                         Toast.makeText(getActivity(),"T:ID="+usertableid+" T:no="+userTableNumber,Toast.LENGTH_SHORT).show();
 
                     }
@@ -271,15 +269,7 @@ public class TableAct extends Fragment {
 
                 }
             });
-            if(userTableList.get(position).isAc()){
-                tvAc.setText("AC");
-            }
-            if(userTableList.get(position).isNonAc()){
-                tvAc.setText("NONAC");
 
-            }if(userTableList.get(position).isGarden()){
-                tvAc.setText("GARDEN");
-            }
             if(userTableList.get(position).isActive()==true){
                 linearLayou.setBackgroundResource(R.drawable.available);
                 textView.setText(userTableList.get(position).getUserTableNumber());
@@ -307,6 +297,9 @@ public class TableAct extends Fragment {
                 if(msg.what==TABLE_BOOKED){
                     MenuListFragment menuListFragment=new MenuListFragment();
                     FragmentManager fragmentManager=getFragmentManager();
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("request",2);
+                    menuListFragment.setArguments(bundle);
                     fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();
                 }else if(msg.what==TABLE_NOT_BOOKED){
                     Toast.makeText(getActivity(),"ERROR",Toast.LENGTH_SHORT).show();

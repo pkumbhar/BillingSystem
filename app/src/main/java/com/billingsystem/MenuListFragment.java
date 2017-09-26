@@ -71,8 +71,15 @@ public class MenuListFragment extends android.app.Fragment {
         View view=inflater.inflate(R.layout.activity_menu_list, container, false);
         linearMenuItem=(LinearLayout)view.findViewById(R.id.lin_menu_list_id);
         recyclerView=(RecyclerView)view.findViewById(R.id.recycler_vehicleMarket_id);
+        Bundle b=getArguments();
+        int a=2;
+        try{
+            a=b.getInt("request");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-        setCategoryView();
+        setCategoryView(a);
         DBAdapter dbAdapter=new DBAdapter(getActivity());
         Cursor mCursor=dbAdapter.getTableDetails(BaseTable.TABLELIST.PRODUCT);
         if(mCursor!=null){
@@ -88,7 +95,8 @@ public class MenuListFragment extends android.app.Fragment {
                 list.add(product);
                 mCursor.moveToNext();
             }
-            menuItemAdapter = new MenuItemAdapter(list,getActivity(), getActivity());
+
+            menuItemAdapter = new MenuItemAdapter(list,getActivity(), getActivity(),a);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -98,7 +106,7 @@ public class MenuListFragment extends android.app.Fragment {
         return view;
     }
 
-    private void setCategoryView() {
+    private void setCategoryView(final int req) {
        final  List<ProductType> productTypeList=new ArrayList<ProductType>();
         final DBAdapter dbAdapter = new DBAdapter(getActivity());
         Cursor mCursor = dbAdapter.getTableDetails(BaseTable.TABLELIST.PRODUCT_TYPE);
@@ -131,7 +139,7 @@ public class MenuListFragment extends android.app.Fragment {
                         ProductType productType=(ProductType) button.getTag();
                         try{
                             list=dbAdapter.getListByProductTypeId(productType.getProductTypeId());
-                            menuItemAdapter = new MenuItemAdapter(list,getActivity(), getActivity());
+                            menuItemAdapter = new MenuItemAdapter(list,getActivity(), getActivity(),req);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                             recyclerView.setLayoutManager(mLayoutManager);
                             recyclerView.setItemAnimator(new DefaultItemAnimator());

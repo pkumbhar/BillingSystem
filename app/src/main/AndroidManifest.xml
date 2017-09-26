@@ -21,16 +21,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ItemSearchAct" />
         <activity android:name=".OrderAct" />
         <activity android:name=".MenuListAct" />
         <activity android:name=".ReleseTable" />
         <activity android:name=".CaptionSlider" />
         <activity android:name=".ForgetPassword" />
-        <activity android:name=".FragmentMainActivity"
+        <activity
+            android:name=".FragmentMainActivity"
             android:label="@string/title_activity_fragment_main"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".FeedBackAct"></activity>
     </application>
 
 </manifest>
