@@ -10,10 +10,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -32,6 +35,7 @@ public class MenuListFragment extends android.app.Fragment {
     private MenuItemAdapter menuItemAdapter;
     private List<Product> list=new ArrayList<Product>();
     private LinearLayout linearMenuItem;
+    private EditText edSearch;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -71,6 +75,41 @@ public class MenuListFragment extends android.app.Fragment {
         View view=inflater.inflate(R.layout.activity_menu_list, container, false);
         linearMenuItem=(LinearLayout)view.findViewById(R.id.lin_menu_list_id);
         recyclerView=(RecyclerView)view.findViewById(R.id.recycler_vehicleMarket_id);
+        edSearch=(EditText)view.findViewById(R.id.tvinput_searching_id);
+
+        edSearch.addTextChangedListener(new TextWatcher() {
+            ArrayList<Product> pList=new ArrayList<Product>();
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                pList.clear();
+                for(Product p:list){
+
+                    if(p.getProductId().contains(s)||(p.getName().contains(s))){
+                        pList.add(p);
+                        sortList(pList);
+                        Toast.makeText(getActivity(),"found",Toast.LENGTH_SHORT).show();
+
+                    }else {
+
+                        Toast.makeText(getActivity(),"not found",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         Bundle b=getArguments();
         int a=2;
         try{
@@ -104,6 +143,13 @@ public class MenuListFragment extends android.app.Fragment {
         }
 
         return view;
+    }
+    private void sortList(ArrayList<Product> list){
+        menuItemAdapter = new MenuItemAdapter(list,getActivity(), getActivity(),2);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(menuItemAdapter);
     }
 
     private void setCategoryView(final int req) {

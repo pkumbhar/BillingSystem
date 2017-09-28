@@ -30,16 +30,15 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/tvinput_forget_password_email_id"
+            android:id="@+id/tvinput_searching_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Search"
             android:drawableRight="@drawable/search_three_six"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:textColor="#ee000000"
             android:paddingRight="20sp"
             android:textColorHint="#ee212521"/>
-
     </android.support.design.widget.TextInputLayout>
     <View
         android:layout_width="match_parent"

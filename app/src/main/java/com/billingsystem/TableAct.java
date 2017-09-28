@@ -237,12 +237,6 @@ public class TableAct extends Fragment {
 
                         UserTable table=new UserTable();
 
-                        //table.setArea(area);
-                        table.setAc(Boolean.FALSE);
-                        table.setNonAc(Boolean.FALSE);
-                        table.setGarden(Boolean.FALSE);
-
-
                         table.setUserTableId(usertableid);
                         table.setUserTableNumber(userTableNumber);
                         SalesBill salesBill=new SalesBill();
@@ -295,6 +289,7 @@ public class TableAct extends Fragment {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if(msg.what==TABLE_BOOKED){
+                    linearArea.setBackgroundResource(R.drawable.available);
                     MenuListFragment menuListFragment=new MenuListFragment();
                     FragmentManager fragmentManager=getFragmentManager();
                     Bundle bundle=new Bundle();
