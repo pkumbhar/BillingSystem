@@ -30,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.background.DownloadProduct;
+import com.checkwifi.WiFiConnection;
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
 import com.entity.Area;
@@ -44,7 +45,7 @@ import java.lang.reflect.Array;
 public class FragmentMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static TextView tvCart;
-    private TextView tvCaptionName,tv_subHeader;
+    private TextView tvCaptionName,tv_subHeader,tvIpAddress;
     private LinearLayout linCart;
 
     @Override
@@ -106,9 +107,10 @@ public class FragmentMainActivity extends AppCompatActivity
             /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
         tvCaptionName= (TextView)header.findViewById(R.id.nav_caption_nameId);
         tv_subHeader=(TextView)header.findViewById(R.id.textView_sub_header);
-
+        tvIpAddress=(TextView)header.findViewById(R.id.textView_ip_address_header_id);
         DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
        try{
+         //  tvIpAddress.setText("Connected with"+dbAdapter.getServerIpAddress());
            Employee employee=dbAdapter.getEmployee();
            tvCaptionName.setText(employee.getEmployeeName());
            tv_subHeader.setText(employee.getEmployeeId());
@@ -172,11 +174,12 @@ public class FragmentMainActivity extends AppCompatActivity
         }else if (id == R.id.nav_area_id) {
             syncArea();
         } else if (id == R.id.nav_product_id) {
-            new DownloadProduct(getApplicationContext(),FragmentMainActivity.this,mHandler).execute("");
-
-
-
-
+            WiFiConnection wiFiConnection=new WiFiConnection();
+            if(wiFiConnection.checkWifiOnAndConnected(getApplicationContext())==true){
+                new DownloadProduct(getApplicationContext(),FragmentMainActivity.this,mHandler).execute("");
+            }else {
+                wiFiConnection.connectToNetWork(FragmentMainActivity.this);
+            }
         } /*else if (id == R.id.nav_slideshow) {
             MenuListFragment menuListFragment=new MenuListFragment();
             FragmentManager fragmentManager=getFragmentManager();
@@ -193,7 +196,8 @@ public class FragmentMainActivity extends AppCompatActivity
     }
     private void syncArea(){
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
-        String url= ServerHost.SERVER_URL.concat("/rest/BillServices/getArea");
+        ServerHost serverHost=new ServerHost();
+        String url= serverHost.SERVER_URL(getApplicationContext()).concat("/rest/BillServices/getArea");
         StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

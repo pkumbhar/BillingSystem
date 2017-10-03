@@ -54,6 +54,7 @@ public class DBAdapter {
             db.execSQL(BaseTable.CREATE_TABLE.UOM);
             db.execSQL(BaseTable.CREATE_TABLE.EMPLOYEE);
             db.execSQL(BaseTable.CREATE_TABLE.AREA);
+            db.execSQL(BaseTable.CREATE_TABLE.IP_CONFIGRATION);
             Log.i("Table Created..!!","--"+db.getPath());
 
         }
@@ -117,6 +118,22 @@ public class DBAdapter {
         return l;
     }
     /*
+    insert into ipconfigration
+     */
+
+    public long insertIntoIpConfigration(String ip){
+        long l=0;
+        ContentValues cv=new ContentValues();
+        cv.put(BaseTable.IP_CONFIGRATION.IP_ADDRESS,ip);
+        db=dbHelper.getWritableDatabase();
+        l=db.insert(BaseTable.TABLELIST.SALES_BILL_DETAIL,null,cv);
+
+        if(l>0){
+            Log.i("#INS->#","IP_C"+l);
+        }
+        return l;
+    }
+    /*
     insert into Employee
      */
     public long insertIntoEmployee(Employee emp){
@@ -135,8 +152,6 @@ public class DBAdapter {
                 Log.i("#",BaseTable.TABLELIST.EMPLOYEE+"#");
                 return l;
             }
-
-
         }
         return 0;
     }
@@ -255,7 +270,7 @@ public class DBAdapter {
            ContentValues cv1=new ContentValues();
             cv1.put(BaseTable.PRODUCT_TYPE.PRODUCT_TYPE_ID,product.getProdyctTypeId().getProductTypeId());
             cv1.put(BaseTable.PRODUCT_TYPE.PRODUCT_NAME,product.getProdyctTypeId().getProductName());
-            cv1.put(BaseTable.PRODUCT_TYPE.TAX_ID,"XYZ");
+           // cv1.put(BaseTable.PRODUCT_TYPE.TAX_ID,"XYZ");
             Long l2=db.insert(BaseTable.TABLELIST.PRODUCT_TYPE,null,cv1);
             if(l2>0){
                 Log.i("ins in Product_type","");
@@ -285,6 +300,18 @@ public class DBAdapter {
         String s=stmt.simpleQueryForString();
         return s;
     }
+    /*
+    get ip Address
+     */
+    public String getServerIpAddress() throws SQLException{
+
+        String q="select  ip_address from ip_configration;";
+        db=dbHelper.getWritableDatabase();
+        SQLiteStatement stmt=db.compileStatement(q);
+        String s=stmt.simpleQueryForString();
+        return s;
+    }
+
     public List<Product> getListByProductTypeId(String productTypeID) throws SQLException{
         List<Product> productList=new ArrayList<Product>();
         Cursor mCursor=null;

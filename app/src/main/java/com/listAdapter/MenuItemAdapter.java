@@ -153,9 +153,6 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
                     Toast.makeText(mContext,""+c,Toast.LENGTH_SHORT).show();
                     FragmentMainActivity.tvCart.setText(""+c);
                 }
-
-
-
             }
         });
     }

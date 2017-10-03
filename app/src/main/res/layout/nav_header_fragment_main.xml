@@ -32,5 +32,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="android.studio@android.com" />
+    <TextView
+        android:id="@+id/textView_ip_address_header_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="android.studio@android.com" />
 
 </LinearLayout>

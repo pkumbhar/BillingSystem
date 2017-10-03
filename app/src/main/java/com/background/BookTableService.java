@@ -100,7 +100,8 @@ public class BookTableService extends AsyncTask<String,Void,JSONObject> {
     @Override
     protected JSONObject doInBackground(String... params) {
         JSONObject jsonObject;
-        String query= ServerHost.SERVER_URL+"/rest/BillServices/bookTable";
+        ServerHost serverHost=new ServerHost();
+        String query= serverHost.SERVER_URL(mContext)+"/rest/BillServices/bookTable";
             try {
                 URL url = new URL(query);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.checkwifi.WiFiConnection;
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
 import com.serverUrl.ServerHost;
@@ -45,9 +46,15 @@ public class FeedBackAct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // TODO NTTWOTK condition
 
-                sendFeedBack();
+                WiFiConnection wiFiConnection=new WiFiConnection();
+                if(wiFiConnection.checkWifiOnAndConnected(getApplicationContext())==true){
+                    sendFeedBack();
+                }else {
+                    wiFiConnection.connectToNetWork(FeedBackAct.this);
+                }
+
+
 
             }
         });
@@ -93,7 +100,8 @@ public class FeedBackAct extends AppCompatActivity {
                 /*
                 http://192.168.0.113:8081/BillingSystem/rest/BillServices/salesBillid?salesBillid={"caption_rating":"4.0","ambiance_rating":"2.5","food_rating":"2.5","sales_bill_id":"SBL-2017-649","status":"200"}
                  */
-                String url= ServerHost.SERVER_URL.concat("/rest/BillServices/salesBillid?salesBillid="+feedBackJson.toString());
+                ServerHost serverHost=new ServerHost();
+                String url= serverHost.SERVER_URL(getApplicationContext()).concat("/rest/BillServices/salesBillid?salesBillid="+feedBackJson.toString());
                 StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

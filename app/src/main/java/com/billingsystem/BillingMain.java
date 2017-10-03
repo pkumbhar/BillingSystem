@@ -26,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.checkwifi.WiFiConnection;
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
 import com.entity.Employee;
@@ -41,7 +42,7 @@ public class BillingMain extends AppCompatActivity {
     private Animation logoMoveAnimation;
     private LinearLayout parentLayout;
     private LinearLayout login_layout,lin_tag_id;
-    private TextView tvForgetPassword;
+    private TextView tvForgetPassword,tvSetIp;
     private EditText edIpaddress,edUserName,edPassword;
 
 
@@ -59,6 +60,13 @@ public class BillingMain extends AppCompatActivity {
         parentLayout=(LinearLayout)findViewById(R.id.activity_billing_main);
         edUserName=(EditText)findViewById(R.id.input_user_name_id);
         edPassword=(EditText)findViewById(R.id.input_password_id);
+        tvSetIp=(TextView)findViewById(R.id.tv_server_setting_id);
+        tvSetIp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BillingMain.this,IpConfigrationActivaty.class));
+            }
+        });
         final DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
         try{
             Employee emp=dbAdapter.getEmployee();
@@ -74,7 +82,13 @@ public class BillingMain extends AppCompatActivity {
         btnStartOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkLoginProcess();
+                WiFiConnection wiFiConnection=new WiFiConnection();
+                if(wiFiConnection.checkWifiOnAndConnected(getApplicationContext())==true){
+                    checkLoginProcess();
+                }else {
+                    wiFiConnection.connectToNetWork(BillingMain.this);
+                }
+
             }
         });
         tvForgetPassword.setOnClickListener(new View.OnClickListener() {
@@ -115,13 +129,17 @@ public class BillingMain extends AppCompatActivity {
 
     }
     private void checkLoginProcess(){
+
         if (btnStartOrder.getText().toString().equals("Login")) {
             // startActivity(new Intent(BillingMain.this,FragmentMainActivity.class));
             if((edUserName.getText().toString().length()>0)&&(edPassword.getText().toString().length()>0)){
                 String userName=edUserName.getText().toString();
                 String password=edPassword.getText().toString();
                 RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
-                String url= ServerHost.SERVER_URL.concat("/rest/BillServices/employeeLogin?userName="+userName+"&password="+password);
+                ServerHost serverHost=new ServerHost();
+                String url= serverHost.SERVER_URL(getApplicationContext()).concat("/rest/BillServices/employeeLogin?userName="+userName+"&password="+password);
+
+
                 StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -165,9 +183,6 @@ public class BillingMain extends AppCompatActivity {
                 });
                 requestQueue.add(stringRequest);
                 requestQueue.start();
-
-
-
             }else {
                 Toast.makeText(getApplicationContext(),"empty value",Toast.LENGTH_SHORT).show();
             }

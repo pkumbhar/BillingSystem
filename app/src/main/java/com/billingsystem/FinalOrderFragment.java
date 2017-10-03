@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +21,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.background.DownloadUserTable;
 import com.background.SendTableOrder;
+import com.checkwifi.WiFiConnection;
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
 import com.entity.Product;
@@ -28,6 +31,7 @@ import com.entity.ProductType;
 import com.entity.SalesBillDetail;
 import com.listAdapter.FinalOrderAdapter;
 import com.listAdapter.MenuItemAdapter;
+import com.serverUrl.ServerHost;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -89,7 +93,8 @@ public class FinalOrderFragment extends android.app.Fragment {
         btnSendOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                WiFiConnection wiFiConnection=new WiFiConnection();
+                if(wiFiConnection.checkWifiOnAndConnected(getActivity())==true){
                     JSONArray jsonArray=new JSONArray();
                     for(SalesBillDetail detail:dbAdapter.getSalesBillDetailList()){
                         try{
@@ -106,6 +111,12 @@ public class FinalOrderFragment extends android.app.Fragment {
                         }
                     }
                     new SendTableOrder(getActivity(),mHandler,jsonArray.toString(),getActivity()).execute("");
+                }else {
+                    wiFiConnection.connectToNetWork(getActivity());
+                }
+
+
+
 
             }
         });

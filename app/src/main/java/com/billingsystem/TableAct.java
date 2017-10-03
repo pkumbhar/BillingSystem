@@ -43,6 +43,7 @@ import com.android.volley.toolbox.Volley;
 import com.background.BookTableService;
 import com.background.DownloadProduct;
 import com.background.DownloadUserTable;
+import com.checkwifi.WiFiConnection;
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
 import com.databaseAdapter.DBBackUpAsyncTask;
@@ -131,9 +132,14 @@ public class TableAct extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String id=(String)button.getTag();
-
+                        WiFiConnection wiFiConnection=new WiFiConnection();
+                        if(wiFiConnection.checkWifiOnAndConnected(getActivity())==true){
+                            new DownloadUserTable(getActivity(),getActivity(),mHandler,id).execute("");
+                        }else {
+                            wiFiConnection.connectToNetWork(getActivity());
+                        }
                        // Toast.makeText(getActivity(),""+id,Toast.LENGTH_SHORT).show();
-                        new DownloadUserTable(getActivity(),getActivity(),mHandler,id).execute("");
+
                     }
                 });
                 linearArea.addView(button);
@@ -220,47 +226,46 @@ public class TableAct extends Fragment {
             linearLayou.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    if(userTableList.get(position).isActive()==true){
-                        dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
-                        dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
-                        Toast.makeText(getActivity(),"Active Table",Toast.LENGTH_SHORT).show();
-                        setBillTable(userTableList.get(position).getUserTableId(),UPDATE_ORDER);
-
-                    }else if(userTableList.get(position).isActive()==false){
-                        dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
-                        dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
-                        UserTable userTable=userTableList.get(position);
-                        String usertableid=userTable.getUserTableId();
-                        String userTableNumber=userTable.getUserTableNumber();
-                        String areaId=userTable.getArea();
-
-                        UserTable table=new UserTable();
-
-                        table.setUserTableId(usertableid);
-                        table.setUserTableNumber(userTableNumber);
-                        SalesBill salesBill=new SalesBill();
-                        salesBill.setUserId(table);
-                        DBAdapter dbAdapter=new DBAdapter(mContext);
-                        Employee employee = dbAdapter.getEmployee();
-                        salesBill.setCreatedBy(employee.getEmployeeId());
-                        salesBill.setFirstName("");
-                        salesBill.setEmail("");
-                        salesBill.setIsOpen("1");
-                        salesBill.setMiddleName("");
-                        salesBill.setServiceCharge("");
-                        salesBill.setRecordTime("");
-
-                        Gson gson=new Gson();
-                        String salsebill=gson.toJson(salesBill);
-                        Log.i("","salsebill");
-
-                       new BookTableService(getActivity(),salsebill,getActivity(),linearLayou,mHandler).execute("");
-                        Toast.makeText(getActivity(),"T:ID="+usertableid+" T:no="+userTableNumber,Toast.LENGTH_SHORT).show();
-
-                    }
                     new DBBackUpAsyncTask(mContext).execute("");
+                    WiFiConnection wiFiConnection=new WiFiConnection();
+                   if(wiFiConnection.checkWifiOnAndConnected(getActivity())==true){
+                       if(userTableList.get(position).isActive()==true) {
+                           dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
+                           dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
+                           Toast.makeText(getActivity(), "Active Table", Toast.LENGTH_SHORT).show();
+                           setBillTable(userTableList.get(position).getUserTableId(), UPDATE_ORDER);
+                       }else if(userTableList.get(position).isActive()==false){
+                               dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
+                               dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
+                               UserTable userTable=userTableList.get(position);
+                               String usertableid=userTable.getUserTableId();
+                               String userTableNumber=userTable.getUserTableNumber();
+                               String areaId=userTable.getArea();
 
+                               UserTable table=new UserTable();
+
+                               table.setUserTableId(usertableid);
+                               table.setUserTableNumber(userTableNumber);
+                               SalesBill salesBill=new SalesBill();
+                               salesBill.setUserId(table);
+                               DBAdapter dbAdapter=new DBAdapter(mContext);
+                               Employee employee = dbAdapter.getEmployee();
+                               salesBill.setCreatedBy(employee.getEmployeeId());
+                               salesBill.setFirstName("");
+                               salesBill.setEmail("");
+                               salesBill.setIsOpen("1");
+                               salesBill.setMiddleName("");
+                               salesBill.setServiceCharge("");
+                               salesBill.setRecordTime("");
+                               Gson gson=new Gson();
+                               String salsebill=gson.toJson(salesBill);
+                               Log.i("","salsebill");
+                               new BookTableService(getActivity(),salsebill,getActivity(),linearLayou,mHandler).execute("");
+                               Toast.makeText(getActivity(),"T:ID="+usertableid+" T:no="+userTableNumber,Toast.LENGTH_SHORT).show();
+                               new DBBackUpAsyncTask(mContext).execute("");
+
+                       }
+                    }
                 }
             });
 
@@ -310,7 +315,8 @@ public class TableAct extends Fragment {
 
         private void setBillTable(String userTableId,final int request){
             RequestQueue requestQueue=Volley.newRequestQueue(getActivity());
-            String url=ServerHost.SERVER_URL.concat("/rest/BillServices/salesBill?userTable="+userTableId);
+            ServerHost serverHost=new ServerHost();
+            String url=serverHost.SERVER_URL(getActivity()).concat("/rest/BillServices/salesBill?userTable="+userTableId);
             StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {

@@ -47,7 +47,8 @@ public class DownloadUserTable extends AsyncTask<String,Void,String> {
         String RETURN = null;
         BufferedReader reader = null;
         try{//http://192.168.0.110:8082/BillingSystem/rest/BillServices/table
-            String query= ServerHost.SERVER_URL+"/rest/BillServices/table?areaId="+areaid;
+            ServerHost serverHost=new ServerHost();
+            String query= serverHost.SERVER_URL(mContext)+"/rest/BillServices/table?areaId="+areaid;
             URL url=new URL(query);
             HttpURLConnection urlConnection=(HttpURLConnection)url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -121,11 +122,6 @@ public class DownloadUserTable extends AsyncTask<String,Void,String> {
                 }
                 table.setUserTableNumber(jsonObject.getString("table_number"));
                 TableAct.userTableList.add(table);
-
-
-
-
-
             }
             progressDialog.dismiss();
             return 1;

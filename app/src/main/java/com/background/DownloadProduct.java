@@ -45,7 +45,8 @@ public class DownloadProduct extends AsyncTask<String,Void,String> {
         BufferedReader reader = null;
         try{
             //String query="http://localhost:8082/BillingSystem/rest/BillServices/activeTable?isactive="+isActive+"&userId="+userId+"&tableName=+tableName";
-            String query= ServerHost.SERVER_URL+"/rest/BillServices/product";
+            ServerHost serverHost=new ServerHost();
+            String query= serverHost.SERVER_URL(mContext)+"/rest/BillServices/product";
             URL url=new URL(query);
             HttpURLConnection urlConnection=(HttpURLConnection)url.openConnection();
             urlConnection.setRequestMethod("GET");

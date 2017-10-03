@@ -38,6 +38,14 @@ public  class BaseTable {
 
 
     }
+    /*
+    ip TABLE
+     */
+    public static class IP_CONFIGRATION{
+        public  static String IP_CONFIGRATION="ip_configration";
+        public  static String IP_ID="IP_ID";
+        public  static String IP_ADDRESS="IP_ADDRESS";
+    }
     public static class SALES_BILL{
         public static String SALES_BILL="SALES_BILL";
         public static String SALES_BILL_ID="SALES_BILL_ID";
@@ -161,6 +169,9 @@ public  class BaseTable {
         public static String AREA="CREATE TABLE `area` (\n" +
                 "\t`AREA_ID`\tTEXT,\n" +
                 "\t`AREA_NAME`\tTEXT\n" +
+                ");";
+        public static String IP_CONFIGRATION="CREATE TABLE `ip_configration` (\n" +
+                "\t`IP_ADDRESS`\tTEXT\n" +
                 ");";
     }
     }

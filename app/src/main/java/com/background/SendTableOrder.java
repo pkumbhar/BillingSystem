@@ -7,14 +7,18 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
 import com.serverUrl.ServerHost;
 
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -50,11 +54,25 @@ public class SendTableOrder extends AsyncTask<String,Void,String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         if(!s.isEmpty()){
-            if(s.equals("1")){
-                mHandler.obtainMessage(1).sendToTarget();
-            }else if(s.equals("0")){
-                mHandler.obtainMessage(0).sendToTarget();
+            try{
+                JSONObject jsonObject=new JSONObject(s);
+                if(jsonObject.has("status")){
+                    String status=jsonObject.getString("status");
+                    if(status.equals("200")){
+                        Toast.makeText(mContext,jsonObject.getString("msg"),Toast.LENGTH_SHORT).show();
+                        mHandler.obtainMessage(1).sendToTarget();
+                    }else if (status.equals("401")){
+                        Toast.makeText(mContext,jsonObject.getString("msg"),Toast.LENGTH_SHORT).show();
+                        mHandler.obtainMessage(0).sendToTarget();
+                    }
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
+        }else if(s.equals("0")){
+            mHandler.obtainMessage(0).sendToTarget();
         }
     }
 
@@ -62,13 +80,21 @@ public class SendTableOrder extends AsyncTask<String,Void,String> {
     protected String doInBackground(String... params) {
         BufferedReader reader = null;
         try{
-            String query= ServerHost.SERVER_URL+"/rest/BillServices/putOrder?order="+salesBill;
+            ServerHost serverHost=new ServerHost();
+            String query= serverHost.SERVER_URL(mContext)+"/rest/BillServices/putOrder";
             URL url=new URL(query);
-            HttpURLConnection urlConnection=(HttpURLConnection)url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setDoInput(true);
-            // urlConnection.setDoOutput(true);
-            urlConnection.setUseCaches(false);
+            //-------------------
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            urlConnection.setDoOutput(true);
+            OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
+            wr.write(salesBill);  //<--- sending data.
+            wr.flush();
+            urlConnection.connect();
+
+            //------------
+
             int status = urlConnection.getResponseCode();
             if(status==200){
                 progressDialog.dismiss();
@@ -82,11 +108,7 @@ public class SendTableOrder extends AsyncTask<String,Void,String> {
                 while ((inputLine = reader.readLine()) != null){
                     buffer.append(inputLine + "\n");
                 }
-                Log.i("BUFFER",""+buffer.toString());
-                DBAdapter dbAdapter=new DBAdapter(mContext);
-                dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
-                dbAdapter.insertIntoSalseBill(buffer.toString());
-                return "1";
+                return buffer.toString();
 
             }else {
                 progressDialog.dismiss();
