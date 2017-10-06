@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,23 +27,17 @@ import com.serverUrl.ServerHost;
 import org.json.JSONObject;
 
 public class FeedBackAct extends AppCompatActivity {
-    private RatingBar ratingBarAmbiance,ratingBarFood,ratingBarCaption;
+
     private Button btnFeedBack;
-    private TextView tvAmbiance,tvFoodRate,tvCaption;
+    private Spinner spinnerCaption;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_back);
-        ratingBarAmbiance=(RatingBar)findViewById(R.id.rating_ambiance_id);
-        ratingBarAmbiance.setNumStars(5);
-        ratingBarFood=(RatingBar)findViewById(R.id.rating_food_id);
-        ratingBarCaption=(RatingBar)findViewById(R.id.rating_caption_id);
-        btnFeedBack=(Button)findViewById(R.id.btn_send_feedback_id);
-        tvAmbiance=(TextView)findViewById(R.id.tv_rate_ambiance_id);
-        tvFoodRate=(TextView)findViewById(R.id.tv_rating_food_id);
-        tvCaption=(TextView)findViewById(R.id.tv_rating_caption_id);
+
         btnFeedBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,27 +54,14 @@ public class FeedBackAct extends AppCompatActivity {
 
             }
         });
-        ratingBarFood.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                tvFoodRate.setText(String.valueOf(rating));
 
-            }
-        });
-        ratingBarCaption.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                tvCaption.setText(String.valueOf(rating));
-            }
-        });
-        ratingBarAmbiance.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                tvAmbiance.setText(String.valueOf(rating));
-            }
-        });
     }
 
+    private void setSpinner(){
+        String brans[] =getResources().getStringArray(R.array.feedback);
+        ArrayAdapter adapter=new ArrayAdapter(getApplicationContext(),R.layout.row,brans);
+        spinnerCaption.setAdapter(adapter);
+    }
 
     private void sendFeedBack(){
         DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
@@ -92,9 +75,9 @@ public class FeedBackAct extends AppCompatActivity {
             try{
                 feedBackJson.put("status","200");
                 feedBackJson.put("sales_bill_id",salsBillid);
-                feedBackJson.put("ambiance_rating",tvAmbiance.getText().toString());
+               /* feedBackJson.put("ambiance_rating",tvAmbiance.getText().toString());
                 feedBackJson.put("food_rating",tvFoodRate.getText().toString());
-                feedBackJson.put("caption_rating",tvCaption.getText().toString());
+                feedBackJson.put("caption_rating",tvCaption.getText().toString());*/
 
                 RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
                 /*

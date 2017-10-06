@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".BillingMain"
+            android:name=".FeedBackAct"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +30,7 @@
             android:name=".FragmentMainActivity"
             android:label="@string/title_activity_fragment_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FeedBackAct" />
+        <activity android:name=".BillingMain" />
         <activity android:name=".IpConfigrationActivaty"></activity>
     </application>
 
