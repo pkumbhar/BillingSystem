@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.renderscript.ScriptGroup;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -180,7 +181,19 @@ public class FragmentMainActivity extends AppCompatActivity
             }else {
                 wiFiConnection.connectToNetWork(FragmentMainActivity.this);
             }
-        } /*else if (id == R.id.nav_slideshow) {
+        }else if(id==R.id.nav_logoutid){
+            DBAdapter adapter=new DBAdapter(getApplicationContext());
+            adapter.deletTable(BaseTable.TABLELIST.SALESBILL);
+            adapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
+            adapter.deletTable(BaseTable.TABLELIST.EMPLOYEE);
+            adapter.deletTable(BaseTable.TABLELIST.PRODUCT_TYPE);
+            adapter.deletTable(BaseTable.TABLELIST.PRODUCT);
+            adapter.deletTable(BaseTable.TABLELIST.AREA);
+            Intent intent=new Intent(FragmentMainActivity.this,BillingMain.class);
+            startActivity(intent);
+            finish();
+
+            /*else if (id == R.id.nav_slideshow) {
             MenuListFragment menuListFragment=new MenuListFragment();
             FragmentManager fragmentManager=getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();
@@ -189,6 +202,7 @@ public class FragmentMainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         }*/
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

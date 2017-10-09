@@ -4,6 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_table_id"
+            android:visible="false"
             android:title="Table"/>
         <item
             android:id="@+id/nav_area_id"

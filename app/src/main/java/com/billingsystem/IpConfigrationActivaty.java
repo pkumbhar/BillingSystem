@@ -12,7 +12,7 @@ import com.databaseAdapter.DBAdapter;
 
 public class IpConfigrationActivaty extends AppCompatActivity {
 
-    private EditText edIpAddress;
+    private EditText edIpAddress,edPortAddress;
     private Button btnSaveIp;
 
 
@@ -20,7 +20,8 @@ public class IpConfigrationActivaty extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ip_configration_activaty);
-        edIpAddress=(EditText)findViewById(R.id.ed_ip_address_Id);
+        edIpAddress=(EditText)findViewById(R.id.ed_ip_address_id);
+        edPortAddress=(EditText)findViewById(R.id.ed_ip_port_id);
         btnSaveIp=(Button)findViewById(R.id.btn_ip_address_Id);
         btnSaveIp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,9 +29,9 @@ public class IpConfigrationActivaty extends AppCompatActivity {
                 //TODO network call neded before click
 
                 DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
-                if(edIpAddress.getText().length()>9){
+                if((edIpAddress.getText().length()>9)&&(edPortAddress.getText().length()==4)){
                     dbAdapter.deletTable(BaseTable.IP_CONFIGRATION.IP_CONFIGRATION);
-                    long l=dbAdapter.insertIntoIpConfigration(edIpAddress.getText().toString());
+                    long l=dbAdapter.insertIntoIpConfigration(edIpAddress.getText().toString(),edPortAddress.getText().toString());
                     if(l>0){
                         Toast.makeText(getApplicationContext(),"ip address is updated",Toast.LENGTH_SHORT);
                         finish();

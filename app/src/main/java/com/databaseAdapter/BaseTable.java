@@ -15,6 +15,7 @@ public  class BaseTable {
         public static String UOM="UOM";
         public static String USER_TABLE="user_table";
         public static String EMPLOYEE="employee";
+        public static String AREA="area";
     }
     public static class PRODUCT{
         public static String PRODUCT_ID="PRODUCT_ID";
@@ -45,6 +46,7 @@ public  class BaseTable {
         public  static String IP_CONFIGRATION="ip_configration";
         public  static String IP_ID="IP_ID";
         public  static String IP_ADDRESS="IP_ADDRESS";
+        public  static String PORT_ADDRESS="PORT_ADDRESS";
     }
     public static class SALES_BILL{
         public static String SALES_BILL="SALES_BILL";
@@ -171,7 +173,8 @@ public  class BaseTable {
                 "\t`AREA_NAME`\tTEXT\n" +
                 ");";
         public static String IP_CONFIGRATION="CREATE TABLE `ip_configration` (\n" +
-                "\t`IP_ADDRESS`\tTEXT\n" +
+                "\t`IP_ADDRESS`\tTEXT,\n" +
+                "\t`PORT_ADDRESS`\tTEXT\n" +
                 ");";
     }
     }

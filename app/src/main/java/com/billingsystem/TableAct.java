@@ -114,7 +114,7 @@ public class TableAct extends Fragment {
         return view;
     }
     private void setAreaButtons(){
-        DBAdapter dbAdapter=new DBAdapter(getActivity());
+        final DBAdapter dbAdapter=new DBAdapter(getActivity());
         Cursor mCursor=dbAdapter.getTableDetails(BaseTable.AREA.AREA);
         if(mCursor!=null){
             mCursor.moveToFirst();
@@ -134,6 +134,8 @@ public class TableAct extends Fragment {
                         String id=(String)button.getTag();
                         WiFiConnection wiFiConnection=new WiFiConnection();
                         if(wiFiConnection.checkWifiOnAndConnected(getActivity())==true){
+                            dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
+                            dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
                             new DownloadUserTable(getActivity(),getActivity(),mHandler,id).execute("");
                         }else {
                             wiFiConnection.connectToNetWork(getActivity());
@@ -234,6 +236,7 @@ public class TableAct extends Fragment {
                            dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
                            Toast.makeText(getActivity(), "Active Table", Toast.LENGTH_SHORT).show();
                            setBillTable(userTableList.get(position).getUserTableId(), UPDATE_ORDER);
+
                        }else if(userTableList.get(position).isActive()==false){
                                dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
                                dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
@@ -383,6 +386,7 @@ public class TableAct extends Fragment {
                                     FinalOrderFragment.list.add(detail);
                                 }
                                 if(FinalOrderFragment.list.size()>0){
+
                                     DBAdapter dbAdapter=new DBAdapter(mContext);
                                     dbAdapter.insertIntoSalseBill(FinalOrderFragment.list.get(0).getSalesBillId());
                                     dbAdapter.insertIntoSalesBillDetails(FinalOrderFragment.list);

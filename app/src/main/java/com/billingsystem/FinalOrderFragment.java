@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -79,6 +80,7 @@ public class FinalOrderFragment extends android.app.Fragment {
 
         final DBAdapter dbAdapter=new DBAdapter(getActivity());
         list=dbAdapter.getSalesBillDetailList();
+        FragmentMainActivity.tvCart.setText(""+list.size());
         finalOrderAdapter = new FinalOrderAdapter(list,getActivity(), getActivity(),dbAdapter,REQUEST);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -140,8 +142,10 @@ public class FinalOrderFragment extends android.app.Fragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(msg.what==1){
-                //DBAdapter dbAdapter=new DBAdapter()
-                Toast.makeText(getActivity(),"Order Placed",Toast.LENGTH_SHORT).show();
+                DBAdapter dbAdapter=new DBAdapter(getActivity());
+                dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
+                dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
+                FragmentMainActivity.tvCart.setText("0");
                 TableAct tableFragment=new TableAct();
                 FragmentManager fragmentManager=getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.content_fragment_main,tableFragment).commit();

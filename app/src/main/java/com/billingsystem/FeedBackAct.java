@@ -29,7 +29,7 @@ import org.json.JSONObject;
 public class FeedBackAct extends AppCompatActivity {
 
     private Button btnFeedBack;
-    private Spinner spinnerCaption;
+    private Spinner spinnerCaption,spinnerFood,spinnerAmbiance;
 
 
 
@@ -37,30 +37,47 @@ public class FeedBackAct extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_back);
-
+        btnFeedBack=(Button)findViewById(R.id.btn_send_feedback_id);
+        spinnerFood=(Spinner)findViewById(R.id.sp_raee_food_id);
+        spinnerCaption=(Spinner)findViewById(R.id.sp_rate_caption);
+        spinnerAmbiance=(Spinner)findViewById(R.id.sp_rate_ambiance_id);
+        setSpinner();
         btnFeedBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 WiFiConnection wiFiConnection=new WiFiConnection();
                 if(wiFiConnection.checkWifiOnAndConnected(getApplicationContext())==true){
-                    sendFeedBack();
+                    if(!spinnerFood.getSelectedItem().toString().equals("---Rate Food---")){
+                        if(!spinnerCaption.getSelectedItem().toString().equals("---Rate Caption---")){
+                            if(!spinnerAmbiance.getSelectedItem().toString().equals("---Rate Ambiance---")){
+                                sendFeedBack();
+                            }else {
+                                Toast.makeText(getApplicationContext(),"Select Ambiance Rating",Toast.LENGTH_SHORT).show();
+                            }
+                        }else {
+                            Toast.makeText(getApplicationContext(),"Select Caption Rating",Toast.LENGTH_SHORT).show();
+                        }
+                    }else {
+                        Toast.makeText(getApplicationContext(),"Select Food Rating",Toast.LENGTH_SHORT).show();
+                    }
                 }else {
                     wiFiConnection.connectToNetWork(FeedBackAct.this);
                 }
-
-
-
             }
         });
 
     }
 
     private void setSpinner(){
-        String brans[] =getResources().getStringArray(R.array.feedback);
-        ArrayAdapter adapter=new ArrayAdapter(getApplicationContext(),R.layout.row,brans);
+        String caption[] =getResources().getStringArray(R.array.feedback);
+        ArrayAdapter adapter=new ArrayAdapter(getApplicationContext(),R.layout.row,caption);
         spinnerCaption.setAdapter(adapter);
+        String food[] =getResources().getStringArray(R.array.feedback_food);
+        ArrayAdapter adapterFood=new ArrayAdapter(getApplicationContext(),R.layout.row,food);
+        spinnerFood.setAdapter(adapterFood);
+        String ambiance[] =getResources().getStringArray(R.array.feedback_ambiance);
+        ArrayAdapter adapterAmbiance=new ArrayAdapter(getApplicationContext(),R.layout.row,ambiance);
+        spinnerAmbiance.setAdapter(adapterAmbiance);
     }
 
     private void sendFeedBack(){
@@ -75,10 +92,9 @@ public class FeedBackAct extends AppCompatActivity {
             try{
                 feedBackJson.put("status","200");
                 feedBackJson.put("sales_bill_id",salsBillid);
-               /* feedBackJson.put("ambiance_rating",tvAmbiance.getText().toString());
-                feedBackJson.put("food_rating",tvFoodRate.getText().toString());
-                feedBackJson.put("caption_rating",tvCaption.getText().toString());*/
-
+                feedBackJson.put("ambiance_rating",spinnerAmbiance.getSelectedItem().toString());
+                feedBackJson.put("food_rating",spinnerFood.getSelectedItem().toString());
+                feedBackJson.put("caption_rating",spinnerCaption.getSelectedItem().toString());
                 RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
                 /*
                 http://192.168.0.113:8081/BillingSystem/rest/BillServices/salesBillid?salesBillid={"caption_rating":"4.0","ambiance_rating":"2.5","food_rating":"2.5","sales_bill_id":"SBL-2017-649","status":"200"}

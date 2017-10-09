@@ -18,14 +18,19 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="enter ip address ex:'192.168.0.102'"
+            android:hint="ex:'192.168.0.102'"
+            android:id="@+id/ed_ip_address_id"
+            android:inputType="text|number"
+            android:lines="1"
             android:gravity="center"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="enter ip address"
+            android:hint="enter port"
             android:layout_marginTop="10sp"
-            android:id="@+id/ed_ip_address_Id"
+            android:inputType="text|number"
+            android:lines="1"
+            android:id="@+id/ed_ip_port_id"
             android:gravity="center"/>
         <Button
             android:layout_width="match_parent"

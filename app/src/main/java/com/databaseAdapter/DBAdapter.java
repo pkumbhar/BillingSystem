@@ -121,12 +121,13 @@ public class DBAdapter {
     insert into ipconfigration
      */
 
-    public long insertIntoIpConfigration(String ip){
+    public long insertIntoIpConfigration(String ip,String port){
         long l=0;
         ContentValues cv=new ContentValues();
         cv.put(BaseTable.IP_CONFIGRATION.IP_ADDRESS,ip);
+        cv.put(BaseTable.IP_CONFIGRATION.PORT_ADDRESS,port);
         db=dbHelper.getWritableDatabase();
-        l=db.insert(BaseTable.TABLELIST.SALES_BILL_DETAIL,null,cv);
+        l=db.insert(BaseTable.IP_CONFIGRATION.IP_CONFIGRATION,null,cv);
 
         if(l>0){
             Log.i("#INS->#","IP_C"+l);
