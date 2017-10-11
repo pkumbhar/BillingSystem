@@ -228,7 +228,7 @@ public class TableAct extends Fragment {
             linearLayou.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new DBBackUpAsyncTask(mContext).execute("");
+
                     WiFiConnection wiFiConnection=new WiFiConnection();
                    if(wiFiConnection.checkWifiOnAndConnected(getActivity())==true){
                        if(userTableList.get(position).isActive()==true) {
@@ -265,7 +265,7 @@ public class TableAct extends Fragment {
                                Log.i("","salsebill");
                                new BookTableService(getActivity(),salsebill,getActivity(),linearLayou,mHandler).execute("");
                                Toast.makeText(getActivity(),"T:ID="+usertableid+" T:no="+userTableNumber,Toast.LENGTH_SHORT).show();
-                               new DBBackUpAsyncTask(mContext).execute("");
+
 
                        }
                     }
@@ -341,6 +341,7 @@ public class TableAct extends Fragment {
             if(response!=null){
                 if(!response.isEmpty()){
                     SalesBill salesBill=new SalesBill();
+                    DBAdapter dbAdapter=new DBAdapter(mContext);
                     try{
                         JSONObject jsonObject=new JSONObject(response);
                         if(jsonObject.has("salesBill")){
@@ -387,8 +388,8 @@ public class TableAct extends Fragment {
                                 }
                                 if(FinalOrderFragment.list.size()>0){
 
-                                    DBAdapter dbAdapter=new DBAdapter(mContext);
-                                    dbAdapter.insertIntoSalseBill(FinalOrderFragment.list.get(0).getSalesBillId());
+
+                                   // dbAdapter.insertIntoSalseBill(FinalOrderFragment.list.get(0).getSalesBillId());
                                     dbAdapter.insertIntoSalesBillDetails(FinalOrderFragment.list);
                                     salesBill.setSalesBillDetailList(salesBillDetails);
                                 }
@@ -410,12 +411,14 @@ public class TableAct extends Fragment {
                         e.printStackTrace();
                     }
                     if(salesBill!=null){
+                        dbAdapter.insertIntoSalseBill(salesBill.getSalesBillId());
                         FinalOrderFragment finalOrderFragment=new FinalOrderFragment();
                         FragmentManager fragmentManager=getFragmentManager();
                         Bundle args=new Bundle();
                         args.putInt("request",request);
                         finalOrderFragment.setArguments(args);
                         fragmentManager.beginTransaction().replace(R.id.content_fragment_main,finalOrderFragment).commit();
+                        new DBBackUpAsyncTask(mContext).execute("");
                     }
                 }
 

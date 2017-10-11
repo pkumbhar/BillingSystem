@@ -11,7 +11,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string-array name="feedback">
-        <item>---Rate Caption---</item>
+        <item>---Rate Captain---</item>
         <item>Poor</item>
         <item>Good</item>
         <item>Excelent</item>
@@ -23,7 +23,7 @@
         <item>Excelent</item>
     </string-array>
     <string-array name="feedback_ambiance">
-        <item>---Rate Ambiance---</item>
+        <item>---Rate Ambience---</item>
         <item>Poor</item>
         <item>Good</item>
         <item>Excelent</item>
