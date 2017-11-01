@@ -12,7 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.entity.Area;
+import com.entity.Branch;
 import com.entity.Employee;
+import com.entity.EmployeeRoleMapping;
+import com.entity.FinancialYear;
 import com.entity.Product;
 import com.entity.ProductType;
 import com.entity.SalesBillDetail;
@@ -55,6 +58,9 @@ public class DBAdapter {
             db.execSQL(BaseTable.CREATE_TABLE.EMPLOYEE);
             db.execSQL(BaseTable.CREATE_TABLE.AREA);
             db.execSQL(BaseTable.CREATE_TABLE.IP_CONFIGRATION);
+            db.execSQL(BaseTable.CREATE_TABLE.BRANCH);
+            db.execSQL(BaseTable.CREATE_TABLE.FINANCIAL_YEAR);
+            db.execSQL(BaseTable.CREATE_TABLE.EMPLOYEE_ROLE_MAPPING);
             Log.i("Table Created..!!","--"+db.getPath());
 
         }
@@ -72,6 +78,16 @@ public class DBAdapter {
         Cursor mCursor=null;
         db=dbHelper.getWritableDatabase();
         mCursor=db.query(false,tableName,null,null,null,null,null,null,null);
+        if(mCursor!=null){
+            mCursor.moveToFirst();
+            return mCursor;
+        }
+        return null;
+    }
+    public Cursor getSalseBillDetailByProductId(String productID){
+        Cursor mCursor=null;
+        db=dbHelper.getWritableDatabase();
+        mCursor=db.query(false,BaseTable.TABLELIST.SALES_BILL_DETAIL,null,BaseTable.SALES_BILL_DETAIL.PRODUCT_ID+"=?",new String[]{productID},null,null,null,null);
         if(mCursor!=null){
             mCursor.moveToFirst();
             return mCursor;
@@ -103,7 +119,9 @@ public class DBAdapter {
         long l=0;
         for (SalesBillDetail sbd:list){
             ContentValues cv=new ContentValues();
+            cv.put(BaseTable.SALES_BILL_DETAIL.SALES_BILL_DETAIL_ID,sbd.getSalesBilldetailId());
             cv.put(BaseTable.SALES_BILL_DETAIL.PRODUCT_ID,sbd.getProductId());
+            cv.put(BaseTable.SALES_BILL_DETAIL.PREVIOUS_QUANTITY,sbd.getPreviouseQuantity());
             cv.put(BaseTable.SALES_BILL_DETAIL.QUANTITY,sbd.getQuantity());
             cv.put(BaseTable.SALES_BILL_DETAIL.PRICE,sbd.getPrice());
             cv.put(BaseTable.SALES_BILL_DETAIL.TOTAL_PRICE,sbd.getTotalPrice());
@@ -235,9 +253,11 @@ public class DBAdapter {
             mCursor.moveToFirst();
             while (mCursor.isAfterLast()==false){
                 SalesBillDetail sbd=new SalesBillDetail();
+                sbd.setSalesBilldetailId(mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL_DETAIL.SALES_BILL_DETAIL_ID)));
                 sbd.setProductId(mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL_DETAIL.PRODUCT_ID)));
                 sbd.setPrice(mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL_DETAIL.PRICE)));
                 sbd.setQuantity(mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL_DETAIL.QUANTITY)));
+                sbd.setPreviouseQuantity(mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL_DETAIL.PREVIOUS_QUANTITY)));
                 sbd.setTotalPrice(mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL_DETAIL.TOTAL_PRICE)));
                 sbd.setSalesBillId(mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL_DETAIL.SALES_BILL_ID)));
                 list.add(sbd);
@@ -357,5 +377,102 @@ public class DBAdapter {
         }
         return null;
     }
-
+    /*
+    insert financial detail
+     */
+    public long insertIntoFinancialYear(FinancialYear fn) throws SQLException{
+        ContentValues cv =new ContentValues();
+        cv.put(BaseTable.FINANCIAL_YEAR.FINANCIAL_YEAR_ID,fn.getFinancialYearId());
+        cv.put(BaseTable.FINANCIAL_YEAR.YEAR_NAME,fn.getYearName());
+        db=dbHelper.getWritableDatabase();
+        return db.insert(BaseTable.TABLELIST.FINANCIAL_YEAR,null,cv);
+    }
+    /*
+    insert to employeRoleMaping
+     */
+    public long insertIntoEmployeRoleMapping(EmployeeRoleMapping emp) throws SQLException{
+        ContentValues cv =new ContentValues();
+        cv.put(BaseTable.EMPLOYEE_ROLE_MAPPING.APPLICATION_ROLE_ID,emp.getApplicationRoleId());
+        cv.put(BaseTable.EMPLOYEE_ROLE_MAPPING.EMPLOYEE_ROLE,emp.getEmployeeRole());
+        db=dbHelper.getWritableDatabase();
+        return db.insert(BaseTable.TABLELIST.EMPLOYEE_ROLE_MAPPING,null,cv);
+    }
+    /*
+    insert To Branch Table
+     */
+    public  long insertIntoBranch(Branch branch) throws SQLException{
+        ContentValues cv =new ContentValues();
+        cv.put(BaseTable.BRANCH.BRANCH_ID,branch.getBranchId());
+        cv.put(BaseTable.BRANCH.BRANCH_NAME,branch.getBranchName());
+        cv.put(BaseTable.BRANCH.ADDRESS,branch.getAddress());
+        cv.put(BaseTable.BRANCH.CITY_ID,branch.getCityId());
+        cv.put(BaseTable.BRANCH.CONTACT_NO,branch.getContactNo());
+        cv.put(BaseTable.BRANCH.EMAIL_ID,branch.getEmailId());
+        db=dbHelper.getWritableDatabase();
+        return db.insert(BaseTable.TABLELIST.BRANCH,null,cv);
+    }
+    /*
+    getBranch Entities List
+     */
+    public List<Branch> getBranchEntity() throws SQLException{
+        Cursor mCursor=null;
+        List<Branch> branchList=new ArrayList<Branch>();
+        db=dbHelper.getReadableDatabase();
+        mCursor=db.query(false,BaseTable.TABLELIST.BRANCH,null,null,null,null,null,null,null);
+        if(mCursor!=null){
+            mCursor.moveToFirst();
+            while (mCursor.isAfterLast()==false){
+                Branch branch=new Branch();
+                branch.setBranchId(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.BRANCH_ID)));
+                branch.setBranchName(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.BRANCH_NAME)));
+                branch.setAddress(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.ADDRESS)));
+                branch.setCityId(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.CITY_ID)));
+                branch.setContactNo(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.CONTACT_NO)));
+                branch.setEmailId(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.EMAIL_ID)));
+                branchList.add(branch);
+                mCursor.moveToNext();
+            }
+        }
+        return branchList;
+    }
+    /*
+    get Employee Rols List
+     */
+    public List<EmployeeRoleMapping> getEmployeeRoleMappingEntity() throws SQLException{
+        Cursor mCursor=null;
+        List<EmployeeRoleMapping> roleMappingList=new ArrayList<EmployeeRoleMapping>();
+        db=dbHelper.getReadableDatabase();
+        mCursor=db.query(false,BaseTable.TABLELIST.EMPLOYEE_ROLE_MAPPING,null,null,null,null,null,null,null);
+        if(mCursor!=null){
+            mCursor.moveToFirst();
+            while (mCursor.isAfterLast()==false){
+                EmployeeRoleMapping empR=new EmployeeRoleMapping();
+                empR.setApplicationRoleId(mCursor.getString(mCursor.getColumnIndex(BaseTable.EMPLOYEE_ROLE_MAPPING.APPLICATION_ROLE_ID)));
+                empR.setEmployeeRole(mCursor.getString(mCursor.getColumnIndex(BaseTable.EMPLOYEE_ROLE_MAPPING.EMPLOYEE_ROLE)));
+                roleMappingList.add(empR);
+                mCursor.moveToNext();
+            }
+        }
+        return roleMappingList;
+    }
+    /*
+    get Financial yearEntity
+     */
+    public List<FinancialYear> getFinancialYearEntity() throws SQLException{
+        Cursor mCursor=null;
+        List<FinancialYear> financialYearList=new ArrayList<FinancialYear>();
+        db=dbHelper.getReadableDatabase();
+        mCursor=db.query(false,BaseTable.TABLELIST.FINANCIAL_YEAR,null,null,null,null,null,null,null);
+        if(mCursor!=null){
+            mCursor.moveToFirst();
+            while (mCursor.isAfterLast()==false){
+                FinancialYear fR=new FinancialYear();
+                fR.setFinancialYearId(mCursor.getString(mCursor.getColumnIndex(BaseTable.FINANCIAL_YEAR.FINANCIAL_YEAR_ID)));
+                fR.setYearName(mCursor.getString(mCursor.getColumnIndex(BaseTable.FINANCIAL_YEAR.YEAR_NAME)));
+                financialYearList.add(fR);
+                mCursor.moveToNext();
+            }
+        }
+        return financialYearList;
+    }
 }

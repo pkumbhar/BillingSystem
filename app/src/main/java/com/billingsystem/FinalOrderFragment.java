@@ -101,8 +101,14 @@ public class FinalOrderFragment extends android.app.Fragment {
                     for(SalesBillDetail detail:dbAdapter.getSalesBillDetailList()){
                         try{
                             JSONObject object=new JSONObject();
+                            object.put("salse_bill_detail_id",detail.getSalesBilldetailId());
                             object.put("product_id",detail.getProductId());
                             object.put("quantity",detail.getQuantity());
+                            if(detail.getPreviouseQuantity()==null){
+                                object.put("prevoius_quantity","0.0");
+                            }else {
+                                object.put("prevoius_quantity",detail.getPreviouseQuantity());
+                            }
                             object.put("price",detail.getPrice());
                             object.put("total_price",detail.getTotalPrice());
                             object.put("sales_bill_id",detail.getSalesBillId());

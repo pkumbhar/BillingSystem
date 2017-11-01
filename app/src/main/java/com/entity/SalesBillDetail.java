@@ -11,6 +11,7 @@ public class SalesBillDetail {
     private String productId;
     private List<Product>  productList;
     private String quantity;
+    private String previouseQuantity;
     private String price;
     private String totalPrice;
     private String salesBillId;
@@ -36,6 +37,14 @@ public class SalesBillDetail {
     public String getProductId() {
 
         return productId;
+    }
+
+    public String getPreviouseQuantity() {
+        return previouseQuantity;
+    }
+
+    public void setPreviouseQuantity(String previouseQuantity) {
+        this.previouseQuantity = previouseQuantity;
     }
 
     public void setProductId(String productId) {

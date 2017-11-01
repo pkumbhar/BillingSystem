@@ -4,6 +4,7 @@ package com.listAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
 import com.entity.Product;
 import com.entity.ProductType;
+import com.entity.SalesBillDetail;
 
 import org.w3c.dom.Text;
 
@@ -35,6 +38,9 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
     private List<Product> productList;
     private Context mContext;
     private Activity mActivity;
+    private DBAdapter dbAdapter;
+    private Cursor mCursor;
+    private List<SalesBillDetail> salesBillDetailList;
     private int req;
 
     public MenuItemAdapter(List<Product> productList, Context mContext, Activity mActivity,int req) {
@@ -42,6 +48,8 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
         this.mContext = mContext;
         this.mActivity = mActivity;
         this.req=req;
+        dbAdapter=new DBAdapter(mContext);
+        salesBillDetailList=dbAdapter.getSalesBillDetailList();
     }
 
     public class MenuItem extends RecyclerView.ViewHolder{
@@ -51,6 +59,7 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
         private TextView tvquantity;
         private ImageView imgAddSign;
         private ImageView imgDeletSign;
+        private LinearLayout lin_row;
 
         public MenuItem(View itemView) {
             super(itemView);
@@ -59,6 +68,7 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
             tvquantity=(TextView)itemView.findViewById(R.id.tv_row_quantiry_id_tx);
             imgAddSign=(ImageView)itemView.findViewById(R.id.img_row_add_sign_id);
             imgDeletSign=(ImageView)itemView.findViewById(R.id.img_row_minussign_id);
+            lin_row=(LinearLayout)itemView.findViewById(R.id.lin_row_quantity_id);
         }
     }
 
@@ -71,10 +81,26 @@ public class MenuItemAdapter  extends RecyclerView.Adapter<MenuItemAdapter.MenuI
     @Override
     public void onBindViewHolder(final MenuItem holder, final int position) {
         final Product product=productList.get(position);
-        holder.tvItemName.setText(product.getName());
 
-        holder.tvItemPrice.setText(product.getPrice());
-        holder.tvquantity.setText("0");
+         /*   Cursor mCursor=dbAdapter.getSalseBillDetailByProductId(product.getProductId());
+        if(mCursor!=null){
+            mCursor.moveToFirst();
+            while (mCursor.isAfterLast()==false){
+                if(mCursor.getString(mCursor.getColumnIndex(BaseTable.SALES_BILL_DETAIL.PRODUCT_ID)).equals(product.getProductId())){
+                    holder.lin_row.setBackgroundColor(Color.parseColor("#FFD8F5C4"));
+                    holder.tvItemName.setText(product.getName());
+                    holder.tvItemPrice.setText(product.getPrice());
+                    holder.tvquantity.setText(salesBillDetailList.get(position).getQuantity());
+                }else {*/
+                    //holder.lin_row.setBackgroundColor(Color.parseColor("#FFD8F5C4"));
+                    holder.tvItemName.setText(product.getName());
+                    holder.tvItemPrice.setText(product.getPrice());
+                    holder.tvquantity.setText("0");
+              //  }
+
+//                mCursor.moveToNext();
+           // }
+       // }
 
         holder.tvItemName.setOnClickListener(new View.OnClickListener() {
             @Override

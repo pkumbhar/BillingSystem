@@ -25,7 +25,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Yaara Di Haveli"
+                    android:text="Yaara Di Haaveli"
                     android:textSize="18dp"
                     android:id="@+id/tv_actitle_id"
                     android:fontFamily="sans-serif-condensed"

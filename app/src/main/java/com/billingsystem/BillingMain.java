@@ -5,6 +5,8 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,11 +14,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,14 +30,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.background.BranchAndFinancialYearService;
 import com.checkwifi.WiFiConnection;
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
+import com.entity.Branch;
 import com.entity.Employee;
+import com.entity.EmployeeRoleMapping;
+import com.entity.FinancialYear;
 import com.google.gson.Gson;
 import com.serverUrl.ServerHost;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BillingMain extends AppCompatActivity {
     private Button btnStartOrder;
@@ -44,6 +55,8 @@ public class BillingMain extends AppCompatActivity {
     private LinearLayout login_layout,lin_tag_id;
     private TextView tvForgetPassword,tvSetIp;
     private EditText edIpaddress,edUserName,edPassword;
+    public static int LOGIN_RESULT=1;
+    private Spinner spBranch,spFinancialYear,spEmployeeRole;
 
 
     @Override
@@ -61,6 +74,9 @@ public class BillingMain extends AppCompatActivity {
         edUserName=(EditText)findViewById(R.id.input_user_name_id);
         edPassword=(EditText)findViewById(R.id.input_password_id);
         tvSetIp=(TextView)findViewById(R.id.tv_server_setting_id);
+        spBranch=(Spinner)findViewById(R.id.spinnerBranch);
+        spEmployeeRole=(Spinner)findViewById(R.id.spinnerEmployeeRole) ;
+        spFinancialYear=(Spinner)findViewById(R.id.spinnerFinancialYear) ;
         tvSetIp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +100,14 @@ public class BillingMain extends AppCompatActivity {
             public void onClick(View v) {
                 WiFiConnection wiFiConnection=new WiFiConnection();
                 if(wiFiConnection.checkWifiOnAndConnected(getApplicationContext())==true){
-                    checkLoginProcess();
+                    Cursor mCursor=dbAdapter.getTableDetails(BaseTable.TABLELIST.EMPLOYEE_ROLE_MAPPING);
+                    if(mCursor!=null){
+                        if(mCursor.getCount()>0){
+                            checkLoginProcess();
+                        }else {
+                            new BranchAndFinancialYearService(BillingMain.this,getApplicationContext(),loginHandler).execute("");
+                        }
+                    }
                 }else {
                     wiFiConnection.connectToNetWork(BillingMain.this);
                 }
@@ -99,6 +122,15 @@ public class BillingMain extends AppCompatActivity {
             }
         });
     }
+    public Handler loginHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what==LOGIN_RESULT){
+                checkLoginProcess();
+            }
+        }
+    };
     private void playAnimationProcess(){
         logoMoveAnimation = AnimationUtils.loadAnimation(this, R.anim.slidedoen);
         imageView.startAnimation(logoMoveAnimation);
@@ -197,6 +229,42 @@ public class BillingMain extends AppCompatActivity {
                 imageView.setVisibility(View.VISIBLE);
                 btnStartOrder.setText("Login");
                 lin_tag_id.setVisibility(View.INVISIBLE);
+                try{
+                    List<Branch> branchList=dbAdapter.getBranchEntity();
+                    List<String> ls=new ArrayList<String>();
+                    ls.add("--select Branch--");
+                    for(Branch b:branchList){
+                        ls.add(b.getBranchName());
+                    }
+                    ArrayAdapter adapterBranch=new ArrayAdapter(getApplicationContext(),R.layout.row,ls);
+                    spBranch.setAdapter(adapterBranch);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                try{
+                    List<EmployeeRoleMapping> roleList=dbAdapter.getEmployeeRoleMappingEntity();
+                    List<String> ls=new ArrayList<String>();
+                    ls.add("--Select Employee Role--");
+                    for(EmployeeRoleMapping em:roleList){
+                        ls.add(em.getEmployeeRole());
+                    }
+                    ArrayAdapter adapterBranch=new ArrayAdapter(getApplicationContext(),R.layout.row,ls);
+                    spEmployeeRole.setAdapter(adapterBranch);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                try{
+                    List<FinancialYear> fList=dbAdapter.getFinancialYearEntity();
+                    List<String> ls=new ArrayList<String>();
+                    ls.add("--select Financial year--");
+                    for(FinancialYear em:fList){
+                        ls.add(em.getYearName());
+                    }
+                    ArrayAdapter adapterBranch=new ArrayAdapter(getApplicationContext(),R.layout.row,ls);
+                    spFinancialYear.setAdapter(adapterBranch);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
     }

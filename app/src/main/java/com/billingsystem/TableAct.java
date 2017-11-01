@@ -131,12 +131,29 @@ public class TableAct extends Fragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         String id=(String)button.getTag();
                         WiFiConnection wiFiConnection=new WiFiConnection();
                         if(wiFiConnection.checkWifiOnAndConnected(getActivity())==true){
-                            dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
-                            dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
-                            new DownloadUserTable(getActivity(),getActivity(),mHandler,id).execute("");
+                            try{
+                                if(dbAdapter.getProductList()!=null){
+                                    if(dbAdapter.getProductList().size()>0){
+                                        dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
+                                        dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
+                                        new DownloadUserTable(getActivity(),getActivity(),mHandler,id).execute("");
+                                    }else {
+                                        Toast.makeText(getActivity(),"01: please download Products",Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }else {
+                                    Toast.makeText(getActivity(),"02: please download Products",Toast.LENGTH_SHORT).show();
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                                Toast.makeText(getActivity(),"03: Product Not Found"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                            }
+
+
                         }else {
                             wiFiConnection.connectToNetWork(getActivity());
                         }
@@ -231,6 +248,7 @@ public class TableAct extends Fragment {
 
                     WiFiConnection wiFiConnection=new WiFiConnection();
                    if(wiFiConnection.checkWifiOnAndConnected(getActivity())==true){
+
                        if(userTableList.get(position).isActive()==true) {
                            dbAdapter.deletTable(BaseTable.TABLELIST.SALESBILL);
                            dbAdapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
@@ -265,11 +283,12 @@ public class TableAct extends Fragment {
                                Log.i("","salsebill");
                                new BookTableService(getActivity(),salsebill,getActivity(),linearLayou,mHandler).execute("");
                                Toast.makeText(getActivity(),"T:ID="+usertableid+" T:no="+userTableNumber,Toast.LENGTH_SHORT).show();
-
-
                        }
+                      }else{
+                          new DownloadProduct(mContext,getActivity(),null).execute("");
+                      }
                     }
-                }
+
             });
 
             if(userTableList.get(position).isActive()==true){
@@ -373,7 +392,10 @@ public class TableAct extends Fragment {
                                         detail.setSalesBillId(js.getString("sales_bill_id"));
                                     }if(js.has("quantity")){
                                         detail.setQuantity(js.getString("quantity"));
-                                    }if(js.has("productId")){
+                                    }if(js.has("prevoius_quantity")){
+                                        detail.setPreviouseQuantity(js.getString("prevoius_quantity"));
+                                    }
+                                    if(js.has("productId")){
                                         detail.setProductId(js.getString("productId"));
                                     }if(js.has("price")){
                                         detail.setPrice(js.getString("price"));

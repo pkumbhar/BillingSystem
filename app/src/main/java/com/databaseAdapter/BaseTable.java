@@ -16,6 +16,9 @@ public  class BaseTable {
         public static String USER_TABLE="user_table";
         public static String EMPLOYEE="employee";
         public static String AREA="area";
+        public static String BRANCH="branch";
+        public static String FINANCIAL_YEAR="financial_year";
+        public static String EMPLOYEE_ROLE_MAPPING="employee_role_mapping";
     }
     public static class PRODUCT{
         public static String PRODUCT_ID="PRODUCT_ID";
@@ -31,6 +34,7 @@ public  class BaseTable {
         public static String SALES_BILL_DETAIL_ID="SALES_BILL_DETAIL_ID";
         public static String PRODUCT_ID="PRODUCT_ID";
         public static String QUANTITY="QUANTITY";
+        public static String PREVIOUS_QUANTITY="PREVIOUS_QUANTITY";
         public static String PRICE="PRICE";
         public static String TOTAL_PRICE="TOTAL_PRICE";
         public static String SALES_BILL_ID="SALES_BILL_ID";
@@ -88,7 +92,6 @@ public  class BaseTable {
         public static String AREA_NAME="AREA_NAME";
     }
     public static class EMPLOYEE{
-
         public static String EMPLOYEE="employee";
         public static String EMP_ID="EMP_ID";
         public static String EMP_NAME="EMP_NAME";
@@ -98,6 +101,31 @@ public  class BaseTable {
         public static String APPLICATION_ROLE_ID="APPLICATION_ROLE_ID";
         public static String BRANCH_ID="BRANCH_ID";
     }
+    public static class BRANCH{
+        public static String BRANCH_ID="BRANCH_ID";
+        public static String BRANCH_NAME="BRANCH_NAME";
+        public static String ADDRESS="ADDRESS";
+        public static String CITY_ID="CITY_ID";
+        public static String CONTACT_NO="CONTACT_NO";
+        public static String EMAIL_ID="EMAIL_ID";
+    }
+    public static class FINANCIAL_YEAR{
+        public static String FINANCIAL_YEAR_ID="FINANCIAL_YEAR_ID";
+        public static String YEAR_NAME="YEAR_NAME";
+        public static String STATRT_DATE="STATRT_DATE";
+        public static String END_DATE="END_DATE";
+        public static String IS_ACTIVE="IS_ACTIVE";
+        public static String RECORD_TIME="RECORD_TIME";
+        public static String BRANCH_ID="BRANCH_ID";
+
+
+    }
+    public static class EMPLOYEE_ROLE_MAPPING{
+        public static String APPLICATION_ROLE_ID="APPLICATION_ROLE_ID";
+        public static String EMPLOYEE_ROLE="EMPLOYEE_ROLE";
+
+    }
+
 
 
 
@@ -106,6 +134,7 @@ public  class BaseTable {
                 "\t`SALES_BILL_DETAIL_ID`\tTEXT,\n" +
                 "\t`PRODUCT_ID`\tTEXT,\n" +
                 "\t`QUANTITY`\tTEXT,\n" +
+                "\t`PREVIOUS_QUANTITY`\tTEXT,\n" +
                 "\t`PRICE`\tTEXT,\n" +
                 "\t`TOTAL_PRICE`\tTEXT,\n" +
                 "\t`SALES_BILL_ID`\tTEXT,\n" +
@@ -175,6 +204,27 @@ public  class BaseTable {
         public static String IP_CONFIGRATION="CREATE TABLE `ip_configration` (\n" +
                 "\t`IP_ADDRESS`\tTEXT,\n" +
                 "\t`PORT_ADDRESS`\tTEXT\n" +
+                ");";
+
+        public static String BRANCH="CREATE TABLE `branch` (\n" +
+                "\t"+ BaseTable.BRANCH.BRANCH_ID+"\tTEXT,\n" +
+                "\t"+ BaseTable.BRANCH.BRANCH_NAME+"\tTEXT,\n" +
+                "\t"+ BaseTable.BRANCH.ADDRESS+"\tTEXT,\n" +
+                "\t"+ BaseTable.BRANCH.CITY_ID+"\tTEXT,\n" +
+                "\t"+ BaseTable.BRANCH.CONTACT_NO+"\tTEXT,\n" +
+                "\t"+ BaseTable.BRANCH.EMAIL_ID+"\tTEXT\n" +
+                ");";
+        public static String FINANCIAL_YEAR="CREATE TABLE `financial_year` (\n" +
+                "\t"+ BaseTable.FINANCIAL_YEAR.FINANCIAL_YEAR_ID+"\tTEXT,\n" +
+                "\t"+ BaseTable.FINANCIAL_YEAR.YEAR_NAME+"\tTEXT,\n" +
+                "\t"+ BaseTable.FINANCIAL_YEAR.STATRT_DATE+"\tTEXT,\n" +
+                "\t"+ BaseTable.FINANCIAL_YEAR.IS_ACTIVE+"\tTEXT,\n" +
+                "\t"+ BaseTable.FINANCIAL_YEAR.RECORD_TIME+"\tTEXT,\n" +
+                "\t"+ BaseTable.FINANCIAL_YEAR.BRANCH_ID+"\tTEXT\n" +
+                ");";
+        public static String EMPLOYEE_ROLE_MAPPING="CREATE TABLE `employee_role_mapping` (\n" +
+                "\t"+BaseTable.EMPLOYEE_ROLE_MAPPING.APPLICATION_ROLE_ID+"\tTEXT,\n" +
+                "\t"+BaseTable.EMPLOYEE_ROLE_MAPPING.EMPLOYEE_ROLE+"\tTEXT\n" +
                 ");";
     }
     }

@@ -100,7 +100,7 @@ public class DownloadProduct extends AsyncTask<String,Void,String> {
     protected void onPreExecute() {
         super.onPreExecute();
         progressDialog=new ProgressDialog(mActivity);
-        progressDialog.setTitle("Login Please wait...");
+        progressDialog.setTitle("Fetching products...");
         progressDialog.setCancelable(false);
         progressDialog.show();
     }

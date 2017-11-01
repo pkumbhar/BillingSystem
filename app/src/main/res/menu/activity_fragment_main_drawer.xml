@@ -8,10 +8,10 @@
             android:title="Table"/>
         <item
             android:id="@+id/nav_area_id"
-            android:title="Sync Area"/>
+            android:title="Area"/>
         <item
             android:id="@+id/nav_product_id"
-            android:title="Sync Product" />
+            android:title="Product" />
 
     </group>
 

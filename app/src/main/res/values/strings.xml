@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BillingSystem</string>
+    <string name="app_name">Yaara Di Haaveli</string>
     <string name="forget_pass">To reset your password, enter your email address which you use to sign In </string>
     <string name="title_activity_fragment_main">FragmentMainActivity</string>
 

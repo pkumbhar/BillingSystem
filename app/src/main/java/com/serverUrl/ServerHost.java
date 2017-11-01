@@ -27,6 +27,7 @@ public class ServerHost {
             address="http://000.000.0.000:8081/BillingSystem";
             e.printStackTrace();
         }*/
-        return "http://192.168.0.109:8081/BillingSystem";
+       // return "http://192.168.1.104:8090/BillingSystem";
+        return "http://192.168.1.102:8081/BillingSystem";
     }
 }

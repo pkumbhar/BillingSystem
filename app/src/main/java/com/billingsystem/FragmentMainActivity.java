@@ -34,6 +34,7 @@ import com.background.DownloadProduct;
 import com.checkwifi.WiFiConnection;
 import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.DBAdapter;
+import com.databaseAdapter.DBBackUpAsyncTask;
 import com.entity.Area;
 import com.entity.Employee;
 import com.serverUrl.ServerHost;
@@ -68,15 +69,16 @@ public class FragmentMainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Yaara Di Haveli", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Yaara Di Haaveli", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                new DBBackUpAsyncTask(getApplicationContext()).execute("");
             }
         });
 
         linCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"OH",Toast.LENGTH_SHORT).show();
+
                 DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
                 Cursor mCursor=dbAdapter.getTableDetails(BaseTable.SALES_BILL_DETAIL.SALES_BILL_DETAIL);
                 if(mCursor!=null){
@@ -259,12 +261,13 @@ public class FragmentMainActivity extends AppCompatActivity
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(msg.what==1){
-                MenuListFragment menuListFragment=new MenuListFragment();
+               /* MenuListFragment menuListFragment=new MenuListFragment();
                 FragmentManager fragmentManager=getFragmentManager();
                 Bundle bundle=new Bundle();
                 bundle.putInt("request",1);
                 menuListFragment.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_fragment_main,menuListFragment).commit();*/
+                Toast.makeText(getApplicationContext(),"Product Sync sucessfull",Toast.LENGTH_SHORT).show();
             }
         }
     };
