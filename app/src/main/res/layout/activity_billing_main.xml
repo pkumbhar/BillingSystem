@@ -54,15 +54,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
+                android:gravity="center"
                 android:layout_marginLeft="8dp">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:gravity="center"
                     android:background="@drawable/myrectangle_to_filter"
                     android:orientation="horizontal">
                     <Spinner
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_margin="5sp"
                         android:id="@+id/spinnerBranch">\
                     </Spinner>
 
@@ -90,7 +95,10 @@
                     android:orientation="horizontal">
                     <Spinner
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_margin="5sp"
                         android:id="@+id/spinnerFinancialYear">\
                     </Spinner>
 
@@ -117,8 +125,11 @@
                     android:orientation="horizontal">
                     <Spinner
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/spinnerEmployeeRole">\
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_margin="5sp"
+                        android:id="@+id/spinnerEmployeeRole">
                     </Spinner>
 
                     <ImageView

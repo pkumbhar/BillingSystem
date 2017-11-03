@@ -8,9 +8,18 @@ public class FinancialYear {
     private String financialYearId;
     private String yearName;
     private String statrtDate;
+    private String endDate;
     private String isActive;
     private String recordTime;
     private String branchId;
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 
     public String getFinancialYearId() {
         return financialYearId;

@@ -28,6 +28,6 @@ public class ServerHost {
             e.printStackTrace();
         }*/
        // return "http://192.168.1.104:8090/BillingSystem";
-        return "http://192.168.1.102:8081/BillingSystem";
+        return "http://192.168.1.119:8081/BillingSystem";
     }
 }

@@ -31,7 +31,7 @@ import java.util.List;
  * Created by Admin on 24-August-24-2017.
  */
 
-public class DBAdapter {
+public class DBAdapter implements BillingDatabaseInterface{
 
     private Context mContext;
     private DBHelper dbHelper;
@@ -474,5 +474,67 @@ public class DBAdapter {
             }
         }
         return financialYearList;
+    }
+
+    @Override
+    public FinancialYear findFinancialYearByName(String yearName) {
+        db=dbHelper.getReadableDatabase();
+        FinancialYear financialYear=null;
+        Cursor mCursor=db.query(false,BaseTable.TABLELIST.FINANCIAL_YEAR,null,BaseTable.FINANCIAL_YEAR.YEAR_NAME+"=?",new String[]{yearName},null,null,null,null);
+        if(mCursor!=null){
+            mCursor.moveToFirst();
+            while (mCursor.isAfterLast()==false){
+                financialYear=new FinancialYear();
+                financialYear.setFinancialYearId(mCursor.getString(mCursor.getColumnIndex(BaseTable.FINANCIAL_YEAR.FINANCIAL_YEAR_ID)));
+                financialYear.setYearName(mCursor.getString(mCursor.getColumnIndex(BaseTable.FINANCIAL_YEAR.YEAR_NAME)));
+                financialYear.setStatrtDate(mCursor.getString(mCursor.getColumnIndex(BaseTable.FINANCIAL_YEAR.STATRT_DATE)));
+                //financialYear.setEndDate(mCursor.getString(mCursor.getColumnIndex(BaseTable.FINANCIAL_YEAR.END_DATE)));
+                financialYear.setIsActive(mCursor.getString(mCursor.getColumnIndex(BaseTable.FINANCIAL_YEAR.IS_ACTIVE)));
+                financialYear.setRecordTime(mCursor.getString(mCursor.getColumnIndex(BaseTable.FINANCIAL_YEAR.RECORD_TIME)));
+                financialYear.setBranchId(mCursor.getString(mCursor.getColumnIndex(BaseTable.FINANCIAL_YEAR.BRANCH_ID)));
+                mCursor.moveToNext();
+            }
+            return financialYear;
+        }
+        return null;
+    }
+
+    @Override
+    public Branch findBranchbByName(String branchName) {
+        db=dbHelper.getReadableDatabase();
+        Branch branch=null;
+        Cursor mCursor=db.query(false,BaseTable.TABLELIST.BRANCH,null,BaseTable.BRANCH.BRANCH_NAME+"=?",new String[]{branchName},null,null,null,null);
+        if(mCursor!=null){
+         mCursor.moveToFirst();
+            while (mCursor.isAfterLast()==false){
+                branch=new Branch();
+                branch.setBranchId(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.BRANCH_ID)));
+                branch.setBranchName(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.BRANCH_NAME)));
+                branch.setCityId(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.CITY_ID)));
+                branch.setAddress(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.ADDRESS)));
+                branch.setContactNo(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.CONTACT_NO)));
+                branch.setEmailId(mCursor.getString(mCursor.getColumnIndex(BaseTable.BRANCH.EMAIL_ID)));
+                mCursor.moveToNext();
+            }
+            return branch;
+        }
+        return null;
+    }
+    @Override
+    public EmployeeRoleMapping findEmployeeRoleMapping(String role) {
+        db=dbHelper.getReadableDatabase();
+        EmployeeRoleMapping roleMapping=null;
+        Cursor mCursor=db.query(false, BaseTable.TABLELIST.EMPLOYEE_ROLE_MAPPING,null,BaseTable.EMPLOYEE_ROLE_MAPPING.EMPLOYEE_ROLE+"=?",new String[]{role},null,null,null,null);
+        if(mCursor!=null){
+            mCursor.moveToFirst();
+            while (mCursor.isAfterLast()==false){
+                roleMapping=new EmployeeRoleMapping();
+                roleMapping.setApplicationRoleId(mCursor.getString(mCursor.getColumnIndex(BaseTable.EMPLOYEE_ROLE_MAPPING.APPLICATION_ROLE_ID)));
+                roleMapping.setEmployeeRole(mCursor.getString(mCursor.getColumnIndex(BaseTable.EMPLOYEE_ROLE_MAPPING.EMPLOYEE_ROLE)));
+                mCursor.moveToNext();
+            }
+            return roleMapping;
+        }
+        return null;
     }
 }
