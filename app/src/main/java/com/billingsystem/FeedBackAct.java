@@ -37,9 +37,6 @@ public class FeedBackAct extends AppCompatActivity {
 
     private Button btnFeedBack;
     private Spinner spinnerCaption,spinnerFood,spinnerAmbiance;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -61,6 +61,8 @@ public class DBAdapter implements BillingDatabaseInterface{
             db.execSQL(BaseTable.CREATE_TABLE.BRANCH);
             db.execSQL(BaseTable.CREATE_TABLE.FINANCIAL_YEAR);
             db.execSQL(BaseTable.CREATE_TABLE.EMPLOYEE_ROLE_MAPPING);
+            db.execSQL(BaseTable.CREATE_TABLE.OUT_ORDER);
+            db.execSQL(BaseTable.CREATE_TABLE.CORPORATE_CUSTOMER);
             Log.i("Table Created..!!","--"+db.getPath());
 
         }
@@ -93,6 +95,43 @@ public class DBAdapter implements BillingDatabaseInterface{
             return mCursor;
         }
         return null;
+    }
+    /*
+    getRoleMapping name by id;
+    parameter should pass empty if wanted all data;
+     */
+    public EmployeeRoleMapping getEmployeeRoleById(String roleId){
+        EmployeeRoleMapping employeeRoleMapping=null;
+        db=dbHelper.getReadableDatabase();
+        if(!roleId.isEmpty()){
+            Cursor mCursor=db.query(false,BaseTable.TABLELIST.EMPLOYEE_ROLE_MAPPING,null,BaseTable.EMPLOYEE_ROLE_MAPPING.APPLICATION_ROLE_ID+"=?",new String[]{roleId},null,null,null,null);
+
+            if(mCursor!=null){
+                mCursor.moveToFirst();
+                while (mCursor.isAfterLast()==false){
+                    employeeRoleMapping=new EmployeeRoleMapping();
+                    employeeRoleMapping.setApplicationRoleId(mCursor.getString(mCursor.getColumnIndex(BaseTable.EMPLOYEE_ROLE_MAPPING.APPLICATION_ROLE_ID)));
+                    employeeRoleMapping.setEmployeeRole(mCursor.getString(mCursor.getColumnIndex(BaseTable.EMPLOYEE_ROLE_MAPPING.EMPLOYEE_ROLE)));
+                    mCursor.moveToNext();
+                }
+                return employeeRoleMapping;
+            }
+        }else {
+            Cursor mCursor=db.query(false,BaseTable.TABLELIST.EMPLOYEE_ROLE_MAPPING,null,null,null,null,null,null,null);
+            if(mCursor!=null){
+                mCursor.moveToFirst();
+                while (mCursor.isAfterLast()==false){
+                    employeeRoleMapping=new EmployeeRoleMapping();
+                    employeeRoleMapping.setApplicationRoleId(mCursor.getString(mCursor.getColumnIndex(BaseTable.EMPLOYEE_ROLE_MAPPING.APPLICATION_ROLE_ID)));
+                    employeeRoleMapping.setEmployeeRole(mCursor.getString(mCursor.getColumnIndex(BaseTable.EMPLOYEE_ROLE_MAPPING.EMPLOYEE_ROLE)));
+                    mCursor.moveToNext();
+                }
+                return employeeRoleMapping;
+            }
+        }
+
+        return null;
+
     }
     public Employee getEmployee(){
         Employee emp=new Employee();

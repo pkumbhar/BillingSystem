@@ -1,5 +1,7 @@
 package com.databaseAdapter;
 
+import com.entity.CorporateCustomer;
+
 /**
  * Created by Admin on 24-August-24-2017.
  */
@@ -20,6 +22,35 @@ public  class BaseTable {
         public static String FINANCIAL_YEAR="financial_year";
         public static String EMPLOYEE_ROLE_MAPPING="employee_role_mapping";
     }
+    /*
+    out order
+     */
+    public static class OUT_ORDER{
+        public static String outOrderId="outOrderId";
+        public static String isApproved="isApproved";
+        public static String approvedBy="approvedBy";
+        public static String createdBy="createdBy";
+        public static String createdOn="createdOn";
+        public static String recordTime="recordTime";
+        public static String orderDescription="orderDescription";
+        public static String corporateCustomerId="corporateCustomerId";
+        public static String orderDeliveryDate="orderDeliveryDate";
+        public static String totalPlate="totalPlate";
+        public static String totalPrice="totalPrice";
+        public static String perPlateCost="perPlateCost";
+    }
+    /*
+
+     */
+    public static class CORPORATE_CUSTOMER{
+        public static String corporateCustomerId="corporateCustomerId";
+        public static String corporateCustomerName="corporateCustomerName";
+        public static String address="address";
+        public static String contactNumber="contactNumber";
+        public static String consernPerson="consernPerson";
+    }
+
+
     public static class PRODUCT{
         public static String PRODUCT_ID="PRODUCT_ID";
         public static String NAME="NAME";
@@ -225,6 +256,28 @@ public  class BaseTable {
         public static String EMPLOYEE_ROLE_MAPPING="CREATE TABLE `employee_role_mapping` (\n" +
                 "\t"+BaseTable.EMPLOYEE_ROLE_MAPPING.APPLICATION_ROLE_ID+"\tTEXT,\n" +
                 "\t"+BaseTable.EMPLOYEE_ROLE_MAPPING.EMPLOYEE_ROLE+"\tTEXT\n" +
+                ");";
+        public static String OUT_ORDER="CREATE TABLE `outOrder` (\n" +
+                "\t"+BaseTable.OUT_ORDER.outOrderId+"\tTEXT,\n" +
+                "\t"+BaseTable.OUT_ORDER.isApproved+"\tTEXT,\n" +
+                "\t"+BaseTable.OUT_ORDER.approvedBy+"\tTEXT,\n" +
+                "\t"+BaseTable.OUT_ORDER.createdBy+"\tTEXT,\n" +
+                "\t"+BaseTable.OUT_ORDER.createdOn+"\tTEXT,\n" +
+                "\t"+BaseTable.OUT_ORDER.recordTime+"\tTEXT,\n" +
+                "\t"+BaseTable.OUT_ORDER.orderDescription+"\tTEXT,\n" +
+                "\t"+BaseTable.OUT_ORDER.corporateCustomerId+"\tTEXT,\n" +
+                "\t"+BaseTable.OUT_ORDER.orderDeliveryDate+"\tTEXT,\n" +
+                "\t"+BaseTable.OUT_ORDER.totalPlate+"\tTEXT,\n" +
+                "\t"+BaseTable.OUT_ORDER.totalPrice+"\tTEXT,\n" +
+                "\t"+BaseTable.OUT_ORDER.perPlateCost+"\tTEXT\n" +
+                ");";
+
+        public static String CORPORATE_CUSTOMER="CREATE TABLE `CorporateCustomer` (\n" +
+                "\t"+ BaseTable.CORPORATE_CUSTOMER.corporateCustomerId+"\tTEXT,\n" +
+                "\t"+BaseTable.CORPORATE_CUSTOMER.corporateCustomerName+"\tTEXT,\n" +
+                "\t"+BaseTable.CORPORATE_CUSTOMER.address+"\tTEXT,\n" +
+                "\t"+BaseTable.CORPORATE_CUSTOMER.contactNumber+"\tTEXT,\n" +
+                "\t"+BaseTable.CORPORATE_CUSTOMER.consernPerson+"\tTEXT\n" +
                 ");";
     }
     }

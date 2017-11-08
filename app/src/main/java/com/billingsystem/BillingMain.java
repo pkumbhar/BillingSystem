@@ -87,8 +87,19 @@ public class BillingMain extends AppCompatActivity {
         try{
             Employee emp=dbAdapter.getEmployee();
             if(emp!=null){
-                startActivity(new Intent(BillingMain.this,FragmentMainActivity.class));
-                finish();
+                EmployeeRoleMapping roleById=dbAdapter.getEmployeeRoleById(emp.getApplicationRoleId());
+                if(roleById.getEmployeeRole().equals("CAPTAINADMIN")){
+                    Intent intent=new Intent(BillingMain.this, FragmentMainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }else if(roleById.getEmployeeRole().equals("KITCHENADMIN")){
+                    Intent intent=new Intent(BillingMain.this, ManagerAct.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
+
             }else if(emp==null){
                 playAnimationProcess();
             }
@@ -165,69 +176,94 @@ public class BillingMain extends AppCompatActivity {
 
         if (btnStartOrder.getText().toString().equals("Login")) {
             if ((spBranch.getSelectedItemPosition() > 0) && (spEmployeeRole.getSelectedItemPosition() > 0) && (spFinancialYear.getSelectedItemPosition() > 0)) {
+                if ((spEmployeeRole.getSelectedItem().toString().equalsIgnoreCase("CAPTAINADMIN"))||spEmployeeRole.getSelectedItem().toString().equalsIgnoreCase("KITCHENADMIN")) {
 
 
-            // startActivity(new Intent(BillingMain.this,FragmentMainActivity.class));
-            if ((edUserName.getText().toString().length() > 0) && (edPassword.getText().toString().length() > 0)) {
-                String userName = edUserName.getText().toString();
-                String password = edPassword.getText().toString();
-                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                ServerHost serverHost = new ServerHost();
-                DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
-                Branch branch=dbAdapter.findBranchbByName(spBranch.getSelectedItem().toString());
-                EmployeeRoleMapping  mapping=dbAdapter.findEmployeeRoleMapping(spEmployeeRole.getSelectedItem().toString());
-                FinancialYear financialYear=dbAdapter.findFinancialYearByName(spFinancialYear.getSelectedItem().toString());
-                String url = serverHost.SERVER_URL(getApplicationContext()).concat("/rest/BillServices/employeeLogin?userName=" + userName + "&password=" + password +"&branch="+branch.getBranchId()+"&role="+mapping.getApplicationRoleId()+"&fyear="+financialYear.getFinancialYearId());
+                    // startActivity(new Intent(BillingMain.this,FragmentMainActivity.class));
+                    if ((edUserName.getText().toString().length() > 0) && (edPassword.getText().toString().length() > 0)) {
+                        String userName = edUserName.getText().toString();
+                        String password = edPassword.getText().toString();
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        ServerHost serverHost = new ServerHost();
+                        DBAdapter dbAdapter = new DBAdapter(getApplicationContext());
+                        Branch branch = dbAdapter.findBranchbByName(spBranch.getSelectedItem().toString());
+                        EmployeeRoleMapping mapping = dbAdapter.findEmployeeRoleMapping(spEmployeeRole.getSelectedItem().toString());
+                        FinancialYear financialYear = dbAdapter.findFinancialYearByName(spFinancialYear.getSelectedItem().toString());
+                        String url = serverHost.SERVER_URL(getApplicationContext()).concat("/rest/BillServices/employeeLogin?userName=" + userName + "&password=" + password + "&branch=" + branch.getBranchId() + "&role=" + mapping.getApplicationRoleId() + "&fyear=" + financialYear.getFinancialYearId());
 
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i("Usertable-->", "" + response);
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Log.i("Usertable-->", "" + response);
 
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            if (jsonObject.has("status")) {
-                                if (jsonObject.getString("status").equals("200")) {
-                                    Employee emp = new Employee();
-                                    emp.setBranchId(jsonObject.getString("branch_id"));
-                                    JSONObject rolmappingjson = jsonObject.getJSONObject("application_role_id");
-                                    emp.setApplicationRoleId(rolmappingjson.getString("application_role_id"));
-                                    emp.setEmployeeId(jsonObject.getString("employee_id"));
-                                    emp.setEmployeeName(jsonObject.getString("employee_name"));
-                                    emp.setUserName(jsonObject.getString("employee_user_name"));
-                                    emp.setPassword(rolmappingjson.getString("pasword"));
-                                    emp.setMobile(jsonObject.getString("employee_mobile"));
-                                    DBAdapter adapter = new DBAdapter(getApplicationContext());
-                                    adapter.deletTable(BaseTable.TABLELIST.EMPLOYEE);
-                                    if (adapter.insertIntoEmployee(emp) > 0) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    if (jsonObject.has("status")) {
+                                        if (jsonObject.getString("status").equals("200")) {
+                                            Employee emp = new Employee();
+                                            emp.setBranchId(jsonObject.getString("branch_id"));
+                                            JSONObject rolmappingjson = jsonObject.getJSONObject("application_role_id");
+                                            emp.setApplicationRoleId(rolmappingjson.getString("application_role_id"));
+                                            emp.setEmployeeId(jsonObject.getString("employee_id"));
+                                            emp.setEmployeeName(jsonObject.getString("employee_name"));
+                                            emp.setUserName(jsonObject.getString("employee_user_name"));
+                                            emp.setPassword(rolmappingjson.getString("pasword"));
+                                            emp.setMobile(jsonObject.getString("employee_mobile"));
+                                            DBAdapter adapter = new DBAdapter(getApplicationContext());
+                                            adapter.deletTable(BaseTable.TABLELIST.EMPLOYEE);
+                                            if (adapter.insertIntoEmployee(emp) > 0) {
+                                                Employee employee = adapter.getEmployee();
+                                                if (employee != null) {
+                                                    EmployeeRoleMapping roleById=adapter.getEmployeeRoleById(employee.getApplicationRoleId());
 
-                                        startActivity(new Intent(BillingMain.this, FragmentMainActivity.class));
+                                                    if(roleById.getEmployeeRole().equals("CAPTAINADMIN")){
+                                                        Intent intent=new Intent(BillingMain.this, FragmentMainActivity.class);
+                                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }else if(roleById.getEmployeeRole().equals("KITCHENADMIN")){
+                                                        Intent intent=new Intent(BillingMain.this, ManagerAct.class);
+                                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                    //if(employee.getApplicationRoleId())
+
+
+                                                }
+
+                                                //
+                                            }
+                                        } else if (jsonObject.getString("status").equals("500")) {
+                                            Toast.makeText(getApplicationContext(), jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
+
+                                        }
                                     }
-                                } else if (jsonObject.getString("status").equals("500")) {
-                                    Toast.makeText(getApplicationContext(), jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
-
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), e.getMessage(),Toast.LENGTH_SHORT).show();
-                        }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getApplicationContext(), "Problem with Network", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        requestQueue.add(stringRequest);
+                        requestQueue.start();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "empty value", Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Problem with Network", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                requestQueue.add(stringRequest);
-                requestQueue.start();
-            } else {
-                Toast.makeText(getApplicationContext(), "empty value", Toast.LENGTH_SHORT).show();
-            }
-        }else {
-                Toast.makeText(getApplicationContext(), "Branch, Role and Fiknancial year should not be empty.!, ", Toast.LENGTH_SHORT).show();
-            }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Branch, Role and Financial year should not be empty.!, ", Toast.LENGTH_SHORT).show();
+                }
+                /* Third if block*/
+            }else {
+                Toast.makeText(getApplicationContext(), "Selected role does not have authority to login.!", Toast.LENGTH_SHORT).show();
 
+
+            }
         } else {
             dbAdapter = new DBAdapter(getApplicationContext());
             Cursor mCursor = dbAdapter.getTableDetails(BaseTable.TABLELIST.USER_TABLE);
