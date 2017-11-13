@@ -1,7 +1,9 @@
 package com.databaseAdapter;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.background.CustomerService;
 import com.billingsystem.DelayAutoCompleteTextView;
 import com.billingsystem.R;
 import com.entity.CorporateCustomer;
@@ -29,17 +33,22 @@ import org.json.JSONTokener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class BookAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
+    public static List<CorporateCustomer> corporateCustomerList=new ArrayList<CorporateCustomer>();
     private static final int MAX_RESULTS = 10;
     private Context mContext;
     private String ccName;
+    private Activity mActivity;
     private List<CorporateCustomer> resultList = new ArrayList<CorporateCustomer>();
 
-    public BookAutoCompleteAdapter(Context context,String ccName) {
+    public BookAutoCompleteAdapter(Context context,String ccName,Activity mActivity) {
         this.mContext = context;
         this.ccName=ccName;
+        this.mActivity=mActivity;
     }
 
     @Override
@@ -77,6 +86,10 @@ public class BookAutoCompleteAdapter extends BaseAdapter implements Filterable {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
                     List<CorporateCustomer> corporateCustomer = findBooks(mContext, constraint.toString());
+                    for(CorporateCustomer c:corporateCustomer){
+                       Log.i("name=",c.getCorporateCustomerName()) ;
+
+                    }
 
                     // Assign the data to the FilterResults
                     if(corporateCustomer!=null){
@@ -103,57 +116,24 @@ public class BookAutoCompleteAdapter extends BaseAdapter implements Filterable {
     /**
      * Returns a search result for the given book title.
      */
-    synchronized private List<CorporateCustomer> findBooks(Context context, String bookTitle) {
-
-       final ProgressDialog progressDialog=new ProgressDialog(context);
-        progressDialog.setMessage("Booking Table");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        ServerHost serverHost = new ServerHost();
-        String url = serverHost.SERVER_URL(context).concat("/rest/BillServices/getCorparateCustomerList?name="+bookTitle);
-        Log.i("cal ccName:",url);
-        StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.i("AUTo",""+response);
-                if(!response.isEmpty()){
-                    try{
-                        Object json=new JSONTokener(response).nextValue();
-                        if(json instanceof JSONObject){
-                            System.out.print("This is an JsonObject");
-
-                        }else if(json instanceof JSONArray){
-                            System.out.print("This is an JsonArray");
-                            JSONArray jsonArray=new JSONArray(response);
+     private List<CorporateCustomer> findBooks(Context context, String bookTitle) {
+        ;
+        new CustomerService(mActivity,mContext,bookTitle,mHandler).execute("");
 
 
-                        }
-                    }catch (JSONException jx){
-                        jx.printStackTrace();
-                    }
-
-
-                }
-                progressDialog.dismiss();
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("AUToEx",""+error.getMessage());
-
-                progressDialog.dismiss();
-
-            }
-        });
-        requestQueue.add(stringRequest);
-        requestQueue.start();
-        progressDialog.show();
-
-        return null;
+        return corporateCustomerList;
     }
+    public android.os.Handler mHandler=new android.os.Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+        }
+    };
+
+
+
+
     //****
 }

@@ -37,29 +37,100 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
                     android:weightSum="1"
-                    android:layout_marginTop="10sp">
+                    android:layout_marginTop="8sp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Customer Name"
+                        android:textColor="#ee000000"
+                        android:textSize="18sp"/>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="0.8"
+                        android:weightSum="1">
 
                         <com.billingsystem.DelayAutoCompleteTextView
                             android:id="@+id/et_book_title"
                             android:inputType="textCapSentences"
-                            android:layout_width="0sp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.8"
+                            android:lines="1"
+                            android:hint="Customer Name"
                             android:imeOptions="flagNoExtractUi|actionSearch"/>
-
                         <ProgressBar
                             android:id="@+id/pb_loading_indicator"
                             style="?android:attr/progressBarStyleSmall"
-                            android:layout_width="0sp"
+                            android:layout_width="wrap_content"
                             android:layout_height="50sp"
                             android:layout_weight="0.2"
                             android:background="#eee48a8a"
                             android:layout_gravity="center_vertical|right"
                             android:visibility="visible"/>
+
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Address"
+                            android:textSize="18sp"
+                            android:textColor="#ee000000"/>
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="0sp"
+                            android:lines="1"
+                            android:hint="Address"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Contact"
+                            android:textSize="18sp"
+                            android:textColor="#ee000000"/>
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="0sp"
+                            android:maxLines="1"
+                            android:inputType="number"
+                            android:hint="contact"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Concern Person"
+                            android:textSize="18sp"
+                            android:textColor="#ee000000"/>
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="0sp"
+                            android:maxLines="1"
+                            android:hint="Concern Person"/>
+                    </LinearLayout>
+
+
 
 
                 </LinearLayout>
@@ -72,26 +143,12 @@
                 android:orientation="vertical"
                 android:layout_gravity="center"
                 android:layout_marginTop="8sp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Special Note"
-                    android:textColor="#ee000000"
-                    android:textSize="18sp"/>
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8sp"
-                    android:hint="add note"
-                    android:id="@+id/ed_man_special_note_id"/>
-
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Save"
                     android:gravity="center"
-                    android:layout_marginTop="10sp"
+                    android:layout_marginTop="8sp"
                     android:textColorHint="#dcdcdc"
                     android:id="@+id/btn_man_submit_id"
                     android:background="@drawable/btn_category_selector_yellow"/>
@@ -102,6 +159,7 @@
             android:layout_width="match_parent"
             android:layout_height="0sp"
             android:layout_weight="0.5"
+            android:visibility="visible"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -120,32 +178,138 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:visibility="visible"
                 android:layout_marginTop="8dp">
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/myrectangle_to_filter"
-                    android:orientation="horizontal">
-                    <Spinner
-                        android:id="@+id/sp_order_type_id"
-                        android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+                    <TextView
+                        android:layout_width="0sp"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:spinnerMode="dialog" />
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:text="Number of Plates"/>
+                    <EditText
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:inputType="number"
+                        android:hint="Number of Plates"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:text="Order Delivery Date"/>
+                    <EditText
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:inputType="number"
+                        android:hint="Order Delivery Date"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:text="Order Delivery Date"/>
+                    <EditText
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:inputType="number"
+                        android:hint="Order Delivery Date"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:text="Per Plate Coste"/>
+                    <EditText
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:inputType="number"
+                        android:hint="Per Plate Coste"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:text="Total Coste"/>
+                    <EditText
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:inputType="number"
+                        android:hint="Total coste"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:text="Order Description"/>
+                    <EditText
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
+                        android:lines="2"
+                        android:hint="Order Description"/>
+                </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="right"
-                        android:src="@drawable/drop" />
-                </RelativeLayout>
+
+
             </LinearLayout>
         </LinearLayout>
 

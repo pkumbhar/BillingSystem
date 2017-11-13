@@ -24,7 +24,7 @@ public class ManagerAct extends AppCompatActivity {
         setContentView(R.layout.activity_manager);
         final DelayAutoCompleteTextView delayAutoCompleteTextView = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
         delayAutoCompleteTextView.setThreshold(3);
-        delayAutoCompleteTextView.setAdapter(new BookAutoCompleteAdapter(this,delayAutoCompleteTextView.getText().toString())); // 'this' is Activity instance
+        delayAutoCompleteTextView.setAdapter(new BookAutoCompleteAdapter(this,delayAutoCompleteTextView.getText().toString(),ManagerAct.this)); // 'this' is Activity instance
         delayAutoCompleteTextView.setLoadingIndicator(
                 (android.widget.ProgressBar) findViewById(R.id.pb_loading_indicator));
         delayAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
