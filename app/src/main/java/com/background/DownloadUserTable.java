@@ -52,9 +52,6 @@ public class DownloadUserTable extends AsyncTask<String,Void,String> {
             URL url=new URL(query);
             HttpURLConnection urlConnection=(HttpURLConnection)url.openConnection();
             urlConnection.setRequestMethod("GET");
-           // urlConnection.setDoInput(true);
-            // urlConnection.setDoOutput(true);
-           // urlConnection.setUseCaches(false);
             int status = urlConnection.getResponseCode();
             Log.i("Login Status"," "+status);
             BufferedInputStream in;

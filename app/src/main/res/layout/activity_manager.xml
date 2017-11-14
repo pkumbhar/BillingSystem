@@ -4,17 +4,29 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android" >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:text="Customer Details"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:background="#f1d30f"
+        android:textSize="22sp"
+        android:fontFamily="sans-serif-condensed"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_margin="12sp"
+        android:layout_marginLeft="12sp"
+        android:layout_marginRight="12sp"
         android:weightSum="1">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0sp"
-            android:layout_weight="0.5"
+            android:layout_weight=".4"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -23,15 +35,27 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="13sp"
-                    android:background="#f9e2e2e2">
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8sp"
+                    android:background="#f9e2e2e2"
+                    android:weightSum="1">
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0sp"
+                        android:layout_weight="0.5"
                         android:layout_height="match_parent"
                         android:text="Customer Details"
                         android:gravity="center|left"
                         android:textSize="22sp"
+                        android:fontFamily="sans-serif-condensed"/>
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_weight="0.5"
+                        android:layout_height="match_parent"
+                        android:text="SAVE"
+                        android:gravity="center|right"
+                        android:textSize="25sp"
+                        android:id="@+id/txt_man_save_id"
+                        android:textColor="#0f7bf7"
                         android:fontFamily="sans-serif-condensed"/>
                 </LinearLayout>
 
@@ -92,6 +116,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="0sp"
                             android:lines="1"
+                            android:id="@+id/ed_man_address_id"
                             android:hint="Address"/>
                     </LinearLayout>
                     <LinearLayout
@@ -109,6 +134,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="0sp"
                             android:maxLines="1"
+                            android:id="@+id/ed_man_contact_number_id"
                             android:inputType="number"
                             android:hint="contact"/>
                     </LinearLayout>
@@ -127,45 +153,23 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="0sp"
                             android:maxLines="1"
+                            android:id="@+id/ed_man_concern_person_id"
                             android:hint="Concern Person"/>
                     </LinearLayout>
-
-
-
-
                 </LinearLayout>
-
-
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:layout_marginTop="8sp">
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Save"
-                    android:gravity="center"
-                    android:layout_marginTop="8sp"
-                    android:textColorHint="#dcdcdc"
-                    android:id="@+id/btn_man_submit_id"
-                    android:background="@drawable/btn_category_selector_yellow"/>
-            </LinearLayout>
-
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0sp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.6"
             android:visibility="visible"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="13sp"
+                android:layout_marginTop="6sp"
                 android:background="#f9e2e2e2">
                 <TextView
                     android:layout_width="match_parent"
@@ -192,6 +196,27 @@
                         android:layout_weight="0.5"
                         android:textSize="18sp"
                         android:textColor="#ee000000"
+                        android:text="Customer Id"/>
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:id="@+id/txt_man_customer_id"
+                        android:textColor="#ee000000"
+                        android:hint="customer id"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textSize="18sp"
+                        android:textColor="#ee000000"
                         android:text="Number of Plates"/>
                     <EditText
                         android:layout_width="0sp"
@@ -202,6 +227,7 @@
                         android:inputType="number"
                         android:hint="Number of Plates"/>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -220,6 +246,7 @@
                         android:layout_weight="0.5"
                         android:textSize="18sp"
                         android:textColor="#ee000000"
+                        android:id="@+id/ed_man_date_id"
                         android:inputType="number"
                         android:hint="Order Delivery Date"/>
                 </LinearLayout>
@@ -234,28 +261,7 @@
                         android:layout_weight="0.5"
                         android:textSize="18sp"
                         android:textColor="#ee000000"
-                        android:text="Order Delivery Date"/>
-                    <EditText
-                        android:layout_width="0sp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:textSize="18sp"
-                        android:textColor="#ee000000"
-                        android:inputType="number"
-                        android:hint="Order Delivery Date"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
-                    <TextView
-                        android:layout_width="0sp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:textSize="18sp"
-                        android:textColor="#ee000000"
-                        android:text="Per Plate Coste"/>
+                        android:text="Per Plate Cost"/>
                     <EditText
                         android:layout_width="0sp"
                         android:layout_height="wrap_content"
@@ -306,6 +312,21 @@
                         android:textColor="#ee000000"
                         android:lines="2"
                         android:hint="Order Description"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginTop="4sp">
+                    <Button
+                        android:layout_width="100sp"
+                        android:layout_height="wrap_content"
+                        android:text="Save"
+                        android:gravity="center"
+                        android:textColorHint="#dcdcdc"
+                        android:id="@+id/btn_man_submit_id"
+                        android:background="@drawable/btn_category_selector_yellow"/>
                 </LinearLayout>
 
 

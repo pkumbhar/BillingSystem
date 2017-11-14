@@ -37,6 +37,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="AppThemeManager">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+
+    </style>
 
     <style name="foodRatingBar" parent="@android:style/Widget.RatingBar">
     <item name="android:progressDrawable">@drawable/food_rating_bar_full</item>

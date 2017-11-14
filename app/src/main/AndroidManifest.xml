@@ -32,7 +32,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".FeedBackAct" />
         <activity android:name=".IpConfigrationActivaty" />
-        <activity android:name=".ManagerAct"></activity>
+        <activity android:name=".ManagerAct"
+                  android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
     </application>
 
 </manifest>

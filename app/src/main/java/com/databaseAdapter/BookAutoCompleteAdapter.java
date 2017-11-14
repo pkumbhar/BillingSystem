@@ -31,6 +31,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Handler;
@@ -43,12 +48,14 @@ public class BookAutoCompleteAdapter extends BaseAdapter implements Filterable {
     private Context mContext;
     private String ccName;
     private Activity mActivity;
+    private TextView txtSave;
     private List<CorporateCustomer> resultList = new ArrayList<CorporateCustomer>();
 
-    public BookAutoCompleteAdapter(Context context,String ccName,Activity mActivity) {
+    public BookAutoCompleteAdapter(Context context,String ccName,Activity mActivity,TextView txtSave) {
         this.mContext = context;
         this.ccName=ccName;
         this.mActivity=mActivity;
+        this.txtSave=txtSave;
     }
 
     @Override
@@ -80,23 +87,82 @@ public class BookAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public Filter getFilter() {
+        final List<CorporateCustomer> corporateCustomerList=new ArrayList<CorporateCustomer>();
         Filter filter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
-                    List<CorporateCustomer> corporateCustomer = findBooks(mContext, constraint.toString());
-                    for(CorporateCustomer c:corporateCustomer){
-                       Log.i("name=",c.getCorporateCustomerName()) ;
+                    JSONObject jsonObject;
+                    ServerHost serverHost=new ServerHost();
+                    String query= serverHost.SERVER_URL(mContext)+"/rest/BillServices/getCorparateCustomerList?name="+constraint;
+                    try {
+                        URL url = new URL(query);
+                        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                        urlConnection.setRequestMethod("GET");
+                        urlConnection.setDoInput(true);
+                        // urlConnection.setDoOutput(true);
+                        urlConnection.setUseCaches(false);
+                        urlConnection.connect();
+                        int statusCode = urlConnection.getResponseCode();
+                        if(statusCode==200){
+                            corporateCustomerList.clear();
+                            InputStream stream=urlConnection.getInputStream() ;
+                            String line="";
+                            BufferedReader br=new BufferedReader(new InputStreamReader(stream));
+                            StringBuffer stringBuffer=new StringBuffer();
+                            while ((line=br.readLine())!=null){
+                                stringBuffer.append(line+"\n");
+                            }
+                            if(!stringBuffer.toString().isEmpty()){
+                                jsonObject=new JSONObject(stringBuffer.toString());
+                                if(jsonObject.length()>0){
+                                    if(jsonObject.has("cc_status")){
+                                        String status=jsonObject.getString("cc_status");
 
+                                        if(status.equals("200")){
+                                            JSONArray customerArray=jsonObject.getJSONArray("customer_details");
+
+                                            for(int i=0;i<customerArray.length();i++){
+                                                CorporateCustomer customer=new CorporateCustomer();
+                                                JSONObject clist=customerArray.getJSONObject(i);
+                                                customer.setCorporateCustomerId(clist.getString("cc_id"));
+                                                customer.setCorporateCustomerName(clist.getString("cc_name"));
+                                                customer.setAddress(clist.getString("cc_address"));
+                                                customer.setConsernPerson(clist.getString("cc_concern_person"));
+                                                customer.setContactNumber(clist.getString("cc_contact_no"));
+                                                corporateCustomerList.add(customer);
+                                            }
+                                            if(corporateCustomerList!=null){
+                                                filterResults.values = corporateCustomerList;
+                                                filterResults.count = corporateCustomerList.size();
+                                            }
+                                        }else if(status.equals("404")){
+                                            Toast.makeText(mContext,jsonObject.getString("msg"),Toast.LENGTH_SHORT).show();
+
+
+                                        }else if(status.equals("402")){
+                                            Toast.makeText(mContext,jsonObject.getString("msg"),Toast.LENGTH_SHORT).show();
+
+
+                                        }else if(status.equals("403")){
+                                            Toast.makeText(mContext,jsonObject.getString("msg"),Toast.LENGTH_SHORT).show();
+
+
+                                        }else if(status.equals("401")){
+                                            Toast.makeText(mContext,jsonObject.getString("msg"),Toast.LENGTH_SHORT).show();
+
+
+                                        }
+                                    }
+                                }
+                            }
+                        }else if(statusCode>200){
+                        }
+                    }catch (Exception e){
+
+                        e.printStackTrace();
                     }
-
-                    // Assign the data to the FilterResults
-                    if(corporateCustomer!=null){
-                        filterResults.values = corporateCustomer;
-                        filterResults.count = corporateCustomer.size();
-                    }
-
                 }
                 return filterResults;
             }
@@ -105,6 +171,7 @@ public class BookAutoCompleteAdapter extends BaseAdapter implements Filterable {
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results != null && results.count > 0) {
                     resultList = (List<CorporateCustomer>) results.values;
+
                     notifyDataSetChanged();
                 } else {
                     notifyDataSetInvalidated();
@@ -113,27 +180,4 @@ public class BookAutoCompleteAdapter extends BaseAdapter implements Filterable {
         return filter;
     }
 
-    /**
-     * Returns a search result for the given book title.
-     */
-     private List<CorporateCustomer> findBooks(Context context, String bookTitle) {
-        ;
-        new CustomerService(mActivity,mContext,bookTitle,mHandler).execute("");
-
-
-        return corporateCustomerList;
-    }
-    public android.os.Handler mHandler=new android.os.Handler(){
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-        }
-    };
-
-
-
-
-    //****
 }
