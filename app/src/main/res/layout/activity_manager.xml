@@ -164,6 +164,7 @@
             android:layout_height="0sp"
             android:layout_weight="0.6"
             android:visibility="visible"
+            android:id="@+id/linOrderDetails_id"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -240,15 +241,31 @@
                         android:textSize="18sp"
                         android:textColor="#ee000000"
                         android:text="Order Delivery Date"/>
-                    <EditText
+                    <LinearLayout
                         android:layout_width="0sp"
-                        android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:textSize="18sp"
-                        android:textColor="#ee000000"
-                        android:id="@+id/ed_man_date_id"
-                        android:inputType="number"
-                        android:hint="Order Delivery Date"/>
+                        android:weightSum="1"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_width="0sp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:textSize="18sp"
+                            android:textColor="#ee000000"
+                            android:id="@+id/ed_man_date_id"
+                            android:inputType="number"
+                            android:hint="Order Delivery Date"/>
+                        <Button
+                            android:layout_width="0sp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:layout_marginLeft="10sp"
+                            android:text="Date"
+                            android:id="@+id/btn_date_id"
+                            android:background="@drawable/btn_category_selector_yellow"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

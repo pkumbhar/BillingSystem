@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.background.CustomerService;
 import com.billingsystem.DelayAutoCompleteTextView;
+import com.billingsystem.ManagerAct;
 import com.billingsystem.R;
 import com.entity.CorporateCustomer;
 import com.serverUrl.ServerHost;
@@ -139,28 +140,25 @@ public class BookAutoCompleteAdapter extends BaseAdapter implements Filterable {
                                             }
                                         }else if(status.equals("404")){
                                             Toast.makeText(mContext,jsonObject.getString("msg"),Toast.LENGTH_SHORT).show();
-
-
+                                            filterResults=null;
                                         }else if(status.equals("402")){
                                             Toast.makeText(mContext,jsonObject.getString("msg"),Toast.LENGTH_SHORT).show();
-
-
+                                            filterResults=null;
                                         }else if(status.equals("403")){
                                             Toast.makeText(mContext,jsonObject.getString("msg"),Toast.LENGTH_SHORT).show();
-
-
+                                            filterResults=null;
                                         }else if(status.equals("401")){
                                             Toast.makeText(mContext,jsonObject.getString("msg"),Toast.LENGTH_SHORT).show();
-
-
+                                            filterResults=null;
                                         }
                                     }
                                 }
                             }
                         }else if(statusCode>200){
+                            filterResults=null;
                         }
                     }catch (Exception e){
-
+                        filterResults=null;
                         e.printStackTrace();
                     }
                 }
@@ -172,8 +170,17 @@ public class BookAutoCompleteAdapter extends BaseAdapter implements Filterable {
                 if (results != null && results.count > 0) {
                     resultList = (List<CorporateCustomer>) results.values;
 
-                    notifyDataSetChanged();
+                        notifyDataSetChanged();
+
                 } else {
+                    if(results==null){
+                        ManagerAct.txtSave.setText("SAVE");
+                        ManagerAct.edConcernPerson.setEnabled(true);
+                        ManagerAct.edContactNumber.setEnabled(true);
+                        ManagerAct.edAddress.setEnabled(true);
+                        ManagerAct.linPutOrder.setVisibility(View.GONE);
+
+                    }
                     notifyDataSetInvalidated();
                 }
             }};
