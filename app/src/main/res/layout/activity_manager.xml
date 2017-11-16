@@ -96,7 +96,7 @@
                             android:layout_weight="0.2"
                             android:background="#eee48a8a"
                             android:layout_gravity="center_vertical|right"
-                            android:visibility="visible"/>
+                            android:visibility="gone"/>
 
 
 
@@ -225,6 +225,7 @@
                         android:layout_weight="0.5"
                         android:textSize="18sp"
                         android:textColor="#ee000000"
+                        android:id="@+id/ed_man_number_of_plates"
                         android:inputType="number"
                         android:hint="Number of Plates"/>
                 </LinearLayout>
@@ -286,7 +287,8 @@
                         android:textSize="18sp"
                         android:textColor="#ee000000"
                         android:inputType="number"
-                        android:hint="Per Plate Coste"/>
+                        android:id="@+id/ed__man_per_plate_costId"
+                        android:hint="Per Plate Cost"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -299,7 +301,7 @@
                         android:layout_weight="0.5"
                         android:textSize="18sp"
                         android:textColor="#ee000000"
-                        android:text="Total Coste"/>
+                        android:text="Total Cost"/>
                     <EditText
                         android:layout_width="0sp"
                         android:layout_height="wrap_content"
@@ -307,7 +309,8 @@
                         android:textSize="18sp"
                         android:textColor="#ee000000"
                         android:inputType="number"
-                        android:hint="Total coste"/>
+                        android:id="@+id/ed__man_total_cost_id"
+                        android:hint="Total cost"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -328,7 +331,9 @@
                         android:textSize="18sp"
                         android:textColor="#ee000000"
                         android:lines="2"
+                        android:id="@+id/ed_man_OrderDescriptionId"
                         android:hint="Order Description"/>
+
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -345,9 +350,6 @@
                         android:id="@+id/btn_man_submit_id"
                         android:background="@drawable/btn_category_selector_yellow"/>
                 </LinearLayout>
-
-
-
             </LinearLayout>
         </LinearLayout>
 

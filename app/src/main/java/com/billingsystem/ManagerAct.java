@@ -30,8 +30,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.checkwifi.WiFiConnection;
+import com.databaseAdapter.BaseTable;
 import com.databaseAdapter.BookAutoCompleteAdapter;
+import com.databaseAdapter.DBAdapter;
 import com.entity.CorporateCustomer;
+import com.entity.Employee;
 import com.serverUrl.ServerHost;
 
 import org.json.JSONException;
@@ -46,7 +50,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class ManagerAct extends AppCompatActivity implements View.OnClickListener {
-    private EditText edNumberOfPlates,edSpecialNote;
+    private EditText edNumberOfPlates,edSpecialNote,edPerPlateCost,edTotalCost;
     private Button btnSubmit,btnDate;
     public static  EditText edDeliveryDate;
     private Spinner spOrderType;
@@ -56,6 +60,7 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
     private TestDialog testDialog;
     public static LinearLayout linPutOrder;
     public  DelayAutoCompleteTextView delayAutoCompleteTextView;
+    private ServerHost serverHost=new ServerHost();
 
 
 
@@ -65,18 +70,7 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager);
-        edAddress=(EditText)findViewById(R.id.ed_man_address_id);
-        edContactNumber=(EditText)findViewById(R.id.ed_man_contact_number_id);
-        edConcernPerson=(EditText)findViewById(R.id.ed_man_concern_person_id);
-        txtSave=(TextView)findViewById(R.id.txt_man_save_id);
-        txtCustomerId=(TextView)findViewById(R.id.txt_man_customer_id);
-        edDeliveryDate=(EditText)findViewById(R.id.ed_man_date_id);
-        linPutOrder=(LinearLayout)findViewById(R.id.linOrderDetails_id);
-        edDeliveryDate.setOnClickListener(this);
-        edDeliveryDate.setEnabled(false);
-        txtSave.setOnClickListener(this);
-        btnDate=(Button)findViewById(R.id.btn_date_id);
-        btnDate.setOnClickListener(this);
+        setView();
         testDialog=new TestDialog();
         delayAutoCompleteTextView = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
         delayAutoCompleteTextView.setThreshold(3);
@@ -98,19 +92,14 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
                     txtSave.setVisibility(View.VISIBLE);
                     txtSave.setText("EDIT");
                     txtCustomerId.setText(book.getCorporateCustomerId());
+                    linPutOrder.setVisibility(View.VISIBLE);
                 }else {
                     txtSave.setVisibility(View.VISIBLE);
                     txtSave.setText("SAVE");
                 }
-
-
             }
         });
-
-
     }
-
-
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.txt_man_save_id){
@@ -135,7 +124,6 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
                                     jsonObject.put("new_customer_detail",newCustomer);
                                    final String mRequestBody=jsonObject.toString();
                                     RequestQueue requestQueue=Volley.newRequestQueue(this);
-                                    ServerHost serverHost=new ServerHost();
                                     String url=serverHost.SERVER_URL(getApplicationContext())+"/rest/BillServices/corporateCustomerDetail";
                                     StringRequest stringRequest=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                                         @Override
@@ -213,11 +201,133 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
         }else if(v.getId()==R.id.btn_date_id){
             testDialog.setFlag(TestDialog.FLAG_START_DATE);
             testDialog.show(getSupportFragmentManager(), "datePicker");
+        }else if(v.getId()==R.id.btn_man_submit_id){
+
+            WiFiConnection wiFiConnection=new WiFiConnection();
+            if(wiFiConnection.checkWifiOnAndConnected(getApplicationContext())==true){
+                sendOutOrderToServer();
+            }else {
+                wiFiConnection.connectToNetWork(ManagerAct.this);
+            }
         }
     }
-    /*
-    Date Dialog
-     */
+    private void setView(){
+        edAddress=(EditText)findViewById(R.id.ed_man_address_id);
+        edContactNumber=(EditText)findViewById(R.id.ed_man_contact_number_id);
+        edConcernPerson=(EditText)findViewById(R.id.ed_man_concern_person_id);
+        txtSave=(TextView)findViewById(R.id.txt_man_save_id);
+        txtCustomerId=(TextView)findViewById(R.id.txt_man_customer_id);
+        edNumberOfPlates=(EditText)findViewById(R.id.ed_man_number_of_plates);
+        edPerPlateCost=(EditText)findViewById(R.id.ed__man_per_plate_costId);
+        edSpecialNote=(EditText)findViewById(R.id.ed_man_OrderDescriptionId);
+        edTotalCost=(EditText)findViewById(R.id.ed__man_total_cost_id);
+        edDeliveryDate=(EditText)findViewById(R.id.ed_man_date_id);
+        linPutOrder=(LinearLayout)findViewById(R.id.linOrderDetails_id);
+        btnSubmit=(Button)findViewById(R.id.btn_man_submit_id);
+        btnSubmit.setOnClickListener(this);
+        edDeliveryDate.setOnClickListener(this);
+        edDeliveryDate.setEnabled(false);
+        txtSave.setOnClickListener(this);
+        btnDate=(Button)findViewById(R.id.btn_date_id);
+        btnDate.setOnClickListener(this);
+    }
+
+    /*send Oredr to Server */
+
+    private void sendOutOrderToServer(){
+        if(!edNumberOfPlates.getText().toString().isEmpty()){
+            if (!edDeliveryDate.getText().toString().isEmpty()){
+                if(!edSpecialNote.getText().toString().isEmpty()){
+                    if(!edPerPlateCost.getText().toString().isEmpty()){
+                        if(!edTotalCost.getText().toString().isEmpty()){
+                            JSONObject outOrder=new JSONObject();
+                            try{
+                                outOrder.put(BaseTable.OUT_ORDER.totalPlate,edNumberOfPlates.getText().toString());
+                                outOrder.put(BaseTable.OUT_ORDER.orderDeliveryDate,edDeliveryDate.getText().toString());
+                                outOrder.put(BaseTable.OUT_ORDER.orderDescription,edSpecialNote.getText().toString());
+                                outOrder.put(BaseTable.OUT_ORDER.perPlateCost,edPerPlateCost.getText().toString());
+                                outOrder.put(BaseTable.OUT_ORDER.totalPrice,edTotalCost.getText().toString());
+                                DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
+                                Employee e=dbAdapter.getEmployee();
+                                outOrder.put(BaseTable.OUT_ORDER.createdBy,e.getEmployeeId());
+                                outOrder.put(BaseTable.OUT_ORDER.corporateCustomerId,txtCustomerId.getText().toString());
+                                final String outOrderstr=outOrder.toString();
+                                RequestQueue requestQueue=Volley.newRequestQueue(getApplicationContext());
+                                String url=serverHost.SERVER_URL(getApplicationContext())+"/rest/BillServices/outOrderDetail";
+                                StringRequest stringRequest=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        Log.i("CS-",response);
+                                        if(!response.isEmpty()){
+                                            try{
+                                                JSONObject respJson=new JSONObject(response);
+                                                if(respJson.has("status")){
+                                                    if(respJson.getString("status").equals("200")){
+
+
+                                                    }else if(respJson.getString("status").equals("500")){
+                                                        //TODO what if  reponse 500
+                                                    }
+                                                }
+                                            }catch(Exception e){
+                                                e.printStackTrace();
+                                            }
+
+
+                                        }else{
+                                            //TODO what if jsonobject is empty
+                                        }
+
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+
+                                    }
+                                }){
+                                    @Override
+                                    public String getBodyContentType() {
+                                        return "application/json; charset=utf-8";
+                                    }
+
+                                    @Override
+                                    public byte[] getBody() throws AuthFailureError {
+                                        try {
+                                            return outOrderstr == null ? null : outOrderstr.getBytes("utf-8");
+                                        } catch (UnsupportedEncodingException uee) {
+                                            VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
+                                                    outOrderstr, "utf-8");
+                                            return null;
+                                        }
+                                    }
+                                };
+                                requestQueue.add(stringRequest);
+                                requestQueue.start();
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+
+
+                        }else {
+                            Toast.makeText(getApplicationContext(),"Enter total cost",Toast.LENGTH_SHORT).show();
+                        }
+                    }else {
+                        Toast.makeText(getApplicationContext(),"Enter per plate cost",Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(getApplicationContext(),"Enetr special note",Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                Toast.makeText(getApplicationContext(),"Order delivery date",Toast.LENGTH_SHORT).show();
+            }
+
+        }else {
+            Toast.makeText(getApplicationContext(),"Enter number of plate",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    /*Date Dialog*/
      public static  class TestDialog extends android.support.v4.app.DialogFragment implements DatePickerDialog.OnDateSetListener {
         private int flag = 0;
         public static final int FLAG_START_DATE = 0;
