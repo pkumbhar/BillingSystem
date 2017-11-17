@@ -263,19 +263,17 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
                                                 JSONObject respJson=new JSONObject(response);
                                                 if(respJson.has("status")){
                                                     if(respJson.getString("status").equals("200")){
-
-
-                                                    }else if(respJson.getString("status").equals("500")){
-                                                        //TODO what if  reponse 500
+                                                        Toast.makeText(getApplicationContext(),respJson.getString("msg"),Toast.LENGTH_SHORT).show();
+                                                        clearAllViews();
+                                                    }else if(respJson.getString("status").equals("401")){
+                                                        Toast.makeText(getApplicationContext(),respJson.getString("msg"),Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
                                             }catch(Exception e){
                                                 e.printStackTrace();
                                             }
-
-
                                         }else{
-                                            //TODO what if jsonobject is empty
+                                            Toast.makeText(getApplicationContext(),"order not places.!",Toast.LENGTH_SHORT).show();
                                         }
 
                                     }
@@ -306,9 +304,6 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
-
-
-
                         }else {
                             Toast.makeText(getApplicationContext(),"Enter total cost",Toast.LENGTH_SHORT).show();
                         }
@@ -326,6 +321,18 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
             Toast.makeText(getApplicationContext(),"Enter number of plate",Toast.LENGTH_SHORT).show();
         }
 
+    }
+    private void clearAllViews(){
+        delayAutoCompleteTextView.setText("");
+        edTotalCost.setText("");
+        edPerPlateCost.setText("");
+        edSpecialNote.setText("");
+        edDeliveryDate.setText("");
+        edConcernPerson.setText("");
+        edContactNumber.setText("");
+        edAddress.setText("");
+        txtCustomerId.setText("");
+        edNumberOfPlates.setText("");
     }
     /*Date Dialog*/
      public static  class TestDialog extends android.support.v4.app.DialogFragment implements DatePickerDialog.OnDateSetListener {
