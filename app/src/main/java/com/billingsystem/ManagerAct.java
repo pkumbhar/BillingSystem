@@ -1,9 +1,12 @@
 package com.billingsystem;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.icu.util.TimeZone;
 import android.os.Build;
@@ -61,6 +64,7 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
     public static LinearLayout linPutOrder;
     public  DelayAutoCompleteTextView delayAutoCompleteTextView;
     private ServerHost serverHost=new ServerHost();
+    private TextView tvLogout;
 
 
 
@@ -140,7 +144,7 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
                                                             ManagerAct.edConcernPerson.setEnabled(false);
                                                             ManagerAct.txtCustomerId.setText(respJson.getString("corporate_customer_id"));
                                                         }else if(respJson.getString("status").equals("500")){
-                                                            //TODO what if  reponse 500
+                                                           Toast.makeText(getApplicationContext(),"problem in network rwquest.",Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
                                                 }catch(Exception e){
@@ -149,7 +153,7 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
 
 
                                             }else{
-                                                //TODO what if jsonobject is empty
+                                                Toast.makeText(getApplicationContext(),"Result not found",Toast.LENGTH_SHORT).show();
                                             }
 
                                         }
@@ -209,9 +213,38 @@ public class ManagerAct extends AppCompatActivity implements View.OnClickListene
             }else {
                 wiFiConnection.connectToNetWork(ManagerAct.this);
             }
+        }else if(v.getId()==R.id.tv_man_logoutId){
+            final AlertDialog.Builder builder=new AlertDialog.Builder(ManagerAct.this);
+            builder.setMessage("are you sure that you want to logout.?");
+            builder.setCancelable(false);
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    DBAdapter adapter=new DBAdapter(getApplicationContext());
+                    adapter.deletTable(BaseTable.TABLELIST.SALESBILL);
+                    adapter.deletTable(BaseTable.TABLELIST.SALES_BILL_DETAIL);
+                    adapter.deletTable(BaseTable.TABLELIST.EMPLOYEE);
+                    adapter.deletTable(BaseTable.TABLELIST.PRODUCT_TYPE);
+                    adapter.deletTable(BaseTable.TABLELIST.PRODUCT);
+                    adapter.deletTable(BaseTable.TABLELIST.AREA);
+                    Intent intent=new Intent(ManagerAct.this,BillingMain.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alertDialog=builder.create();
+            alertDialog.show();
         }
     }
     private void setView(){
+        tvLogout=(TextView)findViewById(R.id.tv_man_logoutId);
+        tvLogout.setOnClickListener(this);
         edAddress=(EditText)findViewById(R.id.ed_man_address_id);
         edContactNumber=(EditText)findViewById(R.id.ed_man_contact_number_id);
         edConcernPerson=(EditText)findViewById(R.id.ed_man_concern_person_id);

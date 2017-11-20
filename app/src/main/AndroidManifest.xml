@@ -30,11 +30,11 @@
             android:name=".FragmentMainActivity"
             android:label="@string/title_activity_fragment_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FeedBackAct" />
+        <activity android:name=".FeedBackAct"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".IpConfigrationActivaty" />
         <activity android:name=".ManagerAct"
-                  android:theme="@style/AppTheme.NoActionBar"
-            ></activity>
+                  android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

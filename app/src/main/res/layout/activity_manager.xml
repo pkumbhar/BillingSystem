@@ -11,7 +11,17 @@
         android:weightSum="1">
         <TextView
             android:layout_width="0sp"
-            android:layout_weight="0.9"
+            android:layout_weight="0.1"
+            android:layout_height="match_parent"
+            android:text=""
+            android:gravity="center"
+            android:textStyle="bold"
+            android:background="#f1d30f"
+            android:textSize="22sp"
+            android:fontFamily="sans-serif-condensed"/>
+        <TextView
+            android:layout_width="0sp"
+            android:layout_weight="0.8"
             android:layout_height="50sp"
             android:text="Customer Details"
             android:gravity="center"
@@ -22,12 +32,12 @@
         <TextView
             android:layout_width="0sp"
             android:layout_weight="0.1"
-            android:layout_height="50sp"
-            android:text="Customer Details"
+            android:layout_height="match_parent"
+            android:text="Logout"
+            android:id="@+id/tv_man_logoutId"
             android:gravity="center"
-            android:textStyle="bold"
             android:background="#f1d30f"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:fontFamily="sans-serif-condensed"/>
         <TextView
             android:layout_width="0sp"

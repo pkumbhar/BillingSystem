@@ -59,6 +59,10 @@ public class BillingMain extends AppCompatActivity {
     private Spinner spBranch,spFinancialYear,spEmployeeRole;
 
 
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +137,7 @@ public class BillingMain extends AppCompatActivity {
             }
         });
     }
+
     public Handler loginHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {

@@ -26,7 +26,7 @@ public class IpConfigrationActivaty extends AppCompatActivity {
         btnSaveIp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO network call neded before click
+                /*network call neded before click*/
 
                 DBAdapter dbAdapter=new DBAdapter(getApplicationContext());
                 if((edIpAddress.getText().length()>9)&&(edPortAddress.getText().length()==4)){
